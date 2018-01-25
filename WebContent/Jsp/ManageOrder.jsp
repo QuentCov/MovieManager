@@ -41,7 +41,7 @@
 				08/16/2018, 6:00 PM
 			</div>
 			<div class="col-sm-2">
-				<a href="/ViewProductDetails.jsp" class="btn btn-default">View Product Details</a>
+				<a href="/MovieDetailsSelection.jsp" class="btn btn-default">View Product Details</a>
 			</div>
 			<div class="col-sm-2">
 				<a href="/CustomerHomePage.jsp" class="btn btn-default">Cancel Order</a>
