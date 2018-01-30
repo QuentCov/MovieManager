@@ -41,6 +41,7 @@ public class Registration extends HttpServlet {
     	String password = request.getParameter("password");
     	data.Users user = new data.Users(userName, password);
     	user.registerUser(user, path);
+    	response.sendRedirect("Login");
 	}
 
 	/**
@@ -51,6 +52,7 @@ public class Registration extends HttpServlet {
     	String password = request.getParameter("password");
     	data.Users user = new data.Users(userName, password);
     	user.registerUser(user, path);
+    	response.sendRedirect("Login");
 	}
 
 }
