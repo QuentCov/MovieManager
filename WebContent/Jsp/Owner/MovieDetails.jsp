@@ -26,13 +26,13 @@
 	</div>
 	
 	<div class="row">
-		<div class="col-sm-2"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-3"></div>
-		<div class="col-sm-2"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
-		<div class="col-sm-1"></div>
+		<div class="col-sm-2">Bee Movie</div>
+		<div class="col-sm-1">Comedy</div>
+		<div class="col-sm-3"><img src="https://images-na.ssl-images-amazon.com/images/I/51mY9ddJHZL.jpg" alt="Bee Movie Poster"/></div>
+		<div class="col-sm-2">Adult woman falls in love with bee.</div>
+		<div class="col-sm-1">2 hrs</div>
+		<div class="col-sm-1">109</div>
+		<div class="col-sm-1">PG</div>
 		<div class="col-sm-1"><button type="button" class="btn btn-default">Update</button></div>
 	</div>
 	
