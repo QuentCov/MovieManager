@@ -13,7 +13,7 @@
 	<a href="/Owner/AddMovie.jsp">Add Movie</a>
 	<a href="/Owner/ViewTheatreDetails.jsp">View Theatre Details</a>
 	<a href="/Owner/OwnerHomePage.jsp">Home Page</a>
-	<a href="">Log Out</a>
+	<a href="/Login.jsp">Log Out</a>
 	
 	<h2>Theatre 13 Showrooms</h2>
 

@@ -1,5 +1,6 @@
 package data;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +32,7 @@ public class Users {
 		this.password = password;
 	}
 	
-	public void registerUser(Users user, String path) {
+	public static void registerUser(Users user, String path) {
 		
 		Properties prop = new Properties();
 		OutputStream output = null;
@@ -58,4 +59,60 @@ public class Users {
 			}
 		}
 	}
+	
+	public static boolean validateUser(Users user, String propFilePath) {
+		
+		Properties prop = new Properties();
+		FileInputStream fis = null;
+
+		boolean isValid = false;
+		try {
+			
+			fis = new FileInputStream(propFilePath);
+			prop.load(fis);
+			
+			// check if properties contains username and password
+			if( (prop.containsKey(user.getUserName())) && (prop.containsKey(user.getPassword())) ) {
+				isValid = true;
+			}
+		} catch (IOException io) {
+			io.printStackTrace();
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return isValid;
+	}
+	
+	public static void deleteUser(Users user, String propFilePath) {
+		
+		Properties prop = new Properties();
+		FileInputStream fis = null;
+
+		try {
+			
+			fis = new FileInputStream(propFilePath);
+			prop.load(fis);
+			
+			// check if properties contains username and password
+			prop.remove(user.getUserName());
+			
+		} catch (IOException io) {
+			io.printStackTrace();
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }
