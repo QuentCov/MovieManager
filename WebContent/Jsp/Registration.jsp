@@ -12,6 +12,8 @@
 <body>
 	<h1>Registration</h1>
 	
+	<a href="Login.jsp" class="btn btn-default">Login</a>
+	
 	<form name="userForm" action=Registration onsubmit="return validateForm()" method="post">
 		UserName: <input type=text name=userName><br>
 		Password: <input type=password name=password><br>
