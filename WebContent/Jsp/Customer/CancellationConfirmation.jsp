@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/GeneralStyle.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/GeneralStyle.css">
 <title>Movie Manager - Cancellation Confirmed</title>
 </head>
 <body>

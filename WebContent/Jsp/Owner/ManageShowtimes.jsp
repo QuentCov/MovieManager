@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Movie Details Page</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../css/GeneralStyle.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/GeneralStyle.css">
 </head>
 <body class="container">
 	<div class="row">
