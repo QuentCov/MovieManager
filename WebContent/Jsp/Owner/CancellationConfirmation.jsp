@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Showtime Added Confirmation Page</title>
+	<title>Cancellation Confirmation Page</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/GeneralStyle.css">
 </head>
@@ -12,25 +12,25 @@
 
 	<div class="row">
 		<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-	   	<a href="/Owner/ViewShowroom.jsp" class="btn btn-default">View Showroom</a>
-	   	<a href="/Owner/ViewTheatreDetails.jsp" class="btn btn-default">View Theatre Details</a>
-	    <a href="/Login.jsp" class="btn btn-default">Log Out</a>
+	   	<a href="/Owner/ViewShowrooms.jsp" class="btn btn-default"><button type="button" class="btn btn-default">View Showrooms</button></a>
+	   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-default"><button type="button" class="btn btn-default">Manage Showtimes</button></a>
+	   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
 	</div>
 
-	<h2>Showtime Added Confirmation</h2>
+	<h2>Showing Cancellation Confirmed</h2>
 
 	<div class="row">
-		<div class="col-sm-4"><h2>Movie</h2></div>
-		<div class="col-sm-4"><h2>Theatre</h2></div>
-		<div class="col-sm-2"><h2>Showroom Number</h2></div>
-		<div class="col-sm-2"><h2>Scheduled Runtime</h2></div>
+		<div class="col-sm-3"><h2>Movie</h2></div>
+		<div class="col-sm-3"><h2>Theatre</h2></div>
+		<div class="col-sm-3"><h2>Showroom Number</h2></div>
+		<div class="col-sm-3"><h2>Refundable Amount</h2></div>
 	</div>
 	
 	<div class="row">
-		<div class="col-sm-4"><h2>Star Trek</h2></div>
-		<div class="col-sm-4"><h2>Theatre 13</h2></div>
-		<div class="col-sm-2"><h2>Showroom 1</h2></div>
-		<div class="col-sm-2"><h2>3:00pm-5:00pm</h2></div>
+		<div class="col-sm-3"><h2>Star Trek</h2></div>
+		<div class="col-sm-3"><h2>Theatre 13</h2></div>
+		<div class="col-sm-3"><h2>Showroom 1</h2></div>
+		<div class="col-sm-3"><h2>$123.45</h2></div>
 	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 

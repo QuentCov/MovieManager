@@ -12,7 +12,7 @@
 	<div class="row">
 		<a href="/Owner/AddMovie.jsp">Add Movie</a>
 		<a href="/Owner/OwnerHomePage.jsp">Home Page</a>
-		<a href="">Log Out</a>
+		<a href="/Login.jsp">Log Out</a>
 	</div>
 	
 	<h2>Movie Corp Theatres</h2>
