@@ -52,7 +52,8 @@
 		
 		<!-- TODO create servlet to add movie and cancel/redirect -->
 		<button type="submit" class="btn btn-primary" value="addMovie">Add Movie</button>
-		<button type="reset" class="btn btn-primary" value="cancelAdd">Cancel</button>
+		<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Cancel</a>
+		<!-- <button type="reset" class="btn btn-primary" value="cancelAdd">Cancel</button> -->
 	</form>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 

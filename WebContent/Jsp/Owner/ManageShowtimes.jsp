@@ -12,7 +12,7 @@
 	<div class="row">
 		<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
 	   	<a href="/Owner/AddMovie.jsp" class="btn btn-default"><button type="button" class="btn btn-default">Add Showtime</button></a>
-	   	<button type="button" class="btn btn-default">Log Out</button>
+	   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
 	</div>
 
 	<h2>Manage Showtimes In Showroom 1</h2>

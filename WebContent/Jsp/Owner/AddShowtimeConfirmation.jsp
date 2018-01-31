@@ -14,7 +14,7 @@
 		<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
 	   	<a href="/Owner/ViewShowroom.jsp" class="btn btn-default">View Showroom</a>
 	   	<a href="/Owner/ViewTheatreDetails.jsp" class="btn btn-default">View Theatre Details</a>
-	   	<button type="button" class="btn btn-default">Log Out</button>
+	    <a href="/Login.jsp" class="btn btn-default">Log Out</a>
 	</div>
 
 	<h2>Showtime Added Confirmation</h2>

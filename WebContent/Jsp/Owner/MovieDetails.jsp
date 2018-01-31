@@ -12,7 +12,7 @@
 	<div class="row">
 	    <a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
 	    <a href="/Owner/AddMovie.jsp" class="btn btn-default">Add Movie</a>
-	    <button type="button" class="btn btn-default">Log Out</button>
+	    <a href="/Login.jsp" class="btn btn-default">Log Out</a>
 	</div>
 	<div class="row">
 		<div class="col-sm-2"><h2>Movie Name</h2></div>
