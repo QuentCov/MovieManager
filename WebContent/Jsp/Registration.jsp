@@ -15,8 +15,8 @@
 	<form name="userForm" action=Registration onsubmit="return validateForm()" method="post">
 		UserName: <input type=text name=userName><br>
 		Password: <input type=password name=password><br>
-		Confirm Password: <input type=password name=passwordConfirm>
-		<input type=submit value=Registration><br>
+		Confirm Password: <input type=password name=passwordConfirm><br>
+		<input type=submit value=Register><br>
 	</form>
 
 </body>

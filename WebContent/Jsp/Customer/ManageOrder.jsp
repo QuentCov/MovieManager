@@ -13,10 +13,10 @@
 	<div class="containter">
 		<div class="row">
 			<div class="col-md-3">
-				<a href="/ViewOrders.jsp" class="btn btn-default">View All Orders</a>
+				<a href="ViewOrders.jsp" class="btn btn-default">View All Orders</a>
 			</div>
 			<div class="offset-md-4 col-md-2">
-				<a href="/CustomerHomePage.jsp" class="btn btn-default">Home</a>
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 				<a href="/Login.jsp" class="btn btn-default">Sign Out</a>
@@ -42,10 +42,10 @@
 				08/16/2018, 6:00 PM
 			</div>
 			<div class="col-sm-2">
-				<a href="/MovieDetailsSelection.jsp" class="btn btn-default">View Product Details</a>
+				<a href="MovieDetailsSelection.jsp" class="btn btn-default">View Product Details</a>
 			</div>
 			<div class="col-sm-2">
-				<a href="/CustomerHomePage.jsp" class="btn btn-default">Cancel Order</a>
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Cancel Order</a>
 			</div>
 		</div>
 	</div>

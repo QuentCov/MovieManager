@@ -13,7 +13,7 @@
 	<div class="containter">
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="/CustomerHomePage.jsp" class="btn btn-default">Home</a>
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 			    <a href="/Login.jsp" class="btn btn-default">Sign Out</a>
@@ -118,10 +118,10 @@
 		</form>
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="/CustomerTransactionConfimration.jsp" class="btn btn-default">Confirm Payment</a>
+				<a href="CustomerTransactionConfimration.jsp" class="btn btn-default">Confirm Payment</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
-			    <a href="/ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Cancel Payment</a>
+			    <a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Cancel Payment</a>
 			</div>
 		</div>
 	</div>
