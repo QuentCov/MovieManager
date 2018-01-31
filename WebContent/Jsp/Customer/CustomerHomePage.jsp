@@ -16,7 +16,7 @@
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon2">
 					<span class="input-group-btn">
-			        	<a href="/MovieSearchResults.jsp" class="btn btn-search" type="button"><i class="fa fa-search fa-fw"></i> Go!</a>
+			        	<a href="MovieSearchResults.jsp" class="btn btn-search" type="button"><i class="fa fa-search fa-fw"></i> Go!</a>
 			      	</span>
 				</div>
 			</div>

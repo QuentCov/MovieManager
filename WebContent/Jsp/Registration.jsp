@@ -6,17 +6,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/GeneralStyle.css">
+<link rel="stylesheet" href="../../css/GeneralStyle.css">
 <title>Movie Manager - Registration</title>
 </head>
 <body>
 	<h1>Registration</h1>
 	
-	<form name="userForm" action=Registration onsubmit="return validateForm()" method="post">
+	<a href="Login.jsp" class="btn btn-default">Login</a>
+	<form name="userForm" action=${pageContext.request.contextPath}/Registration onsubmit="return validateForm()" method="post">
 		UserName: <input type=text name=userName><br>
 		Password: <input type=password name=password><br>
-		Confirm Password: <input type=password name=passwordConfirm>
-		<input type=submit value=Registration><br>
+		Confirm Password: <input type=password name=passwordConfirm><br>
+		<input type=submit value=Register><br>
 	</form>
 
 </body>
