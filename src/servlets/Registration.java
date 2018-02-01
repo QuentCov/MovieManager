@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.annotation.*;
 
 import data.Users;
 
@@ -16,8 +15,8 @@ import data.Users;
  */
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ServletContext sc;
-	String path;
+	private ServletContext sc;
+	private String path;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -27,39 +26,29 @@ public class Registration extends HttpServlet {
     }
     
     protected void init(HttpServletRequest request, HttpServletResponse response) {
-    	sc = this.getServletContext(); 
-    	path = sc.getRealPath("/WEB-INF/users.properties"); 
-    	System.out.println(path);
-    	String userName = request.getParameter("userName"); 
-    	String password = request.getParameter("password");
-    	data.Users user = new data.Users(userName, password);
-    	Users.registerUser(user, path);
+        this.sc = this.getServletContext(); 
+    	this.path = sc.getRealPath("/WEB-INF/users.properties");
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		sc = this.getServletContext(); 
-    	path = sc.getRealPath("/WEB-INF/users.properties");
-		String userName = request.getParameter("userName"); 
-    	String password = request.getParameter("password");
-    	data.Users user = new data.Users(userName, password);
-    	Users.registerUser(user, path);
-    	response.sendRedirect("/Login.jsp");
+		doPost(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		sc = this.getServletContext(); 
-    	path = sc.getRealPath("/WEB-INF/users.properties");
+		this.sc = this.getServletContext(); 
+    	this.path = sc.getRealPath("/WEB-INF/users.properties");
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
-    	data.Users user = new data.Users(userName, password);
-    	Users.registerUser(user, path);
-    	response.sendRedirect("/Login.jsp");
+    	String userType = request.getParameter("userType");
+    	Users user = new Users(userName, password, userType);
+    	Users.registerUser(user, this.path);
+    	response.sendRedirect("Jsp/Login.jsp");
 	}
 
 }
