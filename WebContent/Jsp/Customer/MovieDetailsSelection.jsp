@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+	<%@ include file="/_partials/headTags.html" %>
+	<title>Movies Details Selection Page</title>
 </head>
 <body>
 	<div class="containter">
@@ -50,7 +49,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="containter">
+	<div class="container">
 		Viewer Reviews:
 		<div class="row">
 			<div class="col-sm">
@@ -72,5 +71,6 @@
 			</div>
 		</div>
 	</div>
+    <%@ include file="/_partials/scripts.html" %>
 </body>
 </html>

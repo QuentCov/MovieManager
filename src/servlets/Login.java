@@ -11,18 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import data.Users;
 
 /**
- * Servlet implementation class Registration
+ * Servlet implementation class Login
  */
-public class Registration extends HttpServlet {
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ServletContext sc;
 	private String path;
-       
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Registration() {
+    public Login() {
         super();
+        // Auto-generated constructor stub
     }
     
     protected void init(HttpServletRequest request, HttpServletResponse response) {
@@ -45,10 +46,18 @@ public class Registration extends HttpServlet {
     	this.path = sc.getRealPath("/WEB-INF/users.properties");
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
-    	String userType = request.getParameter("userType");
-    	Users user = new Users(userName, password, userType);
-    	Users.registerUser(user, this.path);
-    	response.sendRedirect("Jsp/Login.jsp");
+    	Users user = new Users(userName, password);
+    	// check if valid user
+    	if (Users.isValidUser(user, this.path)) {
+    		// check user type to determine where to redirect
+    		if (Users.getUserType(user, this.path).equals("Customer")) {
+            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");    			
+    		} else {
+            	response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+    		}
+    	} else {
+        	response.sendRedirect("Jsp/Registration.jsp");
+    	}
 	}
 
 }
