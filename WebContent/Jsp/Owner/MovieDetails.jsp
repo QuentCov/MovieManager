@@ -8,9 +8,9 @@
 <body>
 	<div class="container">
 		<div class="row">
-		    <a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-		    <a href="/Owner/AddMovie.jsp" class="btn btn-default">Add Movie</a>
-		    <a href="/Login.jsp" class="btn btn-default">Log Out</a>
+		    <a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		    <a href="/Owner/AddMovie.jsp" class="btn btn-primary">Add Movie</a>
+		    <a href="/Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<div class="row">
 			<div class="col-sm-2"><h2>Movie Name</h2></div>
@@ -31,7 +31,7 @@
 			<div class="col-sm-1">2 hrs</div>
 			<div class="col-sm-1">109</div>
 			<div class="col-sm-1">PG</div>
-			<div class="col-sm-1"><button type="button" class="btn btn-default">Update</button></div>
+			<div class="col-sm-1"><button type="button" class="btn btn-primary">Update</button></div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

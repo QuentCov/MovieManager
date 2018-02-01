@@ -8,13 +8,13 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-default">Manage Showtimes</a>
-		   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
+			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+		   	<a href="/Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
+
 		<h2>Add Showtime</h2>
-	
+
 		<form>
 			<div class="form-group">
 				<label for="movieGenre">Select Movie:</label>
@@ -43,7 +43,7 @@
 		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
-	
+
 	<script>
 		$(document).ready(function(){
 			$(".dropdown-menu a").click(function(){

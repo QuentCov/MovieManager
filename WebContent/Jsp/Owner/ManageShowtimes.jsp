@@ -8,9 +8,9 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-		   	<a href="/Owner/AddMovie.jsp" class="btn btn-default"><button type="button" class="btn btn-default">Add Showtime</button></a>
-		   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
+			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="/Owner/AddMovie.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Add Showtime</button></a>
+		   	<a href="/Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 	
 		<h2>Manage Showtimes In Showroom 1</h2>

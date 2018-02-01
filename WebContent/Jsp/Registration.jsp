@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="container">
-		<a href="Login.jsp" class="btn btn-default">Already registered? Click here</a>
+		<a href="Login.jsp" class="btn btn-primary">Already registered? Click here</a>
 	
 		<h1>Registration</h1>
 		<form name="userForm" action=${pageContext.request.contextPath}/Registration onsubmit="return validateForm()" method="post">

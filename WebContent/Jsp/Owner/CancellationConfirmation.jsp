@@ -8,10 +8,10 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-		   	<a href="/Owner/ViewShowrooms.jsp" class="btn btn-default"><button type="button" class="btn btn-default">View Showrooms</button></a>
-		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-default"><button type="button" class="btn btn-default">Manage Showtimes</button></a>
-		   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
+			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="/Owner/ViewShowrooms.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">View Showrooms</button></a>
+		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Manage Showtimes</button></a>
+		   	<a href="/Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 	
 		<h2>Showing Cancellation Confirmed</h2>

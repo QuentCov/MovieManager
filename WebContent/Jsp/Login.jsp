@@ -8,7 +8,7 @@
 <body>
 	<div class="container">
 	
-	<a href="Registration.jsp" class="btn btn-default">Not a user yet? Register here</a>
+	<a href="Registration.jsp" class="btn btn-primary">Not a user yet? Register here</a>
 	
 	<h1>Login to Movie Manager</h1>
 	
