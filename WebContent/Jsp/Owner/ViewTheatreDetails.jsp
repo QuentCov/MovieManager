@@ -7,24 +7,24 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<a href="/Owner/AddMovie.jsp">Add Movie</a>
-			<a href="/Owner/OwnerHomePage.jsp">Home Page</a>
-			<a href="/Login.jsp">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
+			<a href="AddMovie.jsp" class="btn btn-primary">Add Movie</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		
-		<h2>Movie Corp Theatres</h2>
+		<h1>Movie Corp Theatres</h1>
 	
 		<div class="row">
-			<div class="col-sm-5"><h2>Theatre Name</h2></div>
-			<div class="col-sm-6"><h2>Address</h2></div>
-			<div class="col-sm-1"><h2>Actions</h2></div>
+			<div class="col-sm-4"><h4>Theatre Name</h4></div>
+			<div class="col-sm-5"><h4>Address</h4></div>
+			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
 		
 		<div class="row">
-			<div class="col-sm-5"><p>Theatre 1</p></div>
-			<div class="col-sm-6"><p>42 Wallaby Way Sydney Australia</p></div>
-			<div class="col-sm-1"><a href="/Owner/ViewShowrooms.jsp" class="btn btn-primary">View</a></div>
+			<div class="col-sm-4"><p>Theatre 1</p></div>
+			<div class="col-sm-5"><p>42 Wallaby Way Sydney Australia</p></div>
+			<div class="col-sm-3"><a href="ViewShowrooms.jsp" class="btn btn-primary">View</a></div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

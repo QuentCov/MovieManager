@@ -7,14 +7,13 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
-		   	<a href="/Login.jsp" class="btn btn-primary">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 
-		<h2>Add Showtime</h2>
-
+		<h1>Add Showtime</h1>
 		<form>
 			<div class="form-group">
 				<label for="movieGenre">Select Movie:</label>
@@ -39,7 +38,7 @@
 				<input type="time" class="form-control" id="showtimeEnd" placeholder="2:30">
 			</div>
 			<!-- TODO Hook up action to add showtime -->
-			<button type="submit" class="btn btn-primary">Add Showtime</button>
+			<a href="AddShowtimeConfirmation.jsp" class="btn btn-primary">Add Showtime</a>
 		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

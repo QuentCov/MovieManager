@@ -7,27 +7,28 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="/Owner/ViewShowroom.jsp" class="btn btn-primary">View Showroom</a>
-		   	<a href="/Owner/ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
-		    <a href="/Login.jsp" class="btn btn-primary">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="ViewShowrooms.jsp" class="btn btn-primary">View Showroom</a>
+		   	<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 	
-		<h2>Showtime Added Confirmation</h2>
+		<h1>Showtime Added</h1>
+		<p>Please review details below.</p>
 	
 		<div class="row">
-			<div class="col-sm-4"><h2>Movie</h2></div>
-			<div class="col-sm-4"><h2>Theatre</h2></div>
-			<div class="col-sm-2"><h2>Showroom Number</h2></div>
-			<div class="col-sm-2"><h2>Scheduled Runtime</h2></div>
+			<div class="col-sm-3"><h4>Movie</h4></div>
+			<div class="col-sm-3"><h4>Theatre</h4></div>
+			<div class="col-sm-3"><h4>Showroom Number</h4></div>
+			<div class="col-sm-3"><h4>Scheduled Runtime</h4></div>
 		</div>
 		
 		<div class="row">
-			<div class="col-sm-4"><h2>Star Trek</h2></div>
-			<div class="col-sm-4"><h2>Theatre 13</h2></div>
-			<div class="col-sm-2"><h2>Showroom 1</h2></div>
-			<div class="col-sm-2"><h2>3:00pm-5:00pm</h2></div>
+			<div class="col-sm-3">Star Trek</div>
+			<div class="col-sm-3">Theatre 13</div>
+			<div class="col-sm-3">Showroom 1</div>
+			<div class="col-sm-3">3:00pm-5:00pm</div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

@@ -7,19 +7,19 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<h2>Navigation</h2>
-			<a href="TheatreBuildingDetails.jsp">View Building Details</a>
-			<a href="AddMovie.jsp">Add Movies</a>
-			<a href="../Login.jsp">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Building Details</a>
+			<a href="AddMovie.jsp" class="btn btn-primary">Add Movies</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
-		<div class="row">
-			<form name="searchMoviesForm" action=searchMoviesResults method="get">
-				Search Movies: <input type=text name=movieToSearch><br>
-				<input type=submit value=searchMoviesResults> <br>  		
-			</form>
-		</div>
+		<h1>Owner Home Page</h1>	
+		<form name="searchMoviesForm">
+			<div class="form-group">
+				<label for="movieToSearch">Search Movies: </label>
+				<input type="text" class="form-control" id="movieToSearch" name="movieToSearch" placeholder="Search Movies">
+			</div>
+			<a href="MovieSearchResults.jsp" class="btn btn-light" type="button">Go!</a>		
+		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 

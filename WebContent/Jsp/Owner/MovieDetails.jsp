@@ -7,29 +7,30 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-		    <a href="/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		    <a href="/Owner/AddMovie.jsp" class="btn btn-primary">Add Movie</a>
-		    <a href="/Login.jsp" class="btn btn-primary">Log Out</a>
+		<div class="row justify-content-around">
+		    <a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		    <a href="AddMovie.jsp" class="btn btn-primary">Add Movie</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
+		<h1>Movie Details</h1>
 		<div class="row">
-			<div class="col-sm-2"><h2>Movie Name</h2></div>
-			<div class="col-sm-1"><h2>Genre</h2></div>
-			<div class="col-sm-3"><h2>Thumbnail</h2></div>
-			<div class="col-sm-2"><h2>Description</h2></div>
-			<div class="col-sm-1"><h2>Runtime</h2></div>
-			<div class="col-sm-1"><h2>Tickets Purchased</h2></div>
-			<div class="col-sm-1"><h2>Rating</h2></div>
-			<div class="col-sm-1"><h2>Actions</h2></div>
+			<div class="col-sm-2"><h4>Movie Name</h4></div>
+			<div class="col-sm-1"><h4>Genre</h4></div>
+			<div class="col-sm-2"><h4>Thumbnail</h4></div>
+			<div class="col-sm-2"><h4>Description</h4></div>
+			<div class="col-sm-1"><h4>Runtime</h4></div>
+			<div class="col-sm-2"><h4>Tickets Sold</h4></div>
+			<div class="col-sm-1"><h4>Rating</h4></div>
+			<div class="col-sm-1"><h4>Actions</h4></div>
 		</div>
 		
 		<div class="row">
 			<div class="col-sm-2">Bee Movie</div>
 			<div class="col-sm-1">Comedy</div>
-			<div class="col-sm-3"><img src="https://images-na.ssl-images-amazon.com/images/I/51mY9ddJHZL.jpg" alt="Bee Movie Poster"/></div>
+			<div class="col-sm-2"><img class="img-fluid" src="https://images-na.ssl-images-amazon.com/images/I/51mY9ddJHZL.jpg" alt="Bee Movie Poster"/></div>
 			<div class="col-sm-2">Adult woman falls in love with bee.</div>
 			<div class="col-sm-1">2 hrs</div>
-			<div class="col-sm-1">109</div>
+			<div class="col-sm-2">109</div>
 			<div class="col-sm-1">PG</div>
 			<div class="col-sm-1"><button type="button" class="btn btn-primary">Update</button></div>
 		</div>

@@ -18,16 +18,17 @@
 				<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 			</div>
 		</div>
-		<h1>Your order has been cancelled and your account has been refunded $142.36.</h1>
+		<h1>Movie Cancelled</h1>
+		<p>Your order has been cancelled and your account has been refunded $142.36.</p>
 		<div class="row">
-			<div class="col-sm-2"><h5>Order Number</h5></div>
-			<div class="col-sm-7"><h5>Movie</h5></div>
-			<div class="col-sm-3"></div>
+			<div class="col-sm-4"><h5>Order Number</h5></div>
+			<div class="col-sm-4"><h5>Movie</h5></div>
+			<div class="col-sm-4"></div>
 		</div>
 		<div class="row">
-			<div class="col-sm-2">Order #16</div>
-			<div class="col-sm-7">Bee Movie</div>
-			<div class="col-sm-3">Movie Cancelled</div>
+			<div class="col-sm-4">Order #16</div>
+			<div class="col-sm-4">Bee Movie</div>
+			<div class="col-sm-4">Movie Cancelled</div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
