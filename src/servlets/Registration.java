@@ -14,7 +14,6 @@ import data.Users;
 /**
  * Servlet implementation class Registration
  */
-@WebServlet("Registration")
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ServletContext sc;
