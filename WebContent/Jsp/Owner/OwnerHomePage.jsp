@@ -8,7 +8,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Building Details</a>
+			<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
 			<a href="AddMovie.jsp" class="btn btn-primary">Add Movies</a>
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>

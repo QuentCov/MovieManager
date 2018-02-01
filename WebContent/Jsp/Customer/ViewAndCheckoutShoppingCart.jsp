@@ -7,15 +7,11 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Shopping Cart</h1>
-		<div class="row">
-			<div class="offset-md-7 col-md-2">
-				<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-			    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
-			</div>
+		<div class="row justify-content-around">
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
+		<h1>Shopping Cart</h1>
 		<div class="row">
 			<div class="col-sm-2"><h5>Movie Name</h5></div>
 			<div class="col-sm-2"><h5>Thumbnail</h5></div>
@@ -45,7 +41,7 @@
 				$142.36
 			</div>
 			<div class="col-sm-2">
-				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove</a>
+				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove from cart</a>
 			</div>
 		</div>
 		<div class="row">
@@ -68,7 +64,7 @@
 				$12.37
 			</div>
 			<div class="col-sm-2">
-				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove</a>
+				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove from cart</a>
 			</div>
 		</div>
 		<div class="row">

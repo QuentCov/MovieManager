@@ -8,7 +8,7 @@
 <body>
 	<div class="container">
 		<h1>Movie Manager! Your Ticket to the Silver Screen!</h1>
-		<div class="float-right">
+		<div class="row justify-content-around">
 			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>

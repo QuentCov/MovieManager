@@ -7,16 +7,10 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
-			</div>
-			<div class="offset-md-4 col-md-2">
-				<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-				<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
-			</div>
+		<div class="row justify-content-around">
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Cancelled</h1>
 		<p>Your order has been cancelled and your account has been refunded $142.36.</p>

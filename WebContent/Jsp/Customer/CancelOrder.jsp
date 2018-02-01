@@ -7,16 +7,10 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
-			</div>
-			<div class="offset-md-4 col-md-2">
-				<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-				<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
-			</div>
+		<div class="row justify-content-around">
+			<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Cancel Order</h1>
 		<div class="row">

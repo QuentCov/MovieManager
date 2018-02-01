@@ -7,6 +7,10 @@
 </head>
 <body>
 	<div class="container">
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
 		<h1>Movie Search Results</h1>
 		<div class="row">
 			<div class="col-sm-2"><h4>Movie Name</h4></div>

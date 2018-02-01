@@ -7,18 +7,13 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="offset-md-3 col-md-2">
-				<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-			    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
-			</div>
-			<div class="col-md-2">
-				<a href="MovieSearchResults.jsp" class="btn btn-primary">Back</a>
-			</div>
-		</div><br>
+		<div class="row justify-content-around">
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
 		<h1>Movie Details:</h1>
+		<br>
 		<div class="row">
 			<div class="col-sm-1"><h5>Movie Name</h5></div>
 			<div class="col-sm-1"><h5>Description</h5></div>

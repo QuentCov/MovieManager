@@ -7,20 +7,22 @@
 </head>
 <body>
 	<div class="container">
-		<a href="Login.jsp" class="btn btn-primary">Already registered? Click here</a>
-	
 		<h1>Registration</h1>
 		<form name="userForm" action=${pageContext.request.contextPath}/Registration onsubmit="return validateForm()" method="post">
 			<div class="form-group">
 				<label for="userName">UserName:</label>
-				<input type="text" class="form-control" id="userName" name="userName" placeholder="UserName">
+				<input type="text" class="form-control" id="userName" name="userName" placeholder="User Name">
 			</div>
-			<div class="form-check form-check-inline">
-				<h6>User Type:</h6>
-				<input class="form-check-input" type="radio" name="userType" id="customer" value="Customer">
-				<label class="form-check-label" for="customer">Customer</label>
-				<input class="form-check-input" type="radio" name="userType" id="owner" value="Owner">
-				<label class="form-check-label" for="owner">Owner</label>
+			<div class="form-group">
+				<label>User Type:</label>
+			</div>
+			<div class="form-group form-check-inline">
+				<div>
+					<input class="form-check-input" type="radio" name="userType" id="customer" value="Customer">
+					<label class="form-check-label" for="customer">Customer</label>
+					<input class="form-check-input" type="radio" name="userType" id="owner" value="Owner">
+					<label class="form-check-label" for="owner">Owner</label>
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="password">Password:</label>
@@ -30,7 +32,11 @@
 				<label for="passwordConfirm">Confirm Password:</label>
 				<input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm Password">
 			</div>
-			<input type="submit" class="btn btn-primary" value=Register><br>
+			
+			<div class="row">
+				<input type="submit" class="btn btn-primary col-sm-2" value=Register><br>
+				<a href="Login.jsp" class="btn btn-link col-sm-4">Already registered? Log in here</a>
+			</div>
 		</form>
 	</div>
 	<script>

@@ -7,8 +7,10 @@
 </head>
 <body>
 	<div class="container">
-		<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-	    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
 		<h1>View All Orders</h1>
 		<div class="row">
 			<div class="col-md-3">
