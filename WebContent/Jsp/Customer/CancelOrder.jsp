@@ -15,7 +15,7 @@
 				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
-				<a href="/Login.jsp" class="btn btn-default">Sign Out</a>
+				<a href="/Login.jsp" class="btn btn-default">Log Out</a>
 			</div>
 		</div>
 		<div class="row">

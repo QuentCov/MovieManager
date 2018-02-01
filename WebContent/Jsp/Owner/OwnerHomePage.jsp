@@ -11,7 +11,7 @@
 			<h2>Navigation</h2>
 			<a href="TheatreBuildingDetails.jsp">View Building Details</a>
 			<a href="AddMovie.jsp">Add Movies</a>
-			<a href="/Login.jsp">Log Out</a>
+			<a href="../Login.jsp">Log Out</a>
 		</div>
 	
 		<div class="row">

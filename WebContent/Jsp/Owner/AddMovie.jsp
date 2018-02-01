@@ -52,6 +52,8 @@
 			<!-- <button type="reset" class="btn btn-primary" value="cancelAdd">Cancel</button> -->
 		</form>
 	</div>
+	
+	<%@ include file="/_partials/scripts.html" %>
 	<script>
 		$(document).ready(function(){
 			$(".dropdown-menu a").click(function(){
@@ -60,8 +62,6 @@
 			});
 		});
 	</script>
-
-	<%@ include file="/_partials/scripts.html" %>
 
 </body>
 </html>
