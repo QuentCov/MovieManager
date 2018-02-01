@@ -18,6 +18,7 @@
 				</div>
 			</div>
 			<div class="col-3">
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 				<a href="ViewOrders.jsp" class="btn btn-default">View Orders</a>
 			</div>
 			<div class="col-4">

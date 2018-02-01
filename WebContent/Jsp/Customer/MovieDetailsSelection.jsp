@@ -6,7 +6,21 @@
 	<title>Movies Details Selection Page</title>
 </head>
 <body>
-	<div class="container">
+	<div class="containter">
+		<div class="row">
+			<div class="offset-md-3 col-md-2">
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
+			</div>
+			<div class="offset-md-1 col-md-2">
+			    <a href="/Login.jsp" class="btn btn-default">Sign Out</a>
+			</div>
+			<div class="col-md-2">
+				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Add to Cart</a>
+			</div>
+			<div class="col-md-2">
+				<a href="MovieSearchResults.jsp" class="btn btn-default">Back</a>
+			</div>
+		</div><br>
 		Movie Details:
 		<div class="row">
 			<div class="col-sm">
