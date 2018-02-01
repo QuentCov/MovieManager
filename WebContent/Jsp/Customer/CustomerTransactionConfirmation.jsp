@@ -13,10 +13,10 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3">
-				<a href="/ViewOrders.jsp" class="btn btn-default">View All Orders</a>
+				<a href="ViewOrders.jsp" class="btn btn-default">View All Orders</a>
 			</div>
 			<div class="offset-md-4 col-md-2">
-				<a href="/CustomerHomePage.jsp" class="btn btn-default">Home</a>
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 				<a href="/Login.jsp" class="btn btn-default">Sign Out</a>

@@ -13,7 +13,7 @@
 	<div class="containter">
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="/CustomerHomePage.jsp" class="btn btn-default">Home</a>
+				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 			    <a href="/Login.jsp" class="btn btn-default">Sign Out</a>
@@ -36,10 +36,10 @@
 				08/16/2018, 6:00 PM
 			</div>
 			<div class="col-lg-3">
-				TODO: Thumbnail
+				<img src="https://vignette.wikia.nocookie.net/beemovie/images/f/f7/Bee-movie-disneyscreencaps_com-2147.jpg/revision/latest?cb=20150208074457">
 			</div>
 			<div class="col-lg-1">
-				<a href="/ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Remove</a>
+				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Remove</a>
 			</div>
 		</div>
 		<div class="row">
@@ -59,10 +59,10 @@
 				08/30/2018, 2:00 PM
 			</div>
 			<div class="col-lg-3">
-				TODO: Thumbnail
+				<img src="http://www.litemovies.com/wp-content/uploads/2017/02/get-out-thumbnail-57f54b46b71d6-1.png">
 			</div>
 			<div class="col-lg-1">
-				<a href="/ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Remove</a>
+				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-default">Remove</a>
 			</div>
 		</div>
 		<div class="row">
@@ -70,7 +70,7 @@
 				Total: $154.73
 			</div>
 			<div class="offset-md-3 col-sm-3">
-				<a href="/CustomerTransaction.jsp" class="btn btn-default">Checkout</a>
+				<a href="CustomerTransaction.jsp" class="btn btn-default">Checkout</a>
 			</div>
 		</div>
 	</div>

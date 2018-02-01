@@ -12,11 +12,12 @@
 <body>
 	<h1>Registration</h1>
 	
+	<a href="Login.jsp" class="btn btn-default">Login</a>
 	<form name="userForm" action=${pageContext.request.contextPath}/Registration onsubmit="return validateForm()" method="post">
 		UserName: <input type=text name=userName><br>
 		Password: <input type=password name=password><br>
-		Confirm Password: <input type=password name=passwordConfirm>
-		<input type=submit value=Registration><br>
+		Confirm Password: <input type=password name=passwordConfirm><br>
+		<input type=submit value=Register><br>
 	</form>
 
 </body>
