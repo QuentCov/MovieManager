@@ -8,47 +8,45 @@
 <body>
 	<div class="container">
 		<h1>Movie Manager! Your Ticket to the Silver Screen!</h1>
-		<div class="row">
-			<div class="col-md-5">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon2">
-					<span class="input-group-btn">
-			        	<a href="MovieSearchResults.jsp" class="btn btn-search" type="button"><i class="fa fa-search fa-fw"></i> Go!</a>
-			      	</span>
+		<div class="row justify-content-around">
+			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
+		<form>
+			<div class="form-group">
+				<label for="movieGenre">Available Theatres:</label>
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Select Theatre
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Theatre 1</a>
+						<a class="dropdown-item" href="#">Theatre 2</a>
+						<a class="dropdown-item" href="#">Theatre 3</a>
+						<a class="dropdown-item" href="#">Theatre 4</a>
+						<a class="dropdown-item" href="#">Theatre 5</a>
+						<a class="dropdown-item" href="#">Theatre 6</a>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
-				<a href="ViewOrders.jsp" class="btn btn-default">View Orders</a>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search Movies">
+				<span class="input-group-btn">
+		        	<a href="MovieSearchResults.jsp" class="btn btn-light" type="button">Go!</a>
+		      	</span>
 			</div>
-			<div class="offset-md-1 col-md-2">
-				<a href="/Login.jsp" class="btn btn-default">Sign In</a>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-    		<div class="col-sm">
-    			Theater 1
-    		</div>
-    		<div class="col-sm">
-    			Theater 2
-    		</div>
-    		<div class="col-sm">
-    			Theater 3
-			</div>
-		</div>
-		<br>
-		<div class="row">
-    		<div class="col-sm">
-    			Theater 4
-    		</div>
-    		<div class="col-sm">
-    			Theater 5
-    		</div>
-    		<div class="col-sm">
-    			Theater 6
-			</div>
-		</div>
+		</form>
 	</div>
+	
 	<%@ include file="/_partials/scripts.html" %>
+	<script>
+		$(document).ready(function(){
+			$(".dropdown-menu a").click(function(){
+				  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+				  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+			});
+		});
+	</script>
+	
 </body>
 </html>

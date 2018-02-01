@@ -7,37 +7,33 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Owner Homepage</a>
-		   	<a href="/Owner/ManageShowtimes.jsp" class="btn btn-default"><button type="button" class="btn btn-default">Manage Showtime</button></a>
-		   	<a href="/Login.jsp" class="btn btn-default">Log Out</a>
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="ManageShowtimes.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Manage Showtime</button></a>
+		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 	
-		<h2>Cancel Movie Showing</h2>
+		<h1>Cancel Movie Showing</h1>
 	
 		<div class="row">
-			<div class="col-sm-3"><h2>Movie</h2></div>
-			<div class="col-sm-3"><h2>Theatre</h2></div>
-			<div class="col-sm-2"><h2>Showroom Number</h2></div>
-			<div class="col-sm-2"><h2>Scheduled Runtime</h2></div>
-			<div class="col-sm-2"><h2>Actions</h2></div>
+			<div class="col-sm-2"><h4>Movie</h4></div>
+			<div class="col-sm-3"><h4>Theatre</h4></div>
+			<div class="col-sm-2"><h4>Showroom Number</h4></div>
+			<div class="col-sm-2"><h4>Scheduled Runtime</h4></div>
+			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
 		
 		<div class="row">
-			<div class="col-sm-3"><h2>Star Trek</h2></div>
-			<div class="col-sm-3"><h2>Theatre 13</h2></div>
-			<div class="col-sm-2"><h2>Showroom 1</h2></div>
-			<div class="col-sm-2"><h2>3:00pm-5:00pm</h2></div>
-			<div class="col-sm-2">
-				<a href="/Owner/CancellationConfirmation.jsp" class="btn btn-primary">Confirm Cancellation</a>
-				<a href="/Owner/OwnerHomePage.jsp" class="btn btn-danger">Discard Cancellation</a>
+			<div class="col-sm-2">Star Trek</div>
+			<div class="col-sm-3">Theatre 13</div>
+			<div class="col-sm-2">Showroom 1</div>
+			<div class="col-sm-2">3:00pm-5:00pm</div>
+			<div class="col-sm-3">
+				<div class="row">
+					<a href="CancellationConfirmation.jsp" class="btn btn-danger">Confirm Cancellation</a>
+					<a href="OwnerHomePage.jsp" class="btn btn-primary">Discard Cancellation</a>				
+				</div>
 			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-sm-5"><p>Theatre 1</p></div>
-			<div class="col-sm-6"><p>42 Wallaby Way Sydney Australia</p></div>
-			<div class="col-sm-1"><a href="/Owner/ViewShowrooms.jsp" class="btn btn-primary">View</a></div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

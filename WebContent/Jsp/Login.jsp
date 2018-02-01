@@ -7,9 +7,6 @@
 </head>
 <body>
 	<div class="container">
-	
-	<a href="Registration.jsp" class="btn btn-default">Not a user yet? Register here</a>
-	
 	<h1>Login to Movie Manager</h1>
 	
 	<form name="userForm" action=${pageContext.request.contextPath}/Login method="post">
@@ -21,7 +18,10 @@
 			<label for="password">Password:</label>
 			<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 		</div>
-		<input type="submit" class="btn btn-primary" value=Login><br>
+		<div class="row">
+			<input type="submit" class="btn btn-primary col-sm-2" value=Login><br>
+			<a href="Registration.jsp" class="btn btn-link col-sm-4">Not a user yet? Register here</a>
+		</div>
 	</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

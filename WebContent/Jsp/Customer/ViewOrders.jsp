@@ -7,6 +7,11 @@
 </head>
 <body>
 	<div class="container">
+		<div class="row justify-content-around">
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
+		<h1>View All Orders</h1>
 		<div class="row">
 			<div class="col-md-3">
 				<div class="dropdown">
@@ -20,18 +25,25 @@
 					</div>
 				</div>
 			</div>
-			<div class="offset-md-4 col-md-2">
-				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-			    <a href="/Login.jsp" class="btn btn-default">Sign Out</a>
-			</div>
 		</div>
 		<div class="row">
-    		<div class="col-sm">
+			<div class="col-sm-3"><h5>Order Number</h5></div>
+			<div class="col-sm-3"><h5>Order Total</h5></div>
+			<div class="col-sm-3"><h5>Ordered Date</h5></div>
+			<div class="col-sm-3"><h5>Actions</h5></div>
+		</div>
+		<div class="row">
+    		<div class="col-sm-3">
     			Order 1 
-    		<div class="col-lg-1">
-				<a href="ManageOrder.jsp" class="btn btn-default">Manage Order 1</a>
+    		</div>
+    		<div class="col-sm-3">
+    			$154.73
+    		</div>
+    		<div class="col-sm-3">
+    			08/15/2018, 2:00 PM
+    		</div>
+    		<div class="col-sm-3">
+				<a href="ManageOrder.jsp" class="btn btn-primary">Manage Order 1</a>
 			</div>
     	</div>
 	</div>

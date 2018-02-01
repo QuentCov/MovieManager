@@ -7,6 +7,10 @@
 </head>
 <body>	
 	<div class="container">
+		<div class="row justify-content-around">
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		</div>
 		<h2>Add Movie Page</h2>
 		<form>
 			<div class="form-group">
@@ -47,11 +51,12 @@
 			</div>
 			
 			<!-- TODO create servlet to add movie and cancel/redirect -->
-			<button type="submit" class="btn btn-primary" value="addMovie">Add Movie</button>
-			<a href="/Owner/OwnerHomePage.jsp" class="btn btn-default">Cancel</a>
-			<!-- <button type="reset" class="btn btn-primary" value="cancelAdd">Cancel</button> -->
+			<button type="submit" class="btn btn-primary" value="addMovie">Save</button>
+			<a href="OwnerHomePage.jsp" class="btn btn-primary">Cancel</a>
 		</form>
 	</div>
+	
+	<%@ include file="/_partials/scripts.html" %>
 	<script>
 		$(document).ready(function(){
 			$(".dropdown-menu a").click(function(){
@@ -60,8 +65,6 @@
 			});
 		});
 	</script>
-
-	<%@ include file="/_partials/scripts.html" %>
 
 </body>
 </html>
