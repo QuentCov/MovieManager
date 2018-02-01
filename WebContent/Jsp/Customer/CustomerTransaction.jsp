@@ -12,8 +12,11 @@
 <body>
 	<div class="containter">
 		<div class="row">
-			<div class="offset-md-7 col-md-2">
+			<div class="offset-md-3 col-md-2">
 				<a href="CustomerHomePage.jsp" class="btn btn-default">Home</a>
+			</div>
+			<div class="col-lg-4">
+				<a href="ViewOrders.jsp" class="btn btn-default">View Orders</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 			    <a href="/Login.jsp" class="btn btn-default">Sign Out</a>

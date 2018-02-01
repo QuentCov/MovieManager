@@ -33,27 +33,11 @@
 		</div>
 		<div class="row">
     		<div class="col-sm">
-    			Order 1
-    		</div>
-    		<div class="col-sm">
-    			Order 2
-    		</div>
-    		<div class="col-sm">
-    			Order 3
+    			Order 1 
+    		<div class="col-lg-1">
+				<a href="ManageOrder.jsp" class="btn btn-default">Manage Order 1</a>
 			</div>
-		</div>
-		<br>
-		<div class="row">
-    		<div class="col-sm">
-    			Order 4
-    		</div>
-    		<div class="col-sm">
-    			Order 5
-    		</div>
-    		<div class="col-sm">
-    			Order 6
-			</div>
-		</div>
+    	</div>
 	</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 

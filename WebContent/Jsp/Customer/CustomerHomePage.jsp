@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<a href="/ViewOrders.jsp" class="btn btn-default">View Orders</a>
+				<a href="ViewOrders.jsp" class="btn btn-default">View Orders</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 				<a href="/Login.jsp" class="btn btn-default">Sign In</a>
