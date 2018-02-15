@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.Users;
+import data.User;
 
 /**
  * Servlet implementation class Registration
@@ -46,8 +46,8 @@ public class Registration extends HttpServlet {
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
     	String userType = request.getParameter("userType");
-    	Users user = new Users(userName, password, userType);
-    	Users.registerUser(user, this.path);
+    	User user = new User(userName, password, userType);
+    	User.registerUser(user, this.path);
     	response.sendRedirect("Jsp/Login.jsp");
 	}
 

@@ -6,20 +6,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
-public class Users {
+public class User {
 	String userName;
 	String password;
 	String type;
 	final static String TYPE_MOD = "_TYPE";
 	
-	public Users(String userName, String password) {
+	public User(String userName, String password) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.type = "Customer";
 	}
 	
-	public Users(String userName, String password, String type) {
+	public User(String userName, String password, String type) {
 		super();
 		this.userName = userName;
 		this.password = password;
@@ -50,7 +50,7 @@ public class Users {
 		this.type = type;
 	}
 	
-	public static void registerUser(Users user, String path) {
+	public static void registerUser(User user, String path) {
 		
 		Properties prop = new Properties();
 		OutputStream output = null;
@@ -83,7 +83,7 @@ public class Users {
 		}
 	}
 	
-	public static boolean isValidUser(Users user, String path) {
+	public static boolean isValidUser(User user, String path) {
 		
 		Properties prop = new Properties();
 		FileInputStream fis = null;
@@ -113,7 +113,7 @@ public class Users {
 		return isValid;
 	}
 	
-	public static String getUserType(Users user, String path) {
+	public static String getUserType(User user, String path) {
 		Properties prop = new Properties();
 		FileInputStream fis = null;
 		String type = "";
@@ -140,7 +140,7 @@ public class Users {
 		return type;
 	}
 	
-	public static void deleteUser(Users user, String path) {
+	public static void deleteUser(User user, String path) {
 		
 		Properties prop = new Properties();
 		FileInputStream fis = null;
