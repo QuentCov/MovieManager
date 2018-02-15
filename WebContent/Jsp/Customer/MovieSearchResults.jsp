@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Search Results</title>
+	<title>Movie Search Results</title>
 </head>
 <body>
 	<div class="container">
@@ -23,7 +23,7 @@
 			<div class="col-sm-1"><h4>Price</h4></div>
 			<div class="col-sm-2"><h4>Thumbnail</h4></div>
 			<div class="col-sm-2"><h4>Actions</h4></div>
-		</div>		
+		</div>
 		<div class="row">
     		<div class="col-sm-2">
     			Madden Theatre

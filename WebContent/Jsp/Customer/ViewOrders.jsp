@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager - View Orders</title>
+	<title>View Orders</title>
 </head>
 <body>
 	<div class="container">
@@ -34,7 +34,7 @@
 		</div>
 		<div class="row">
     		<div class="col-sm-3">
-    			Order 1 
+    			Order 1
     		</div>
     		<div class="col-sm-3">
     			$154.73

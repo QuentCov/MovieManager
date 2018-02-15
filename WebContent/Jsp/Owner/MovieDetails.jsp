@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Details Page</title>
+	<title>Movie Details</title>
 </head>
 <body>
 	<div class="container">
@@ -23,7 +23,7 @@
 			<div class="col-sm-1"><h4>Rating</h4></div>
 			<div class="col-sm-1"><h4>Actions</h4></div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-2">Bee Movie</div>
 			<div class="col-sm-1">Comedy</div>
@@ -36,6 +36,6 @@
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
-	
+
 </body>
 </html>

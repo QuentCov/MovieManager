@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Details Page</title>
+	<title>Manage Showtimes</title>
 </head>
 <body>
 	<div class="container">
@@ -12,16 +12,16 @@
 		   	<a href="AddShowtime.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Add Showtime</button></a>
 		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
-		<h1>Manage Showtimes In Showroom 1</h1>
-	
+
+		<h1>Manage Showtimes</h1>
+
 		<div class="row">
 			<div class="col-sm-3"><h4>Movie Playing</h4></div>
 			<div class="col-sm-4"><h4>Scheduled Runtime</h4></div>
 			<div class="col-sm-2"><h4>Tickets Sold</h4></div>
 			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-3"><p>Avatar</p></div>
 			<div class="col-sm-4"><p>8:30pm-11:00pm</p></div>

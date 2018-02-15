@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager</title>
+	<title>Customer Home Page</title>
 </head>
 <body>
 	<div class="container">
@@ -37,7 +37,7 @@
 			</div>
 		</form>
 	</div>
-	
+
 	<%@ include file="/_partials/scripts.html" %>
 	<script>
 		$(document).ready(function(){
@@ -47,6 +47,6 @@
 			});
 		});
 	</script>
-	
+
 </body>
 </html>

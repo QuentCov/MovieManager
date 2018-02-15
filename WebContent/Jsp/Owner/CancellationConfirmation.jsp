@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Cancellation Confirmation Page</title>
+	<title>Cancellation Confirmation</title>
 </head>
 <body>
 	<div class="container">
@@ -13,17 +13,17 @@
 		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
+
 		<h1>Cancellation Confirmed</h1>
 		<p>Please review details below.</p>
-	
+
 		<div class="row">
 			<div class="col-sm-3"><h4>Movie</h4></div>
 			<div class="col-sm-3"><h4>Theatre</h4></div>
 			<div class="col-sm-3"><h4>Showroom Number</h4></div>
 			<div class="col-sm-3"><h4>Refundable Amount</h4></div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-3">Star Trek</div>
 			<div class="col-sm-3">Theatre 13</div>
