@@ -49,6 +49,10 @@ public class Login extends HttpServlet {
     	String password = request.getParameter("password");
     	User user = new User(userName, password);
     	// check if valid user
+    	
+    	// TODO CHANGE TO VALIDATE USER AND GET USER TYPE
+    	/*
+    	
     	if (User.isValidUser(user, this.path)) {
     		// check user type to determine where to redirect
     		if (User.getUserType(user, this.path).equals("Customer")) {
@@ -59,6 +63,8 @@ public class Login extends HttpServlet {
     	} else {
         	response.sendRedirect("Jsp/Registration.jsp");
     	}
+    	
+    	*/
 	}
 
 }
