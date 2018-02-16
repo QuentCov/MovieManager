@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movies Details Selection Page</title>
+	<title>Movies Details Selection</title>
 </head>
 <body>
 	<div class="container">

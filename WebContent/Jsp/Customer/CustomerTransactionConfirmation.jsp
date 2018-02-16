@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager - Transaction Complete!</title>
+	<title>Transaction Confirmed</title>
 </head>
 <body>
 	<div class="container">

@@ -32,7 +32,7 @@
 				<label for="passwordConfirm">Confirm Password:</label>
 				<input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm Password">
 			</div>
-			
+
 			<div class="row">
 				<input type="submit" class="btn btn-primary col-sm-2" value=Register><br>
 				<a href="Login.jsp" class="btn btn-link col-sm-4">Already registered? Log in here</a>
@@ -49,22 +49,22 @@
 				alert("Username must be filled out.");
 				return false;
 			}
-			
+
 			if(type === "") {
 				alert("Type must be filled out.");
 				return false;
 			}
-	
+
 			if(pass === "") {
 				alert("Password must be filled out.");
 				return false;
 			}
-	
+
 			if(passConf === "") {
 				alert("Please confirm your password");
 				return false;
 			}
-	
+
 			if(!pass.equals(passConf)) {
 				alert("Your password and password confirmation must match.");
 				return false;

@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager - Manage Order</title>
+	<title>Manage Order</title>
 </head>
 <body>
 	<div class="container">

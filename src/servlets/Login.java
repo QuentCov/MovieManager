@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.Users;
+import models.User;
 
 /**
  * Servlet implementation class Login
@@ -46,11 +46,11 @@ public class Login extends HttpServlet {
     	this.path = sc.getRealPath("/WEB-INF/users.properties");
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
-    	Users user = new Users(userName, password);
+    	User user = new User(userName, password);
     	// check if valid user
-    	if (Users.isValidUser(user, this.path)) {
+    	if (User.isValidUser(user, this.path)) {
     		// check user type to determine where to redirect
-    		if (Users.getUserType(user, this.path).equals("Customer")) {
+    		if (User.getUserType(user, this.path).equals("Customer")) {
             	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");    			
     		} else {
             	response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
