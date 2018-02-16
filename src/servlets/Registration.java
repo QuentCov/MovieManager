@@ -48,6 +48,7 @@ public class Registration extends HttpServlet {
     	//String password = request.getParameter("password");
     	//String userType = request.getParameter("userType");
     	//User user = new User(userName, password, userType);
+
     	// TODO CHANGE TO ACTUALLY REGISTER USER
     	// User.registerUser(user, this.path);
     	response.sendRedirect("Jsp/Login.jsp");
