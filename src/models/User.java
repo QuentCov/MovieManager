@@ -14,7 +14,6 @@ public class User {
 	private String fullName;
 	private Address streetAddress;
 	private String phoneNumber;
-	private final static String TYPE_MOD = "_TYPE";
 
 	public User(String userName, String password) {
 		super();
@@ -84,10 +83,6 @@ public class User {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	public String getTYPE_MOD() {
-		return TYPE_MOD;
 	}
 
 	// checks if the given phone number is in the correct format

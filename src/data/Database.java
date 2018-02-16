@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Database {
-	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/username";
-    private static final String USER = "testuser";
-    private static final String PASS = "testpass";
+	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/qcovert";
+    private static final String USER = "qcovert";
+    private static final String PASS = "???";
     
     public static ResultSet runQuery(String query) {
 		try {

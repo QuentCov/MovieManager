@@ -3,6 +3,8 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.Review;
+
 public class ReviewDB {
 	public static Review getReview() {
 		String query = "SELECT * FROM reviewBuildings WHERE Reviewname=";
@@ -19,7 +21,7 @@ public class ReviewDB {
 	}
 	
 	public static Review getReview(Review review) {
-		return getThreatre();
+		return getReview();
 	}
 	
 	public static boolean addReview(Review review) {
@@ -50,23 +52,5 @@ public class ReviewDB {
 		    return true;
 		}
 	    return false;
-	}
-	
-	public static boolean validateReview(Review review) {
-		return validateReview(review.getReviewName(), review.getPassword());
-	}
-	
-	public static boolean validateReview(String reviewName, String pass) {
-		String query = "SELECT * FROM reviews WHERE Reviewname=" + reviewName + " AND Password=" + pass;
-		ResultSet rs = Database.runQuery(query);
-        try {
-			if(rs.next())
-			{
-			    return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        return false;
 	}
 }

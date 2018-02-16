@@ -3,6 +3,8 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.User;
+
 public class UserDB {
 	
 	public static User getUser(String userName, String pass) {

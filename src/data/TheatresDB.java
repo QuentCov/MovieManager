@@ -7,8 +7,8 @@ import models.Theatre;
 
 public class TheatresDB {
 	
-	public static Theatre getTheatre() {
-		String query = "SELECT * FROM theatreBuildings WHERE Theatrename=";
+	public static Theatre getTheatre(String name) {
+		String query = "SELECT * FROM theatreBuildings WHERE Name=" + name;
 		ResultSet rs = Database.runQuery(query);
 		try {
 			if(rs.next())
@@ -22,7 +22,7 @@ public class TheatresDB {
 	}
 	
 	public static Theatre getTheatre(Theatre theatre) {
-		return getThreatre();
+		return getTheatre(theatre.getName());
 	}
 	
 	public static boolean addTheatre(Theatre theatre) {
@@ -53,23 +53,5 @@ public class TheatresDB {
 		    return true;
 		}
 	    return false;
-	}
-	
-	public static boolean validateTheatre(Theatre theatre) {
-		return validateTheatre(theatre.getTheatreName(), theatre.getPassword());
-	}
-	
-	public static boolean validateTheatre(String theatreName, String pass) {
-		String query = "SELECT * FROM theatres WHERE Theatrename=" + theatreName + " AND Password=" + pass;
-		ResultSet rs = Database.runQuery(query);
-        try {
-			if(rs.next())
-			{
-			    return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        return false;
 	}
 }

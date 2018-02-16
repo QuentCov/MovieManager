@@ -9,11 +9,6 @@ public class Order {
 	private ArrayList<Movie> movies;
 	private ArrayList<Integer> tickets;
 	private ArrayList<Double> cost;
-	private String cardType;
-	private int cardNumber;
-	private int ccv;
-	private int expirationMonth;
-	private int expirationYear;
 	private Address billingAddress;
 	private Address shippingAddress;
 
@@ -55,46 +50,6 @@ public class Order {
 
 	public void setCost(ArrayList<Double> cost) {
 		this.cost = cost;
-	}
-
-	public String getCardType() {
-		return cardType;
-	}
-
-	public void setCardType(String cardType) {
-		this.cardType = cardType;
-	}
-
-	public int getCardNumber() {
-		return cardNumber;
-	}
-
-	public void setCardNumber(int cardNumber) {
-		this.cardNumber = cardNumber;
-	}
-
-	public int getCcv() {
-		return ccv;
-	}
-
-	public void setCcv(int ccv) {
-		this.ccv = ccv;
-	}
-
-	public int getExpirationMonth() {
-		return expirationMonth;
-	}
-
-	public void setExpirationMonth(int expirationMonth) {
-		this.expirationMonth = expirationMonth;
-	}
-
-	public int getExpirationYear() {
-		return expirationYear;
-	}
-
-	public void setExpirationYear(int expirationYear) {
-		this.expirationYear = expirationYear;
 	}
 
 	public Address getBillingAddress() {
