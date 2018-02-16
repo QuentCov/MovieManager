@@ -2,17 +2,47 @@ package data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 
+import models.CreditCard;
+import models.Movie;
 import models.Order;
+import models.User;
 
 public class OrdersDB {
-	public static Order getOrder(String name) {
-		String query = "SELECT * FROM orders WHERE Name=" + name;
+	public static Order getOrder(String email) {
+		String query = "SELECT * FROM users u WHERE EmailAddress=" + email 
+				     + "INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName"
+				     + "INNER JOIN orders o ON u.Id=o.CustomerId"
+				     + "INNER JOIN orderItems oi ON o.Id=oi.OrderId"
+				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId"
+				     + "INNER JOIN movies m ON ms.movieId=m.Id";
 		ResultSet rs = Database.runQuery(query);
 		try {
 			if(rs.next())
 			{
-			    //TODO: make order
+			    Order order = new Order();
+			    User customer = UserDB.createUser(rs);
+			    CreditCard card = CreditCardsDB.createCard(rs);
+			    
+			    order.setCustomer(customer);
+			    order.setDate(new Date());
+			    order.setCreditCard(card);
+			    order.setCost(rs.getInt("o.TotalCost"));
+			    //order.setBillingAddress();
+			    //private Address shippingAddress;
+			    
+			    ArrayList<Integer> tickets = new ArrayList<Integer>();
+			    ArrayList<Movie> movies = new ArrayList<Movie>();
+			    tickets.add(rs.getInt("oi.Quantity"));
+			    movies.add(MovieDB.createMovie(rs));
+			    
+			    while(rs.next()) {
+			    	tickets.add(rs.getInt("oi.Quantity"));
+			    	movies.add(MovieDB.createMovie(rs));
+			    }
+			    return order;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -21,13 +51,20 @@ public class OrdersDB {
 	}
 	
 	public static Order getOrder(Order order) {
-		return getOrder(order.getCustomer().getFullName());
+		return getOrder(order.getCustomer().getEmailAddress());
 	}
 	
+	//TODO: Speak with David about the Order class.
 	public static boolean addOrder(Order order) {
-		String query = "INSERT INTO orders VALUES (NULL, ?, ?, ?)";
-		//TODO: Add values I need from David.
-		int i = Database.runUpdate(query);
+//		private User customer;
+//		private ArrayList<Movie> movies;
+//		private ArrayList<Integer> tickets;
+		String query = "INSERT INTO users (OrderDate, CustomerId, TotalCost, BillingAddress, CreditCardNumber)"
+				 + "VALUES (" + new Date() + ", ?, " + order.getCost() + ", ?, ?)";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(order.getBillingAddress().getAddress1());
+		params.add(order.getCreditCard().getCardNumber());
+		int i = Database.runUpdate(query, params);
 		if(i == 1) {
 		    return true;
 		}
@@ -42,15 +79,6 @@ public class OrdersDB {
 	    if(i == 1) {
 	    	return true;
 	    }
-	    return false;
-	}
-	
-	public static boolean deleteOrder(String orderName) {
-		String query = "DELETE FROM orders WHERE Ordername=" + orderName;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
 	    return false;
 	}
 }

@@ -8,7 +8,8 @@ public class Order {
 	private User customer;
 	private ArrayList<Movie> movies;
 	private ArrayList<Integer> tickets;
-	private ArrayList<Double> cost;
+	private double cost;
+	private CreditCard creditCard;
 	private Address billingAddress;
 	private Address shippingAddress;
 
@@ -44,12 +45,20 @@ public class Order {
 		this.tickets = tickets;
 	}
 
-	public ArrayList<Double> getCost() {
+	public double getCost() {
 		return cost;
 	}
 
-	public void setCost(ArrayList<Double> cost) {
+	public void setCost(double cost) {
 		this.cost = cost;
+	}
+	
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
 	}
 
 	public Address getBillingAddress() {

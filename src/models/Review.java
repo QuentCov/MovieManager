@@ -3,7 +3,7 @@ package models;
 public class Review {
 	private User reviewer;
 	private String review;
-	private double rating;
+	private int rating;
 	private Movie movie;
 	private final int MAX_REVIEW_LENGTH = 1000;
 	
@@ -23,11 +23,11 @@ public class Review {
 		this.review = review;
 	}
 	
-	public double getRating() {
+	public int getRating() {
 		return rating;
 	}
 	
-	public void setRating(double rating) {
+	public void setRating(int rating) {
 		this.rating = rating;
 	}
 	
