@@ -13,7 +13,7 @@
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
+
 		<h1>Theatre 13 Showrooms</h1>
 		<div class="row">
 			<div class="col-sm-3"><h4>Showroom Number</h4></div>
@@ -22,7 +22,7 @@
 			<div class="col-sm-2"><h4>Status</h4></div>
 			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-3"><p>Showroom 1</p></div>
 			<div class="col-sm-2"><p>250</p></div>

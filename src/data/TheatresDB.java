@@ -3,6 +3,8 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.Theatre;
+
 public class TheatresDB {
 	
 	public static Theatre getTheatre() {

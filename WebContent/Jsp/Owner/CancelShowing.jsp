@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Cancel Showing Page</title>
+	<title>Cancel Movie Showing</title>
 </head>
 <body>
 	<div class="container">
@@ -12,9 +12,9 @@
 		   	<a href="ManageShowtimes.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Manage Showtime</button></a>
 		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-	
+
 		<h1>Cancel Movie Showing</h1>
-	
+
 		<div class="row">
 			<div class="col-sm-2"><h4>Movie</h4></div>
 			<div class="col-sm-3"><h4>Theatre</h4></div>
@@ -22,7 +22,7 @@
 			<div class="col-sm-2"><h4>Scheduled Runtime</h4></div>
 			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-2">Star Trek</div>
 			<div class="col-sm-3">Theatre 13</div>
@@ -31,7 +31,7 @@
 			<div class="col-sm-3">
 				<div class="row">
 					<a href="CancellationConfirmation.jsp" class="btn btn-danger">Confirm Cancellation</a>
-					<a href="OwnerHomePage.jsp" class="btn btn-primary">Discard Cancellation</a>				
+					<a href="OwnerHomePage.jsp" class="btn btn-primary">Discard Cancellation</a>
 				</div>
 			</div>
 		</div>

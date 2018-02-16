@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager - Shopping Cart</title>
+	<title>Shopping Cart</title>
 </head>
 <body>
 	<div class="container">
@@ -20,7 +20,7 @@
 			<div class="col-sm-1"><h5>Tickets Bought</h5></div>
 			<div class="col-sm-1"><h5>Total Price</h5></div>
 			<div class="col-sm-2"><h5>Actions</h5></div>
-		</div>	
+		</div>
 		<div class="row">
 			<div class="col-sm-2">
 				The Bee Movie

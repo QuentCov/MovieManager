@@ -3,15 +3,15 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Add Movie Page</title>
+	<title>Add Movie</title>
 </head>
-<body>	
+<body>
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-		<h2>Add Movie Page</h2>
+		<h2>Add Movie</h2>
 		<form>
 			<div class="form-group">
 				<label for="movieName">Movie Name:</label>
@@ -49,13 +49,13 @@
 				<label for="movieRating">Movie Rating:</label>
 				<input type="email" class="form-control" id="movieRating" name="movieRating" placeholder="Movie Rating">
 			</div>
-			
+
 			<!-- TODO create servlet to add movie and cancel/redirect -->
 			<button type="submit" class="btn btn-primary" value="addMovie">Save</button>
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Cancel</a>
 		</form>
 	</div>
-	
+
 	<%@ include file="/_partials/scripts.html" %>
 	<script>
 		$(document).ready(function(){

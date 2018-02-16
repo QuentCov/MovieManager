@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<title>Movie Manager - Cancellation Confirmed</title>
+	<title>Cancellation Confirmed</title>
 </head>
 <body>
 	<div class="container">
