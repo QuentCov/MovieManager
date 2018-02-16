@@ -3,8 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.Date;
 
-import data.User;
-
 public class Order {
 	private Date date;
 	private User customer;
@@ -16,25 +14,25 @@ public class Order {
 	private int ccv;
 	private int expirationMonth;
 	private int expirationYear;
-	private String billingAddress;
-	private String shippingAddress;
-	
+	private Address billingAddress;
+	private Address shippingAddress;
+
 	public Date getDate() {
 		return date;
 	}
-	
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
+
 	public User getCustomer() {
 		return customer;
 	}
-	
+
 	public void setCustomer(User customer) {
 		this.customer = customer;
-	}	
-	
+	}
+
 	public ArrayList<Movie> getMovies() {
 		return movies;
 	}
@@ -62,67 +60,72 @@ public class Order {
 	public String getCardType() {
 		return cardType;
 	}
-	
+
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
-	
+
 	public int getCardNumber() {
 		return cardNumber;
 	}
-	
+
 	public void setCardNumber(int cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-	
+
 	public int getCcv() {
 		return ccv;
 	}
-	
+
 	public void setCcv(int ccv) {
 		this.ccv = ccv;
 	}
-	
+
 	public int getExpirationMonth() {
 		return expirationMonth;
 	}
-	
+
 	public void setExpirationMonth(int expirationMonth) {
 		this.expirationMonth = expirationMonth;
 	}
-	
+
 	public int getExpirationYear() {
 		return expirationYear;
 	}
-	
+
 	public void setExpirationYear(int expirationYear) {
 		this.expirationYear = expirationYear;
 	}
-	
-	public String getBillingAddress() {
+
+	public Address getBillingAddress() {
 		return billingAddress;
 	}
-	
-	public void setBillingAddress(String billingAddress) {
+
+	public void setBillingAddress(Address billingAddress) {
 		this.billingAddress = billingAddress;
 	}
-	
-	public String getShippingAddress() {
+
+	public Address getShippingAddress() {
 		return shippingAddress;
 	}
-	
-	public void setShippingAddress(String shippingAddress) {
+
+	public void setShippingAddress(Address shippingAddress) {
 		this.shippingAddress = shippingAddress;
 	}
 
-	// checks if the address is a valid address
-	public boolean isValidAddress() {
-		return true;
+	// checks if the billing address is a valid address
+	public boolean isValidBillingAddress() {
+		return this.billingAddress.isValidAddress();
 	}
-	
+
+    // checks if the shipping address is a valid address
+    public boolean isValidShippingAddress() {
+        return this.shippingAddress.isValidAddress();
+    }
+
 	// checks if the order makes the showroom(s) over capacity
 	public boolean isNotOverCapacity() {
 		return true;
 	}
-	
+
 }

@@ -1,7 +1,5 @@
 package models;
 
-import data.User;
-
 public class Review {
 	private User reviewer;
 	private String review;

@@ -1,11 +1,10 @@
 package models;
 
 import java.util.ArrayList;
-import data.User;
 
 public class Theatre {
 	private String name;
-	private String address;
+	private Address address;
 	private ArrayList<Showroom> showrooms;
 	private User owner;
 	
@@ -19,11 +18,11 @@ public class Theatre {
 		this.name = name;
 	}
 
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
