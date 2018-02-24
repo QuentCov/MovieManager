@@ -40,6 +40,7 @@ public class ReviewDB {
 			    	reviews.add(review);
 			    }
 			}
+			rs.close();
 			return reviews;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,6 +64,7 @@ public class ReviewDB {
 			    	reviews.add(review);
 			    }
 			}
+			rs.close();
 			return reviews;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,6 +88,7 @@ public class ReviewDB {
 					movieId = rs.getInt("Id");
 				
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -100,14 +103,5 @@ public class ReviewDB {
 		    return true;
 		}
 		return false;
-	}
-	
-	public static boolean deleteReview(int id) {
-		String query = "DELETE FROM reviews WHERE Id=" + id;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
-	    return false;
 	}
 }

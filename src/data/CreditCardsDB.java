@@ -19,6 +19,7 @@ public class CreditCardsDB {
 			String query = "SELECT * FROM users WHERE Id=" + rs.getInt("CustomerId");
 			ResultSet rs2 = Database.runQuery(query);
 			card.setOwner(UserDB.createUser(rs2));
+			rs2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -32,8 +33,11 @@ public class CreditCardsDB {
 		try {
 			if(rs.next())
 			{
-			    return createCard(rs);
+				CreditCard card = createCard(rs);
+				rs.close();
+			    return card;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -48,6 +52,7 @@ public class CreditCardsDB {
 			if(rs.next()) {
 				ownerId = rs.getInt("Id");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -48,10 +48,11 @@ public class TheatresDB {
 					showroom.setShowings(showings);
 					showrooms.add(showroom);
 				}
-				
+
 				theatre.setShowrooms(showrooms);
 				return theatre;
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +66,13 @@ public class TheatresDB {
 						    + "FROM theatreBuildings t WHERE Name=" + name 
 						    + "INNER JOIN showrooms ON theatreBuildings.Id=showrooms.theatreId";
 		ResultSet rs = Database.runQuery(query);
-		return createTheatre(rs);
+		Theatre theatre = createTheatre(rs);
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return theatre;
 	}
 	
 	public static boolean addTheatre(Theatre theatre) {
@@ -79,12 +86,13 @@ public class TheatresDB {
 			if(rs.next()) {
 				ownerId = rs.getInt("Id");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		query = "INSERT INTO users (Name, Address, ownerId, City, State, ZipCode)"
-			  + "VALUES (?, ?,"+ ownerId +", ?, ?, ?)";
+			  + "VALUES (?, ?," + ownerId + ", ?, ?, ?)";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(theatre.getName());
@@ -113,6 +121,7 @@ public class TheatresDB {
 			if(rs.next()) {
 				ownerId = rs.getInt("Id");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -130,15 +139,6 @@ public class TheatresDB {
 	    if(i == 1) {
 	    	return true;
 	    }
-	    return false;
-	}
-	
-	public static boolean deleteTheatre(String theatreName) {
-		String query = "DELETE FROM theatres WHERE Name=" + theatreName;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
 	    return false;
 	}
 }

@@ -40,8 +40,11 @@ public class UserDB {
 		try {
 			if(rs.next())
 			{
-			    return createUser(rs);
+				User user = createUser(rs);
+				rs.close();
+			    return user;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -54,8 +57,11 @@ public class UserDB {
 		try {
 			if(rs.next())
 			{
-			    return createUser(rs);
+				User user = createUser(rs);
+				rs.close();
+			    return user;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -108,15 +114,6 @@ public class UserDB {
 	    return false;
 	}
 	
-	public static boolean deleteUser(String userName) {
-		String query = "DELETE FROM users WHERE EmailAddress=" + userName;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
-	    return false;
-	}
-	
 	public static boolean validateUser(User user) {
 		return validateUser(user.getEmailAddress());
 	}
@@ -127,8 +124,10 @@ public class UserDB {
         try {
 			if(rs.next())
 			{
+				rs.close();
 			    return true;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

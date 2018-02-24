@@ -19,6 +19,7 @@ public class Database {
 	    	PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);
             connection.close();
+            stmt.close();
             return rs;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -35,6 +36,7 @@ public class Database {
 	    	PreparedStatement stmt = connection.prepareStatement(query);
 	        int i = stmt.executeUpdate(query);
 	        connection.close();
+	        stmt.close();
 	        return i;
 		} catch (SQLException ex) {
 	        ex.printStackTrace();
@@ -54,6 +56,7 @@ public class Database {
 	        }
 	        int i = stmt.executeUpdate(query);
 	        connection.close();
+	        stmt.close();
 	        return i;
 		} catch (SQLException ex) {
 	        ex.printStackTrace();

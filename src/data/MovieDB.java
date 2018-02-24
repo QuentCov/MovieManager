@@ -30,8 +30,11 @@ public class MovieDB {
 		try {
 			if(rs.next())
 			{
-				return createMovie(rs);
+				Movie movie = createMovie(rs);
+				rs.close();
+			    return movie;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -44,8 +47,11 @@ public class MovieDB {
 		try {
 			if(rs.next())
 			{
-			    return createMovie(rs);
+				Movie movie = createMovie(rs);
+				rs.close();
+			    return movie;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -84,15 +90,6 @@ public class MovieDB {
 	    if(i == 1) {
 	    	return true;
 	    }
-	    return false;
-	}
-	
-	public static boolean deleteMovie(String name) {
-		String query = "DELETE FROM movies WHERE Name=" + name;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
 	    return false;
 	}
 }

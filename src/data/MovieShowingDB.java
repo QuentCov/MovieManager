@@ -37,7 +37,9 @@ public class MovieShowingDB {
 				}
 				
 				showing.setShowroom(showroom);
+				rs3.close();
 			}
+			rs2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,6 +57,7 @@ public class MovieShowingDB {
 			{
 			    showings.add(createMovieShowing(rs));
 			}
+			rs.close();
 			return showings;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,15 +74,6 @@ public class MovieShowingDB {
 	    if(i == 1) {
 	    	return true;
 	    }
-	    return false;
-	}
-	
-	public static boolean deleteMovieShowing(int id) {
-		String query = "DELETE FROM movieShowings WHERE Id=" + id;
-		int i = Database.runUpdate(query);
-		if(i == 1) {
-		    return true;
-		}
 	    return false;
 	}
 }

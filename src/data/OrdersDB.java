@@ -42,19 +42,17 @@ public class OrdersDB {
 			    	tickets.add(rs.getInt("oi.Quantity"));
 			    	movies.add(MovieDB.createMovie(rs));
 			    }
+			    rs.close();
 			    return order;
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	//TODO: Speak with David about the Order class.
 	public static boolean addOrder(Order order) {
-//		private User customer;
-//		private ArrayList<Movie> movies;
-//		private ArrayList<Integer> tickets;
 		String query = "INSERT INTO users (OrderDate, CustomerId, TotalCost, BillingAddress, CreditCardNumber)"
 				 + "VALUES (" + new Date() + ", ?, " + order.getCost() + ", ?, ?)";
 		ArrayList<String> params = new ArrayList<String>();
