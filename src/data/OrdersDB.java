@@ -50,10 +50,6 @@ public class OrdersDB {
 		return null;
 	}
 	
-	public static Order getOrder(Order order) {
-		return getOrder(order.getCustomer().getEmailAddress());
-	}
-	
 	//TODO: Speak with David about the Order class.
 	public static boolean addOrder(Order order) {
 //		private User customer;

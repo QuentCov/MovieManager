@@ -30,7 +30,7 @@ public class MovieDB {
 		try {
 			if(rs.next())
 			{
-				createMovie(rs);
+				return createMovie(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -44,16 +44,12 @@ public class MovieDB {
 		try {
 			if(rs.next())
 			{
-			    createMovie(rs);
+			    return createMovie(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static Movie getUser(Movie movie) {
-		return getMovie(movie.getName());
 	}
 	
 	public static boolean addMovie(Movie movie) {

@@ -49,18 +49,19 @@ public class MovieShowingDB {
 	public static ArrayList<MovieShowing> getMovieShowings(int showroomId) {
 		String query = "SELECT * FROM movieShowings WHERE showroomId=" + showroomId;
 		ResultSet rs = Database.runQuery(query);
+		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 		try {
 			while(rs.next())
 			{
-			    createMovieShowing(rs);
+			    showings.add(createMovieShowing(rs));
 			}
+			return showings;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	//TODO: Speak with David about the MovieShowing entry.
 	public static boolean addMovieShowing(MovieShowing movieShowing) {
 		String query = "UPDATE movieShowing SET Price=?, NumberPurchased=?, StartTime=?, EndTime=?, movieId=?, showroomId=? "
 				     + "WHERE EmailAddress=?";

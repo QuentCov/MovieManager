@@ -68,10 +68,6 @@ public class TheatresDB {
 		return createTheatre(rs);
 	}
 	
-	public static Theatre getTheatre(Theatre theatre) {
-		return getTheatre(theatre.getName());
-	}
-	
 	public static boolean addTheatre(Theatre theatre) {
 		Address address = theatre.getAddress();
 		User owner = theatre.getOwner();

@@ -39,10 +39,6 @@ public class CreditCardsDB {
 		}
 		return null;
 	}
-	
-	public static CreditCard getCreditCard(CreditCard creditCard) {
-		return getCreditCard(creditCard.getCardNumber());
-	}
 
 	public static boolean addCreditCard(CreditCard card) {
 		String query = "SELECT Id FROM users WHERE FullName=" + card.getOwner().getFullName();

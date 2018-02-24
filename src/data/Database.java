@@ -5,19 +5,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Database {
 	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/qcovert";
     private static final String USER = "qcovert";
-    private static final String PASS = "???";
+    private static final String PASS = "qJ3zTz";
     
     public static ResultSet runQuery(String query) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
-            Statement stmt = connection.createStatement();
+	    	PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);
             connection.close();
             return rs;
@@ -33,7 +32,7 @@ public class Database {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
-	        Statement stmt = connection.createStatement();
+	    	PreparedStatement stmt = connection.prepareStatement(query);
 	        int i = stmt.executeUpdate(query);
 	        connection.close();
 	        return i;

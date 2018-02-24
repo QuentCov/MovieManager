@@ -40,7 +40,7 @@ public class UserDB {
 		try {
 			if(rs.next())
 			{
-			    createUser(rs);
+			    return createUser(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,16 +54,12 @@ public class UserDB {
 		try {
 			if(rs.next())
 			{
-			    createUser(rs);
+			    return createUser(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static User getUser(User user) {
-		return getUser(user.getEmailAddress());
 	}
 	
 	public static boolean addUser(User user) {
