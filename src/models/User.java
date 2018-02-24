@@ -7,7 +7,7 @@ public class User {
 	private String fullName;
 	private Address streetAddress;
 	private String phoneNumber;
-	
+
 	public User() {
 		super();
 	}
