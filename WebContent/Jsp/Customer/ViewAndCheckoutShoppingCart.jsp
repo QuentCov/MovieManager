@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,70 +7,42 @@
 	<title>Shopping Cart</title>
 </head>
 <body>
+	<!-- <jsp:useBean id="allOrders" type="java.util.ArrayList<models.Order>" scope="session" /> -->
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>
-		<div class="row">
-			<div class="col-sm-2"><h5>Movie Name</h5></div>
-			<div class="col-sm-2"><h5>Thumbnail</h5></div>
-			<div class="col-sm-2"><h5>Theatre Name/Number</h5></div>
-			<div class="col-sm-2"><h5>Showtime/Date</h5></div>
-			<div class="col-sm-1"><h5>Tickets Bought</h5></div>
-			<div class="col-sm-1"><h5>Total Price</h5></div>
-			<div class="col-sm-2"><h5>Actions</h5></div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2">
-				The Bee Movie
-			</div>
-			<div class="col-sm-2">
-				<img class="img-fluid" src="https://vignette.wikia.nocookie.net/beemovie/images/f/f7/Bee-movie-disneyscreencaps_com-2147.jpg/revision/latest?cb=20150208074457">
-			</div>
-			<div class="col-sm-2">
-				De Marco Theatre # 2
-			</div>
-			<div class="col-sm-2">
-				08/16/2018, 6:00 PM
-			</div>
-			<div class="col-sm-1">
-				13 Tickets
-			</div>
-			<div class="col-sm-1">
-				$142.36
-			</div>
-			<div class="col-sm-2">
-				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove from cart</a>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-2">
-				Get Out
-			</div>
-			<div class="col-sm-2">
-				<img class="img-fluid" src="http://www.litemovies.com/wp-content/uploads/2017/02/get-out-thumbnail-57f54b46b71d6-1.png">
-			</div>
-			<div class="col-sm-2">
-				De Marco Theatre # 6
-			</div>
-			<div class="col-sm-2">
-				08/30/2018, 2:00 PM
-			</div>
-			<div class="col-sm-1">
-				1 Ticket
-			</div>
-			<div class="col-sm-1">
-				$12.37
-			</div>
-			<div class="col-sm-2">
-				<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-danger">Remove from cart</a>
-			</div>
-		</div>
+		<table border="1">
+	        <tr>
+		        <td>Movie Details</td>
+				<td>Tickets Bought</td>
+				<td>Total Price</td>
+				<td>Actions</td>
+	        </tr>
+	        <c:forEach items="${allOrders}" var="current">
+		    	<tr>
+		    		<tr>
+			    		<c:forEach items="${current.getMovies()}" var="movie">
+				    		<td>movie.getMovie().getName()></td>
+				            <td>movie.getShowroom().getTheatre().getName()></td>
+				            <td>movie.getStartTime()></td>
+				            <td>movie.getShowroom().getCapacity()></td>
+				            <td>movie.getCost()></td>
+				            <td>movie.getMovie().getThumbnailFile()</td>
+				            <td>current.getTicketsBoughtByMovie(movie)</td>
+				            <!-- TODO: Add the options for each -->
+				         </c:forEach>
+			         </tr>
+			         <td>${current.getTotalPrice()}</td>
+			         <!-- TODO: Add Actions -->
+		        </tr>
+			</c:forEach>
+		</table>
 		<div class="row">
 			<div class="offset-md-3 col-sm-3">
-				Total: $154.73
+				Total: ${totalCost.cost}
 			</div>
 			<div class="offset-md-3 col-sm-3">
 				<a href="CustomerTransaction.jsp" class="btn btn-success">Checkout</a>

@@ -128,4 +128,28 @@ public class Order {
 		return true;
 	}
 
+	public double getTotalCost() {
+		double j = 0;
+		for(Double i : cost) {
+			j = j + i;
+		}
+		return j;
+	}
+	
+	public int getTicketCount() {
+		int j = 0;
+		for(Integer i : tickets) {
+			i = i + j;
+		}
+		return j;
+	}
+	
+	public int getTicketsByMovie(Movie movie) {
+		if(!movies.contains(movie)) {
+			return 0;
+		}
+		
+		int i = movies.indexOf(movie);
+		return tickets.get(i);
+	}
 }

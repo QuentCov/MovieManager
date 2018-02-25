@@ -57,4 +57,8 @@ public class Movie {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
+	
+	public double getAverageRating() {
+		return 0;
+	}
 }
