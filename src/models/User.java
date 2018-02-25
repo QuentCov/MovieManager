@@ -1,11 +1,5 @@
 package models;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Properties;
-
 public class User {
 	private String emailAddress;
 	private String password;
@@ -13,6 +7,10 @@ public class User {
 	private String fullName;
 	private Address streetAddress;
 	private String phoneNumber;
+
+	public User() {
+		super();
+	}
 
 	public User(String emailAddress, String password) {
 		super();
