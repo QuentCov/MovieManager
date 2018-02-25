@@ -5,7 +5,7 @@ import java.util.Date;
 public class Review {
 	private User reviewer;
 	private String review;
-	private double rating;
+	private int rating;
 	private Date date;
 	private Movie movie;
 	private final int MAX_REVIEW_LENGTH = 1000;
@@ -28,11 +28,11 @@ public class Review {
 		}
 	}
 	
-	public double getRating() {
+	public int getRating() {
 		return rating;
 	}
 	
-	public void setRating(double rating) {
+	public void setRating(int rating) {
 		this.rating = rating;
 	}
 	

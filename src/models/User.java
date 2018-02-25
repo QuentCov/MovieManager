@@ -8,6 +8,10 @@ public class User {
 	private Address streetAddress;
 	private String phoneNumber;
 
+	public User() {
+		super();
+	}
+
 	public User(String emailAddress, String password) {
 		super();
 		this.emailAddress = emailAddress;

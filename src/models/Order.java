@@ -8,12 +8,8 @@ public class Order {
 	private User customer;
 	private ArrayList<Movie> movies;
 	private ArrayList<Integer> tickets;
-	private ArrayList<Double> cost;
-	private String cardType;
-	private int cardNumber;
-	private int ccv;
-	private int expirationMonth;
-	private int expirationYear;
+	private double cost;
+	private CreditCard creditCard;
 	private Address billingAddress;
 	private Address shippingAddress;
 
@@ -49,52 +45,20 @@ public class Order {
 		this.tickets = tickets;
 	}
 
-	public ArrayList<Double> getCost() {
+	public double getCost() {
 		return cost;
 	}
 
-	public void setCost(ArrayList<Double> cost) {
+	public void setCost(double cost) {
 		this.cost = cost;
 	}
-
-	public String getCardType() {
-		return cardType;
+	
+	public CreditCard getCreditCard() {
+		return creditCard;
 	}
 
-	public void setCardType(String cardType) {
-		this.cardType = cardType;
-	}
-
-	public int getCardNumber() {
-		return cardNumber;
-	}
-
-	public void setCardNumber(int cardNumber) {
-		this.cardNumber = cardNumber;
-	}
-
-	public int getCcv() {
-		return ccv;
-	}
-
-	public void setCcv(int ccv) {
-		this.ccv = ccv;
-	}
-
-	public int getExpirationMonth() {
-		return expirationMonth;
-	}
-
-	public void setExpirationMonth(int expirationMonth) {
-		this.expirationMonth = expirationMonth;
-	}
-
-	public int getExpirationYear() {
-		return expirationYear;
-	}
-
-	public void setExpirationYear(int expirationYear) {
-		this.expirationYear = expirationYear;
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
 	}
 
 	public Address getBillingAddress() {
