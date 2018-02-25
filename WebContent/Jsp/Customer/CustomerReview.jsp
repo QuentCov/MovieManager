@@ -11,7 +11,6 @@
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-		<!-- <jsp:useBean id="movie" type="models.Movie" scope="session" /> -->
 		<div class="row"><h1>Review for: Insert Movie Title Here Later</h1></div>
 		<form action="CustomerReviewConfirmation">
 			<div class="form-group">

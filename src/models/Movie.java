@@ -1,5 +1,7 @@
 package models;
 
+import data.MovieDB;
+
 public class Movie {
 	private String name;
 	private String genre;
@@ -59,6 +61,6 @@ public class Movie {
 	}
 	
 	public double getAverageRating() {
-		return 0;
+		return MovieDB.getAverageScore(this);
 	}
 }

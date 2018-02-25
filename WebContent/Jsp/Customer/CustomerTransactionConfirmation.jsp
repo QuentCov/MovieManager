@@ -7,7 +7,6 @@
 	<title>Transaction Confirmed</title>
 </head>
 <body>
-	<!-- <jsp:useBean id="order" type="models.Order" scope="session" /> -->
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>

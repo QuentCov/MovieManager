@@ -65,5 +65,25 @@ public class Database {
 		}
 		return -1;
     }
+
+	public static ResultSet runQuery(String query, ArrayList<String> params) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        for(int j = 0; j < params.size(); j++) {
+	        	stmt.setString(j, params.get(j));
+	        }
+	        ResultSet rs = stmt.executeQuery(query);
+	        connection.close();
+	        stmt.close();
+	        return rs;
+		} catch (SQLException ex) {
+	        ex.printStackTrace();
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
     
 }

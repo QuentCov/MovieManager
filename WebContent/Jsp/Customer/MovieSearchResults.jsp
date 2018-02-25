@@ -7,7 +7,6 @@
 	<title>Movie Search Results</title>
 </head>
 <body>
-	<jsp:useBean id="allMovies" type="java.util.ArrayList<models.MovieShowing>" scope="session" />
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
@@ -34,8 +33,11 @@
 		            <td>current.getShowroom().getCapacity()></td>
 		            <td>current.getCost()></td>
 		            <td>current.getMovie().getThumbnailFile()</td>
-		            <!-- TODO: Add the options for each -->
 		    	</tr>
+		    	<form name="item" action="UpdateCart">
+	            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
+	            	<input type="submit" name="action" value="Add to Cart">
+	            </form>
 		    </c:forEach>
 	    </table>
     </div>

@@ -7,7 +7,6 @@
 	<title>Cancellation Confirmed</title>
 </head>
 <body>
-	<!-- <jsp:useBean id="orders" type="models.Order" scope="session" /> -->
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
@@ -18,9 +17,13 @@
 		<p>Your order has been cancelled and your account has been refunded ${current.getTotalPrice()}.</p>
 		<table border="1">
 	        <tr>
-		        <td>Movie Details</td>
-				<td>Total Price</td>
-				<td>Actions</td>
+		        <td>Movie Title</td>
+		        <td>Theatre</td>
+		        <td>Start Time</td>
+		        <td>Seats Available</td>
+		        <td>Cost per Ticket</td>
+		        <td>Poster</td>
+				<td>Tickets Bought</td>
 	        </tr>
     		<tr>
 	    		<c:forEach items="${orders.getMovies()}" var="movie">
@@ -31,9 +34,7 @@
 		            <td>movie.getCost()></td>
 		            <td>movie.getMovie().getThumbnailFile()</td>
 		            <td>current.getTicketsBoughtByMovie(movie)</td>
-		            <!-- TODO: Add the options for each -->
 		         </c:forEach>
-		         <td>current.getTicketsBoughtByMovie(movie)</td>
 	         </tr>
 		</table>
 	</div>

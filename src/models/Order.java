@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Order {
+	//This ID is used by the shopping cart to identify each of its orders.
+	private int ID;
 	private Date date;
 	private User customer;
 	private ArrayList<Movie> movies;
@@ -91,14 +93,6 @@ public class Order {
 	public boolean isNotOverCapacity() {
 		return true;
 	}
-
-	public double getTotalCost() {
-		double j = 0;
-		for(Double i : cost) {
-			j = j + i;
-		}
-		return j;
-	}
 	
 	public int getTicketCount() {
 		int j = 0;
@@ -115,5 +109,13 @@ public class Order {
 		
 		int i = movies.indexOf(movie);
 		return tickets.get(i);
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 }

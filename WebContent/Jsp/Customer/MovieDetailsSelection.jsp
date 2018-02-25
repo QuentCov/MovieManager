@@ -7,8 +7,6 @@
 	<title>Movies Details Selection</title>
 </head>
 <body>
-	<!-- <jsp:useBean id="movieShowing" type="models.MovieShowing" scope="session" /> -->
-	<!-- <jsp:useBean id="reviews" type="java.util.ArrayList<models.Review>" scope="session" /> -->
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
@@ -38,9 +36,16 @@
 	            <td>movieShwoing.getStartTime()</td>
 	            <td>movie.getCost()</td>
 	            <td>movie.getShowroom().getCapacity()</td>
-	        	<!-- TODO: Add Actions -->
-	        </tr>
+	         </tr>
 		</table>
+		<form name="item" action="UpdateCart">
+        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
+        	<input type="submit" name="action" value="Add to Cart">
+        </form>
+        <form name="item" action="CustomerReview">
+        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
+        	<input type="submit" name="action" value="Add Review">
+        </form>
 		<h2>Viewer Reviews:</h2>
 		<table border="1">
 			<tr>
