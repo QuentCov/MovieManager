@@ -12,7 +12,7 @@
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>View Your Orders</h1>
+		<h1>Do you want to cancel this order?</h1>
 		<table border="1">
 	        <tr>
 		        <td>Movie Title</td>
@@ -24,7 +24,7 @@
 				<td>Tickets Bought</td>
 	        </tr>
     		<tr>
-	    		<c:forEach items="${orders.getMovies()}" var="movie">
+	    		<c:forEach items="${order.getMovies()}" var="movie">
 		    		<td>movie.getMovie().getName()></td>
 		            <td>movie.getShowroom().getTheatre().getName()></td>
 		            <td>movie.getStartTime()></td>
@@ -37,7 +37,7 @@
 	         </tr>
 		</table>
 		<div class="offset-md-3 col-sm-3">
-			<a href="CancellationConfirmation" class="btn btn-success">Confirm Cancellation</a>
+			<a href="CancelOrder" class="btn btn-success">Confirm Cancellation</a>
 		</div>
 		<div class="offset-md-3 col-sm-3">
 			<a href="ViewAndCheckoutShoppingCart" class="btn btn-success">Discard Cancellation</a>

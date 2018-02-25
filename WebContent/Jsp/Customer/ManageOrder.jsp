@@ -24,7 +24,7 @@
 				<td>Tickets Bought</td>
 				<td>Actions</td>
 	        </tr>
-	        <c:forEach items="${allOrders}" var="current">
+	        <c:forEach items="${orders}" var="current">
 		    	<tr>
 		    		<c:forEach items="${current.getMovies()}" var="movie">
 			    		<td>movie.getMovie().getName()></td>

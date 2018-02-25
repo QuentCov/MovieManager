@@ -65,14 +65,67 @@ public class OrdersDB {
 		return false;
 	}
 	
-	//Note: We recognize the inefficiency here and have brainstormed solutions, 
-	//	    but these solutions are too intensive for a project of this scope.
-	public static boolean updateOrder(Order order) {
-		String query = "UPDATE orders SET Ordername=?, Password=?, WHERE id=?";
-		int i = Database.runUpdate(query);
-	    if(i == 1) {
-	    	return true;
-	    }
-	    return false;
+	public static boolean deleteOrder(Order order) {
+		User owner = order.getCustomer();
+		String query = "SELECT Id FROM users WHERE Email=?";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(owner.getEmailAddress());
+		ResultSet rs = Database.runQuery(query, params);
+		int id = -1;
+		try {
+			if(rs.next()) {
+				id = rs.getInt("Id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(id == -1) {
+			return false;
+		}
+		
+		query = "SELECT Id FROM orders WHERE CustomerId=?";
+		params.clear();
+		params.add(Integer.toString(id));
+		rs = Database.runQuery(query, params);
+		try {
+			if(rs.next()) {
+				id = rs.getInt("Id");
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(id == -1) {
+			return false;
+		}
+		
+		query = "DELETE FROM orderItems WHERE OrderId=?";
+		params.clear();
+		params.add(Integer.toString(id));
+		int i = Database.runUpdate(query, params);
+		if(i != 0 || i != -1) {
+			query = "DELETE FROM orders WHERE CartId=?";
+			params.clear();
+			params.add(Integer.toString(order.getID()));
+			i = Database.runUpdate(query, params);
+			
+			if(i != 0 || i != -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean refundOrder(Order order) {
+		CreditCard card = order.getCreditCard();
+		card.setBalance(card.getBalance() + order.getCost());
+		boolean updated = CreditCardsDB.updateBalance(card);
+		
+		if(updated) {
+			return true;
+		}
+		return false;
 	}
 }

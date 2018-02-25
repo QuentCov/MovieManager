@@ -8,6 +8,7 @@ public class CreditCard {
 	private String ccv;
 	private int expirationMonth;
 	private int expirationYear;
+	private double balance;
 	
 	public User getOwner() {
 		return owner;
@@ -45,5 +46,11 @@ public class CreditCard {
 	}
 	public void setExpirationYear(int expirationYear) {
 		this.expirationYear = expirationYear;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 }

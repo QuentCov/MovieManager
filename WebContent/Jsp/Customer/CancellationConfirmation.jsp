@@ -26,7 +26,7 @@
 				<td>Tickets Bought</td>
 	        </tr>
     		<tr>
-	    		<c:forEach items="${orders.getMovies()}" var="movie">
+	    		<c:forEach items="${cancelOrder.getMovies()}" var="movie">
 		    		<td>movie.getMovie().getName()></td>
 		            <td>movie.getShowroom().getTheatre().getName()></td>
 		            <td>movie.getStartTime()></td>
