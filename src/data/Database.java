@@ -1,10 +1,15 @@
 package data;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Database {
@@ -12,8 +17,43 @@ public class Database {
     private static final String USER = "qcovert";
     private static final String PASS = "qJ3zTz";
     
+    private static boolean createdDB = false;
+    
+    public static int setupDatabase() {
+    	try {
+			Class.forName("com.mysql.jdbc.Driver");
+	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
+	    	Statement stmt = connection.createStatement();
+
+	    	// unfortunately needs absolute path of the Setup.sql file
+	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("D:/Documents/Dropbox/Eclipse Workspace/JavaEE/MovieManager/src/data/Setup.sql"));
+	    	String query = "";
+	    	int i = 0;
+	    	while((query = setupScriptReader.readLine()) != null) {
+	    		i = stmt.executeUpdate(query);
+	    	}
+            connection.close();
+            stmt.close();
+            setupScriptReader.close();
+        	createdDB = true;
+            return i;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return -1;
+    }
+    
     public static ResultSet runQuery(String query) {
 		try {
+			if(!createdDB) {
+    			setupDatabase();
+            }
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	    	PreparedStatement stmt = connection.prepareStatement(query);
@@ -31,6 +71,9 @@ public class Database {
     
     public static int runUpdate(String query) {
 		try {
+			if(!createdDB) {
+    			setupDatabase();
+            }
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	    	PreparedStatement stmt = connection.prepareStatement(query);
@@ -48,6 +91,9 @@ public class Database {
     
     public static int runUpdate(String query, ArrayList<String> params) {
     	try {
+    		if(!createdDB) {
+    			setupDatabase();
+            }
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	        PreparedStatement stmt = connection.prepareStatement(query);
