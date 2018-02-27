@@ -5,6 +5,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import data.MovieDB;
+import models.Movie;
 
 /**
  * Servlet implementation class MovieSearchResults
@@ -17,22 +21,28 @@ public class MovieSearchResults extends HttpServlet {
      */
     public MovieSearchResults() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession();
+		
+		String name = (String) session.getAttribute("searchString");
+		Movie movie = MovieDB.getMovie(name);
+		if(movie != null) {
+			session.setAttribute("movie", movie);
+		}
+		
+		session.setAttribute("results", "Movie Not Found");
+		response.sendRedirect("MovieDetailsResults.jsp");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -11,7 +11,7 @@ import models.Order;
 import models.User;
 
 public class OrdersDB {
-	public static Order getOrder(String email) {
+	public static ArrayList<Order> getOrders(String email) {
 		String query = "SELECT * FROM users u WHERE EmailAddress=" + email 
 				     + "INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName"
 				     + "INNER JOIN orders o ON u.Id=o.CustomerId"
@@ -19,8 +19,9 @@ public class OrdersDB {
 				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId"
 				     + "INNER JOIN movies m ON ms.movieId=m.Id";
 		ResultSet rs = Database.runQuery(query);
+		ArrayList<Order> orders = new ArrayList<Order>();
 		try {
-			if(rs.next())
+			while(rs.next())
 			{
 			    Order order = new Order();
 			    User customer = UserDB.createUser(rs);
@@ -42,14 +43,14 @@ public class OrdersDB {
 			    	tickets.add(rs.getInt("oi.Quantity"));
 			    	movies.add(MovieDB.createMovie(rs));
 			    }
-			    rs.close();
-			    return order;
+			
+			    orders.add(order);
 			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return orders;
 	}
 	
 	public static boolean addOrder(Order order) {

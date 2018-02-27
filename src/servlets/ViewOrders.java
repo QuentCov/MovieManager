@@ -1,10 +1,17 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import data.OrdersDB;
+import models.Order;
+import models.User;
 
 /**
  * Servlet implementation class ViewOrders
@@ -17,22 +24,27 @@ public class ViewOrders extends HttpServlet {
      */
     public ViewOrders() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession();
+		
+		User user = (User) session.getAttribute("user");
+		String email = user.getEmailAddress();
+		ArrayList<Order> orders = OrdersDB.getOrders(email);
+		
+		session.setAttribute("orders", orders);
+		
+		response.sendRedirect("ViewOrders.jsp");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
