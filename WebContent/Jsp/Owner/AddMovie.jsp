@@ -12,46 +12,40 @@
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h2>Add Movie</h2>
-		<form>
+		<form action="${pageContext.request.contextPath}/AddMovie" name="addMovieForm" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="movieName">Movie Name:</label>
-				<input type="email" class="form-control" id="movieName" name="movieName" placeholder="Movie Name">
+				<input type="text" class="form-control" id="movieName" name="movieName" placeholder="Movie Name" required>
 			</div>
 			<div class="form-group">
 				<label for="movieGenre">Movie Genre:</label>
-				<div class="dropdown">
-					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Select Movie Genre
-					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Horror</a>
-						<a class="dropdown-item" href="#">Action</a>
-						<a class="dropdown-item" href="#">Comedy</a>
-						<a class="dropdown-item" href="#">Adventure</a>
-						<a class="dropdown-item" href="#">Romance</a>
-						<a class="dropdown-item" href="#">Sci-Fi</a>
-					</div>
-				</div>
+				<select class="form-control" id="movieGenre" name="movieGenre" required>
+					<option>Horror</option>
+					<option>Action</option>
+					<option>Comedy</option>
+					<option>Adventure</option>
+					<option>Romance</option>
+					<option>Sci-Fi</option>
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="movieThumbnail">Movie Thumbnail:</label>
-				<input type="file" class="form-control" id="movieThumbnail" name="movieThumbnail" placeholder="Movie Thumbnail">
+				<input type="file" class="form-control-file" id="movieThumbnail" name="movieThumbnail" placeholder="Movie Thumbnail" required>
 			</div>
 			<div class="form-group">
 				<label for="movieDescription">Movie Description:</label>
-				<input type="text" class="form-control" id="movieDescription" name="movieDescription" placeholder="Movie Description">
+				<input type="text" class="form-control" id="movieDescription" name="movieDescription" placeholder="Movie Description" required>
 			</div>
 			<div class="form-group">
 				<label for="movieRuntime">Movie Runtime:</label>
-				<input type="text" class="form-control" id="movieRuntime" name="movieRuntime" placeholder="Movie Runtime">
+				<input type="text" class="form-control" id="movieRuntime" name="movieRuntime" placeholder="Movie Runtime" required>
 			</div>
 			<div class="form-group">
 				<label for="movieRating">Movie Rating:</label>
-				<input type="email" class="form-control" id="movieRating" name="movieRating" placeholder="Movie Rating">
+				<input type="text" class="form-control" id="movieRating" name="movieRating" placeholder="Movie Rating" required>
 			</div>
 
-			<!-- TODO create servlet to add movie and cancel/redirect -->
-			<button type="submit" class="btn btn-primary" value="addMovie">Save</button>
+			<input type="submit" class="btn btn-primary" value="Add Movie">
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Cancel</a>
 		</form>
 	</div>

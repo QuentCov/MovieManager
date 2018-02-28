@@ -3,12 +3,23 @@ package models;
 public class Movie {
 	private String name;
 	private String genre;
-	private String thumbnailFile;
+	private String thumbnailName;
+	private byte[] thumbnailData;
 	private String description;
 	private int runtime;
 	private String rating;
 	
 	public Movie() {}
+	
+	public Movie(String name, String genre, String thumbnailName, byte[] thumbnailData, String description, int runtime, String rating) {
+		this.name = name;
+		this.genre = genre;
+		this.thumbnailName = thumbnailName;
+		this.thumbnailData = thumbnailData;
+		this.description = description;
+		this.runtime = runtime;
+		this.rating = rating;
+	}
 	
 	public String getName() {
 		return name;
@@ -34,14 +45,22 @@ public class Movie {
 		this.description = description;
 	}
 	
-	public String getThumbnailFile() {
-		return thumbnailFile;
+	public String getThumbnailName() {
+		return thumbnailName;
 	}
-	
-	public void setThumbnailFile(String thumbnailFile) {
-		this.thumbnailFile = thumbnailFile;
+
+	public void setThumbnailName(String thumbnailName) {
+		this.thumbnailName = thumbnailName;
 	}
-	
+
+	public byte[] getThumbnailData() {
+		return thumbnailData;
+	}
+
+	public void setThumbnailData(byte[] thumbnailData) {
+		this.thumbnailData = thumbnailData;
+	}
+
 	public int getRuntime() {
 		return runtime;
 	}

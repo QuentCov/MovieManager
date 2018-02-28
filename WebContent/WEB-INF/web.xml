@@ -39,4 +39,14 @@
     <servlet-name>Login</servlet-name>
     <url-pattern>/Login</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddMovie</display-name>
+    <servlet-name>AddMovie</servlet-name>
+    <servlet-class>servlets.AddMovie</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddMovie</servlet-name>
+    <url-pattern>/AddMovie</url-pattern>
+  </servlet-mapping>
 </web-app>
