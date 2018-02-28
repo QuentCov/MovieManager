@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.Database;
+
 
 //import models.User;
 
@@ -43,6 +45,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Database.setupDatabase();
 		//this.sc = this.getServletContext(); 
     	//this.path = sc.getRealPath("/WEB-INF/users.properties");
 		//String userName = request.getParameter("userName"); 
