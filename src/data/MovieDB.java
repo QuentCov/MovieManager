@@ -2,6 +2,7 @@ package data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,38 +28,78 @@ public class MovieDB {
 		return movie;
 	}
 	
-	public static Movie getMovieById(int id) {
-		String query = "SELECT * FROM Movie WHERE ID=" + id + ";";
-		ResultSet rs = Database.runQuery(query);
+	public static ArrayList<Movie> getAllMovies() {
+		String query = "SELECT * FROM Movie;";
+		PreparedStatement statement = Database.prepareStatement(query);
+		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
-			if(rs.next())
-			{
-				Movie movie = createMovie(rs);
-				rs.close();
-			    return movie;
-			}
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+		    	Movie movie = MovieDB.createMovie(rs);
+		    	movies.add(movie);
+		    }
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return movies;
+	}
+	
+	public static Movie getMovieById(int id) {
+		String query = "SELECT * FROM Movie WHERE ID=" + id + ";";
+		PreparedStatement statement = Database.prepareStatement(query);
+		Movie movie = null;
+		try {
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				movie = createMovie(rs);
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movie;
 	}
 	
 	public static Movie getMovieByName(String name) {
 		String query = "SELECT * FROM Movie WHERE Name=" + name + ";";
-		ResultSet rs = Database.runQuery(query);
+		PreparedStatement statement = Database.prepareStatement(query);
+		Movie movie = null;
 		try {
-			if(rs.next())
-			{
-				Movie movie = createMovie(rs);
-				rs.close();
-			    return movie;
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				movie = createMovie(rs);
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return movie;
+	}
+	
+	public static ArrayList<Movie> searchMoviesByName(String name) {
+		String query = "SELECT * FROM Movie WHERE Name LIKE '%" + name + "%';";
+		PreparedStatement statement = Database.prepareStatement(query);
+		ArrayList<Movie> movies = new ArrayList<Movie>();
+		try {
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+		    	Movie movie = MovieDB.createMovie(rs);
+		    	movies.add(movie);
+		    }
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movies;
 	}
 	
 	public static boolean addMovie(Movie movie) {

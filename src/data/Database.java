@@ -20,6 +20,23 @@ public class Database {
     
     private static boolean createdDB = false;
     
+    public static PreparedStatement prepareStatement(String query){
+		if(!createdDB) {
+			setupDatabase();
+        }
+		PreparedStatement statement = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(URL, USER, PASS);
+			statement = conn.prepareStatement(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return statement;
+    }
+    
     public static int setupDatabase() {
     	try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -50,24 +67,27 @@ public class Database {
 		return -1;
     }
     
-    public static ResultSet runQuery(String query) {
-		try {
-			if(!createdDB) {
+    // TODO Needs to be removed since the returned ResultSet will be null due to closing connections before returning
+    public static ResultSet runQuery(String query){
+		ResultSet results = null;
+    	try {
+    		if(!createdDB) {
     			setupDatabase();
             }
 			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
+			Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	    	PreparedStatement stmt = connection.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery(query);
-            connection.close();
-            stmt.close();
-            return rs;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+	        ResultSet rs = stmt.executeQuery();
+    		results = rs;
+    		connection.close();
+    		stmt.close();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	} catch (ClassNotFoundException e) {
+    		e.printStackTrace();
+    	}
+
+		return results;
     }
     
     public static int runUpdate(String query) {
@@ -78,7 +98,7 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	    	PreparedStatement stmt = connection.prepareStatement(query);
-	        int i = stmt.executeUpdate(query);
+	        int i = stmt.executeUpdate();
 	        connection.close();
 	        stmt.close();
 	        return i;
@@ -98,10 +118,10 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	        PreparedStatement stmt = connection.prepareStatement(query);
-	        for(int j = 0; j < params.size(); j++) {
-	        	stmt.setString(j, params.get(j));
+	        for(int j = 1; j < params.size() + 1; j++) {
+	        	stmt.setString(j, params.get(j-1));
 	        }
-	        int i = stmt.executeUpdate(query);
+	        int i = stmt.executeUpdate();
 	        connection.close();
 	        stmt.close();
 	        return i;
@@ -122,7 +142,7 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	        PreparedStatement stmt = connection.prepareStatement(query);
-	        for(int j = 1; j < params.size()+ 1; j++) {
+	        for(int j = 1; j < params.size() + 1; j++) {
 	        	if(j != blobIndex) {
 		        	stmt.setString(j, params.get(j-1));
 	        	} else {

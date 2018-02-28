@@ -13,12 +13,12 @@
 			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Owner Home Page</h1>
-		<form name="searchMoviesForm">
+		<form action="${pageContext.request.contextPath}/OwnerMovieSearchResults" name="searchMoviesForm" method="post">
 			<div class="form-group">
-				<label for="movieToSearch">Search Movies: </label>
+				<label for="movieToSearch">Search Movies (search without a query to view all movies): </label>
 				<input type="text" class="form-control" id="movieToSearch" name="movieToSearch" placeholder="Search Movies">
 			</div>
-			<a href="MovieSearchResults.jsp" class="btn btn-light" type="button">Go!</a>
+			<input class="btn btn-light" type="submit" value="Search">
 		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

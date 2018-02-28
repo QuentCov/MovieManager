@@ -1,5 +1,8 @@
 package models;
 
+import java.io.UnsupportedEncodingException;
+import org.apache.tomcat.util.codec.binary.Base64;
+
 public class Movie {
 	private String name;
 	private String genre;
@@ -75,5 +78,10 @@ public class Movie {
 	
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+	
+	public String renderImage() throws UnsupportedEncodingException {
+        byte[] encodeBase64 = Base64.encodeBase64(this.thumbnailData);
+        return new String(encodeBase64, "UTF-8");
 	}
 }

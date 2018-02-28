@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,8 +9,8 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+			<a href="Jsp/Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Search Results</h1>
 		<div class="row">
@@ -18,14 +19,21 @@
 			<div class="col-sm-4"><h4>Thumbnail</h4></div>
 			<div class="col-sm-2"><h4>Actions</h4></div>
 		</div>
+		
+		<c:forEach items="${movies}" var="movie">
 		<div class="row">
-			<div class="col-sm-2"><p>Avatar</p></div>
-			<div class="col-sm-4"><p>Blue people movie in outer space.</p></div>
-			<div class="col-sm-4"><img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/en/b/b0/Avatar-Teaser-Poster.jpg" alt="Avatar Movie Thumbnail"></div>
+			<div class="col-sm-2"><p>${movie.getName()}</p></div>
+			<div class="col-sm-4"><p>${movie.getDescription()}</p></div>
+			<div class="col-sm-4"><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}"/></div>
 			<div class="col-sm-2">
-				<a href="MovieDetails.jsp"><button type="button" class="btn btn-primary">View Details</button></a>
+				<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieDetails">
+	            	<input type="hidden" name="movieName" value="${movie.getName()}"/>
+	            	<input type="submit" class="btn btn-primary" value="View Movie Details">
+	            </form>
 			</div>
 		</div>
+		</c:forEach>
+		
 	</div>
     <%@ include file="/_partials/scripts.html" %>
 </body>

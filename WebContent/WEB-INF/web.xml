@@ -49,4 +49,14 @@
     <servlet-name>AddMovie</servlet-name>
     <url-pattern>/AddMovie</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OwnerMovieSearchResults</display-name>
+    <servlet-name>OwnerMovieSearchResults</servlet-name>
+    <servlet-class>servlets.OwnerMovieSearchResults</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OwnerMovieSearchResults</servlet-name>
+    <url-pattern>/OwnerMovieSearchResults</url-pattern>
+  </servlet-mapping>
 </web-app>
