@@ -1,14 +1,28 @@
 package models;
 
+import java.io.UnsupportedEncodingException;
+import org.apache.tomcat.util.codec.binary.Base64;
+
 public class Movie {
 	private String name;
 	private String genre;
-	private String thumbnailFile;
+	private String thumbnailName;
+	private byte[] thumbnailData;
 	private String description;
 	private int runtime;
 	private String rating;
 	
 	public Movie() {}
+	
+	public Movie(String name, String genre, String thumbnailName, byte[] thumbnailData, String description, int runtime, String rating) {
+		this.name = name;
+		this.genre = genre;
+		this.thumbnailName = thumbnailName;
+		this.thumbnailData = thumbnailData;
+		this.description = description;
+		this.runtime = runtime;
+		this.rating = rating;
+	}
 	
 	public String getName() {
 		return name;
@@ -34,14 +48,22 @@ public class Movie {
 		this.description = description;
 	}
 	
-	public String getThumbnailFile() {
-		return thumbnailFile;
+	public String getThumbnailName() {
+		return thumbnailName;
 	}
-	
-	public void setThumbnailFile(String thumbnailFile) {
-		this.thumbnailFile = thumbnailFile;
+
+	public void setThumbnailName(String thumbnailName) {
+		this.thumbnailName = thumbnailName;
 	}
-	
+
+	public byte[] getThumbnailData() {
+		return thumbnailData;
+	}
+
+	public void setThumbnailData(byte[] thumbnailData) {
+		this.thumbnailData = thumbnailData;
+	}
+
 	public int getRuntime() {
 		return runtime;
 	}
@@ -56,5 +78,10 @@ public class Movie {
 	
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+	
+	public String renderImage() throws UnsupportedEncodingException {
+        byte[] encodeBase64 = Base64.encodeBase64(this.thumbnailData);
+        return new String(encodeBase64, "UTF-8");
 	}
 }
