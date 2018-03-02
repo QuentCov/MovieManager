@@ -5,7 +5,7 @@ public class CreditCard {
 	private User owner;
 	private String cardType;
 	private String cardNumber;
-	private String ccv;
+	private int ccv;
 	private int expirationMonth;
 	private int expirationYear;
 	private double balance;
@@ -29,10 +29,10 @@ public class CreditCard {
 	public void setCardNumber(String cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-	public String getCcv() {
+	public int getCcv() {
 		return ccv;
 	}
-	public void setCcv(String ccv) {
+	public void setCcv(int ccv) {
 		this.ccv = ccv;
 	}
 	public int getExpirationMonth() {

@@ -40,7 +40,6 @@
     <url-pattern>/Login</url-pattern>
   </servlet-mapping>
   <servlet>
-    <description></description>
     <display-name>TheatreAndMovieSearchQueryServlet</display-name>
     <servlet-name>TheatreAndMovieSearchQueryServlet</servlet-name>
     <servlet-class>servlets.TheatreAndMovieSearchQueryServlet</servlet-class>
@@ -138,5 +137,24 @@
   <servlet-mapping>
     <servlet-name>CancelOrderTransaction</servlet-name>
     <url-pattern>/CancelOrderTransaction</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <display-name>AddMovie</display-name>
+    <servlet-name>AddMovie</servlet-name>
+    <servlet-class>servlets.AddMovie</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddMovie</servlet-name>
+    <url-pattern>/AddMovie</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OwnerMovieSearchResults</display-name>
+    <servlet-name>OwnerMovieSearchResults</servlet-name>
+    <servlet-class>servlets.OwnerMovieSearchResults</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OwnerMovieSearchResults</servlet-name>
+    <url-pattern>/OwnerMovieSearchResults</url-pattern>
   </servlet-mapping>
 </web-app>
