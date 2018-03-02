@@ -28,7 +28,7 @@ public class CreditCardsDB {
 	}
 	
 	public static CreditCard getCreditCard(String cardNumber) {
-		String query = "SELECT * FROM creditCardBuildings WHERE CreditCardNumber=" + cardNumber;
+		String query = "SELECT * FROM creditCardBuildings WHERE Name=" + cardNumber;
 		ResultSet rs = Database.runQuery(query);
 		try {
 			if(rs.next())
@@ -66,26 +66,6 @@ public class CreditCardsDB {
 		int i = Database.runUpdate(query, params);
 		if(i == 1) {
 		    return true;
-		}
-		return false;
-	}
-
-	public static boolean updateBalance(CreditCard card) {
-		String query = "UPDATE creditCards SET balance = ? WHERE CardHolderName=?";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(Double.toString(card.getBalance()));
-		params.add(card.getOwner().getFullName());
-		int i = Database.runUpdate(query, params);
-		if(i == 1) {
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean verifyCard(CreditCard card) {
-		CreditCard dataBaseCard = getCreditCard(card.getCardNumber());
-		if(dataBaseCard.equals(card)) {
-			return true;
 		}
 		return false;
 	}

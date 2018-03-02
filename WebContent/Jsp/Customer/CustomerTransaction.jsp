@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,20 +14,45 @@
 		</div>
 		<h1>Transaction Page</h1>
 		<h3>Purchases</h3>
-		<table border="1">
-	        <tr>
-		        <td>Movies</td>
-				<td>Tickets Bought</td>
-				<td>Total Price</td>
-	        </tr>
-	        <tr>
-    			<c:forEach items="${order.getMovies()}" var="movie">
-	    			<td>movie.getMovie().getName()></td>
-	        	</c:forEach>
-	            <td>order.getTicketCount()></td>
-	            <td>order.getTotalCost</td>
-	    	</tr>
-		</table>
+		<div class="row">
+			<div class="col-sm-3"><h4>Movie Name</h4></div>
+			<div class="col-sm-3"><h4>Tickets</h4></div>
+			<div class="col-sm-3"><h4>Total Price</h4></div>
+			<div class="col-sm-3"><h4>Theatre Name</h4></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				The Bee Movie
+			</div>
+			<div class="col-sm-3">
+				13 Tickets
+			</div>
+			<div class="col-sm-3">
+				$142.36
+			</div>
+			<div class="col-sm-3">
+				De Marco Theatre # 2
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				Get Out
+			</div>
+			<div class="col-sm-3">
+				1 Ticket
+			</div>
+			<div class="col-sm-3">
+				$12.37
+			</div>
+			<div class="col-sm-3">
+				De Marco Theatre # 6
+			</div>
+		</div>
+		<div class="row">
+			<div class="offset-md-3 col-sm-3">
+				Total: $154.73
+			</div>
+		</div>
 		<br>
 		<form>
 			<div class="form-group">
@@ -97,7 +121,7 @@
 		</form>
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
+				<a href="CustomerTransactionConfirmation.jsp" class="btn btn-primary">Confirm Payment</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
 			    <a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>

@@ -1,12 +1,9 @@
 package models;
 
-import java.util.Date;
-
 public class Review {
 	private User reviewer;
 	private String review;
 	private int rating;
-	private Date date;
 	private Movie movie;
 	private final int MAX_REVIEW_LENGTH = 1000;
 	
@@ -23,9 +20,7 @@ public class Review {
 	}
 	
 	public void setReview(String review) {
-		if(!isReviewTooLong(review)) {
-			this.review = review;
-		}
+		this.review = review;
 	}
 	
 	public int getRating() {
@@ -49,16 +44,8 @@ public class Review {
 	}
 	
 	// checks if the review is longer than the maximum review length
-	public boolean isReviewTooLong(String review) {
+	public boolean isReviewTooLong() {
 		return this.review.length() >= this.getMAX_REVIEW_LENGTH();
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 	
 }

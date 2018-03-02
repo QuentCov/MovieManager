@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,57 +14,72 @@
 		</div>
 		<h1>Movie Details:</h1>
 		<br>
-		<table border="1">
-			<tr>
-				<td>Movie Name</td>
-				<td>Description</td>
-				<td>Rating</td>
-				<td>Poster</td>
-				<td>Theatre Name/Number</td>
-				<td>Showtime</td>
-				<td>Price per Seat</td>
-				<td>Seats Available</td>
-				<td>Actions</td>
-			</tr>
-			<tr>
-	    		<td>movieShowing.getMovie().getName()</td>
-	            <td>movieShowing.getMovie().getDescription()</td>
-	            <td>movieShowing.getMovie().getRating</td>
-	            <td>movieShowing.getMovie().getThumbnailFile()</td>
-	            <td>movieShowing.getShowroom().getTheatre().getName()</td>
-	            <td>movieShwoing.getStartTime()</td>
-	            <td>movie.getCost()</td>
-	            <td>movie.getShowroom().getCapacity()</td>
-	         </tr>
-		</table>
-		<form name="item" action="UpdateCart">
-        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-        	<input type="submit" name="action" value="Add to Cart">
-        </form>
-        <form name="item" action="CustomerReview">
-        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-        	<input type="submit" name="action" value="Add Review">
-        </form>
+		<div class="row">
+			<div class="col-sm-1"><h5>Movie Name</h5></div>
+			<div class="col-sm-1"><h5>Description</h5></div>
+			<div class="col-sm-1"><h5>Rating</h5></div>
+			<div class="col-sm-2"><h5>Poster</h5></div>
+			<div class="col-sm-2"><h5>Theatre Name/Number</h5></div>
+			<div class="col-sm-1"><h5>Showtime</h5></div>
+			<div class="col-sm-1"><h5>Price per Seat</h5></div>
+			<div class="col-sm-1"><h5>Seats Available</h5></div>
+			<div class="col-sm-2"><h5>Actions</h5></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">
+				Spongebob Squarepants: The New Musical
+			</div>
+			<div class="col-sm-1">
+				Our Town meets Armageddon under the sea!
+			</div>
+			<div class="col-sm-1">
+				Rating: 4.35 Stars
+			</div>
+			<div class="col-sm-2">
+    			<img class="img-fluid" src="https://img.wennermedia.com/article-leads-horizontal/inside-spongebob-play-e579f90d-908e-4ffd-9674-4ae8a0861dbe.jpg">
+			</div>
+			<div class="col-sm-2">
+				De Marko Theatre #1
+			</div>
+			<div class="col-sm-1">
+				08/16/2018 6:37
+			</div>
+			<div class="col-sm-1">
+				$40.00 per seat
+			</div>
+			<div class="col-sm-1">
+				160 Available Seats
+			</div>
+			<div class="col-sm-2">
+    			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Add to Cart</a>
+			</div>
+		</div>
 		<h2>Viewer Reviews:</h2>
-		<table border="1">
-			<tr>
-				<td>Total Rating: movieShowing.getMovie().getAverageRating()</td>
-			</tr>
-			<tr>
-				<td>Reviewer</td>
-				<td>Date</td>
-				<td>Rating</td>
-				<td>Review</td>
-			</tr>
-    		<c:forEach items="${reviews}" var="review">
-    		<tr>
-	    		<td>review.getUser().getFullName()></td>
-	            <td>review.getDate()></td>
-	            <td>review.getRating()></td>
-	            <td>review.getReview()></td>
-	        <tr>
-	        </c:forEach>
-		</table>
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>Total Rating: 4.35 Stars</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2"><h5>Name</h5></div>
+			<div class="col-sm-1"><h5>Date</h5></div>
+			<div class="col-sm-1"><h5>Rating</h5></div>
+			<div class="col-sm-8"><h5>Review</h5></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2">
+				Pat Boivan
+			</div>
+			<div class="col-sm-1">
+				01/20/18
+			</div>
+			<div class="col-sm-1">
+				Total Rating: 4.35 Stars
+			</div>
+			<div class="col-sm-8">
+				Too much water.
+			</div>
+		</div>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
 </body>
