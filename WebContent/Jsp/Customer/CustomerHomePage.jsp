@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
-<!-- If you know how this doesn't work, tell me, because this is ridiculous. -->
-<jsp:include page="/MovieManager/src/servlets/TheatreLoad.java">
 <head>
 	<%@ include file="/_partials/headTags.html" %>
+	<%@ page import="data.TheatresDB" %>
 	<title>Customer Home Page</title>
 </head>
 <body>

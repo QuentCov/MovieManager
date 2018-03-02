@@ -13,11 +13,11 @@ import models.User;
 public class OrdersDB {
 	public static ArrayList<Order> getOrders(String email) {
 		String query = "SELECT * FROM users u WHERE EmailAddress=" + email 
-				     + "INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName"
-				     + "INNER JOIN orders o ON u.Id=o.CustomerId"
-				     + "INNER JOIN orderItems oi ON o.Id=oi.OrderId"
-				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId"
-				     + "INNER JOIN movies m ON ms.movieId=m.Id";
+				     + " INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName "
+				     + "INNER JOIN orders o ON u.Id=o.CustomerId "
+				     + "INNER JOIN orderItems oi ON o.Id=oi.OrderId "
+				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId "
+				     + "INNER JOIN movies m ON ms.movieId=m.Id;";
 		ResultSet rs = Database.runQuery(query);
 		ArrayList<Order> orders = new ArrayList<Order>();
 		try {
@@ -31,6 +31,8 @@ public class OrdersDB {
 			    order.setDate(new Date());
 			    order.setCreditCard(card);
 			    order.setCost(rs.getInt("o.TotalCost"));
+			    //TODO: ...
+			    //Address address = new Address();
 			    //order.setBillingAddress();
 			    //private Address shippingAddress;
 			    
@@ -55,7 +57,7 @@ public class OrdersDB {
 	
 	public static boolean addOrder(Order order) {
 		String query = "INSERT INTO users (OrderDate, CustomerId, TotalCost, BillingAddress, CreditCardNumber)"
-				 + "VALUES (" + new Date() + ", ?, " + order.getCost() + ", ?, ?)";
+				 + " VALUES (" + new Date() + ", ?, " + order.getCost() + ", ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(order.getBillingAddress().getAddress1());
 		params.add(order.getCreditCard().getCardNumber());
@@ -68,7 +70,7 @@ public class OrdersDB {
 	
 	public static boolean deleteOrder(Order order) {
 		User owner = order.getCustomer();
-		String query = "SELECT Id FROM users WHERE Email=?";
+		String query = "SELECT Id FROM users WHERE Email=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(owner.getEmailAddress());
 		ResultSet rs = Database.runQuery(query, params);
@@ -85,7 +87,7 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "SELECT Id FROM orders WHERE CustomerId=?";
+		query = "SELECT Id FROM orders WHERE CustomerId=?;";
 		params.clear();
 		params.add(Integer.toString(id));
 		rs = Database.runQuery(query, params);
@@ -102,12 +104,12 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "DELETE FROM orderItems WHERE OrderId=?";
+		query = "DELETE FROM orderItems WHERE OrderId=?;";
 		params.clear();
 		params.add(Integer.toString(id));
 		int i = Database.runUpdate(query, params);
 		if(i != 0 || i != -1) {
-			query = "DELETE FROM orders WHERE CartId=?";
+			query = "DELETE FROM orders WHERE CartId=?;";
 			params.clear();
 			params.add(Integer.toString(order.getID()));
 			i = Database.runUpdate(query, params);

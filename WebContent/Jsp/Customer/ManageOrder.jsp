@@ -24,7 +24,7 @@
 				<td>Tickets Bought</td>
 				<td>Actions</td>
 	        </tr>
-	        <c:forEach items="${orders}" var="current">
+	        <c:forEach items="${cart}" var="current">
 		    	<tr>
 		    		<c:forEach items="${current.getMovies()}" var="movie">
 			    		<td>movie.getMovie().getName()></td>
@@ -34,7 +34,7 @@
 			            <td>movie.getCost()></td>
 			            <td>movie.getMovie().getThumbnailFile()</td>
 			            <td>current.getTicketsBoughtByMovie(movie)</td>
-			            <form name="item" method="POST" action="CartController">
+			            <form name="item" method="GET" action="ViewOrders">
 			            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
 			            	<input type="submit" name="action" value="View">
 			            </form>

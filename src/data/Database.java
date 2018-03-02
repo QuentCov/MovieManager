@@ -18,7 +18,6 @@ public class Database {
 	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
 	    	PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);
-            connection.close();
             stmt.close();
             return rs;
         } catch (SQLException ex) {
@@ -75,7 +74,6 @@ public class Database {
 	        	stmt.setString(j, params.get(j));
 	        }
 	        ResultSet rs = stmt.executeQuery(query);
-	        connection.close();
 	        stmt.close();
 	        return rs;
 		} catch (SQLException ex) {
