@@ -1,5 +1,7 @@
 package data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -64,11 +66,16 @@ public class TheatresDB {
 						    + "theatreBuildings.City, theatreBuildings.State, theatreBuildings.ZipCode,"
 						    + "theatreBuildings.Name, showrooms.Id, showrooms.Name, showrooms.AvailableSeats,"
 						    + "FROM theatreBuildings t WHERE Name=" + name 
-						    + "INNER JOIN showrooms ON theatreBuildings.Id=showrooms.theatreId";
-		ResultSet rs = Database.runQuery(query);
-		Theatre theatre = createTheatre(rs);
+						    + "INNER JOIN showrooms ON theatreBuildings.Id=showrooms.theatreId;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		Theatre theatre = null;
 		try {
+			ResultSet rs = s.executeQuery(query);
+			theatre = createTheatre(rs);
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -79,20 +86,25 @@ public class TheatresDB {
 		Address address = theatre.getAddress();
 		User owner = theatre.getOwner();
 		
-		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress();
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress() + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		
 		int ownerId = -1;
 		try {
+			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
 				ownerId = rs.getInt("Id");
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		query = "INSERT INTO users (Name, Address, ownerId, City, State, ZipCode)"
-			  + "VALUES (?, ?," + ownerId + ", ?, ?, ?)";
+			  + "VALUES (?, ?," + ownerId + ", ?, ?, ?);";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(theatre.getName());
@@ -114,19 +126,23 @@ public class TheatresDB {
 		Address address = theatre.getAddress();
 		User owner = theatre.getOwner();
 		
-		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress();
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress() + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		int ownerId = -1;
 		try {
+			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
 				ownerId = rs.getInt("Id");
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		query = "UPDATE theatres SET Address=?, ownerId=" + ownerId + ", City=?, State=?, ZipCode=? WHERE Name=?)";
+		query = "UPDATE theatres SET Address=?, ownerId=" + ownerId + ", City=?, State=?, ZipCode=? WHERE Name=?);";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(address.getAddress1());

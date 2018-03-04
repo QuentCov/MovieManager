@@ -1,5 +1,6 @@
 package models;
 
+import data.MovieDB;
 import java.io.UnsupportedEncodingException;
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -78,6 +79,10 @@ public class Movie {
 	
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+	
+	public double getAverageRating() {
+		return MovieDB.getAverageScore(this);
 	}
 	
 	public String renderImage() throws UnsupportedEncodingException {

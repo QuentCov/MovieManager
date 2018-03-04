@@ -2,6 +2,7 @@ package data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +31,8 @@ public class MovieDB {
 	
 	public static ArrayList<Movie> getAllMovies() {
 		String query = "SELECT * FROM Movie;";
-		PreparedStatement statement = Database.prepareStatement(query);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -39,8 +41,8 @@ public class MovieDB {
 		    	movies.add(movie);
 		    }
 			rs.close();
-			statement.getConnection().close();
 			statement.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,7 +51,8 @@ public class MovieDB {
 	
 	public static Movie getMovieById(int id) {
 		String query = "SELECT * FROM Movie WHERE ID=" + id + ";";
-		PreparedStatement statement = Database.prepareStatement(query);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
 		Movie movie = null;
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -57,8 +60,8 @@ public class MovieDB {
 				movie = createMovie(rs);
 			}
 			rs.close();
-			statement.getConnection().close();
 			statement.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +70,8 @@ public class MovieDB {
 	
 	public static Movie getMovieByName(String name) {
 		String query = "SELECT * FROM Movie WHERE Name=" + name + ";";
-		PreparedStatement statement = Database.prepareStatement(query);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
 		Movie movie = null;
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -75,7 +79,7 @@ public class MovieDB {
 				movie = createMovie(rs);
 			}
 			rs.close();
-			statement.getConnection().close();
+			c.close();
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,7 +89,8 @@ public class MovieDB {
 	
 	public static ArrayList<Movie> searchMoviesByName(String name) {
 		String query = "SELECT * FROM Movie WHERE Name LIKE '%" + name + "%';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -94,7 +99,7 @@ public class MovieDB {
 		    	movies.add(movie);
 		    }
 			rs.close();
-			statement.getConnection().close();
+			c.close();
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,5 +146,31 @@ public class MovieDB {
 	    	return true;
 	    }
 	    return false;
+	}
+
+	public static double getAverageScore(Movie movie) {
+		String query = "SELECT r.Rating FROM movies m WHERE Name=? "
+					 + "INNER JOIN reviews r ON m.ID=r.movieId";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movie.getName());
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
+		
+		double i = 0;
+		int count = 0;
+		try {
+			ResultSet rs = statement.executeQuery(query);
+			while(rs.next()) {
+				i = i + rs.getInt("Rating");
+				count++;
+			}
+			if(count != 0) {
+				i = (i / count);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return i;
 	}
 }

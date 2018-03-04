@@ -8,27 +8,38 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Database {
-	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/dcao";
-    private static final String USER = "dcao";
-    private static final String PASS = "testPass1!";
+	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/qcovert";
+    private static final String USER = "qcovert";
+    private static final String PASS = "qJ3zTz";
     
     private static boolean createdDB = false;
     
-    public static PreparedStatement prepareStatement(String query){
+    public static Connection getConnection() {
+    	Connection conn = null;
+    	try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(URL, USER, PASS);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return conn;
+    }
+    
+    public static PreparedStatement prepareStatement(Connection c, String query){
 		if(!createdDB) {
 			setupDatabase();
         }
 		PreparedStatement statement = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(URL, USER, PASS);
-			statement = conn.prepareStatement(query);
+			statement = c.prepareStatement(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e1) {
@@ -44,7 +55,7 @@ public class Database {
 	    	Statement stmt = connection.createStatement();
 
 	    	// unfortunately needs absolute path of the Setup.sql file
-	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("D:/Documents/Dropbox/Eclipse Workspace/JavaEE/MovieManager/src/data/Setup.sql"));
+	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/Setup.sql"));
 	    	String query = "";
 	    	int i = 0;
 	    	while((query = setupScriptReader.readLine()) != null) {
@@ -65,29 +76,6 @@ public class Database {
 			e.printStackTrace();
 		}
 		return -1;
-    }
-    
-    // TODO Needs to be removed since the returned ResultSet will be null due to closing connections before returning
-    public static ResultSet runQuery(String query){
-		ResultSet results = null;
-    	try {
-    		if(!createdDB) {
-    			setupDatabase();
-            }
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(URL, USER, PASS);
-	    	PreparedStatement stmt = connection.prepareStatement(query);
-	        ResultSet rs = stmt.executeQuery();
-    		results = rs;
-    		connection.close();
-    		stmt.close();
-    	} catch (SQLException e) {
-    		e.printStackTrace();
-    	} catch (ClassNotFoundException e) {
-    		e.printStackTrace();
-    	}
-
-		return results;
     }
     
     public static int runUpdate(String query) {
