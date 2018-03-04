@@ -161,7 +161,7 @@ public class MovieDB {
 	    return false;
 	}	
 	
-	public static boolean updateMovieByName(Movie movie) {
+	public static boolean updateMovie(Movie movie) {
 		String query = "UPDATE Movie SET Genre=?, ThumbnailName=?, ThumbnailData=?, Description=?, Runtime=" + movie.getRuntime() + ", Rating=? "
 				     + "WHERE Name=?;";
 

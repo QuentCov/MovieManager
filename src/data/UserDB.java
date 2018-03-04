@@ -4,28 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import models.Address;
 import models.User;
 
 public class UserDB {
 	
 	public static User createUser(ResultSet rs) {
 		try {
-		    User user = new User();
-		    Address address = new Address();
-		    
+		    User user = new User();		    
 		    user.setEmailAddress(rs.getString("EmailAddress"));
 		    user.setPassword(rs.getString("Password"));
-		    user.setType(Integer.toString(rs.getInt("Type")));
-		    user.setFullName(rs.getString("fullName"));
+		    user.setType(rs.getString("Type"));
+		    user.setFullName(rs.getString("FullName"));
+		    user.setStreetAddress(AddressDB.getAddressById(rs.getInt("AddressId")));
 		    user.setPhoneNumber(rs.getString("PhoneNumber"));
-		    
-		    address.setAddress1(rs.getString("Address"));
-		    address.setCity(rs.getString("City"));
-		    address.setStateAbbreviation(rs.getString("State"));
-		    address.setZipCode(rs.getString("ZipCode"));
-		    
-		    user.setStreetAddress(address);
 		    return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -34,12 +25,28 @@ public class UserDB {
 		return null;
 	}
 	
-	public static User getUser(int id) {
-		String query = "SELECT * FROM users WHERE Id=" + id;
+	public static int getUserIdByEmailAddress(String emailAddress) {
+		String query = "SELECT ID FROM User WHERE EmailAddress='" + emailAddress + "';";
+		int id = -1;
 		ResultSet rs = Database.runQuery(query);
 		try {
-			if(rs.next())
-			{
+			if(rs.next()) {
+				id = rs.getInt("ID");
+				rs.close();
+			    return id;
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	public static User getUserById(int id) {
+		String query = "SELECT * FROM User WHERE ID=" + id + ";";
+		ResultSet rs = Database.runQuery(query);
+		try {
+			if(rs.next()) {
 				User user = createUser(rs);
 				rs.close();
 			    return user;
@@ -51,8 +58,8 @@ public class UserDB {
 		return null;
 	}
 	
-	public static User getUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName;
+	public static User getUserByEmailAddress(String emailAddress) {
+		String query = "SELECT * FROM User WHERE EmailAddress='" + emailAddress + "';";
 		ResultSet rs = Database.runQuery(query);
 		try {
 			if(rs.next())
@@ -69,19 +76,15 @@ public class UserDB {
 	}
 	
 	public static boolean addUser(User user) {
-		Address address = user.getStreetAddress();
-		String query = "INSERT INTO users (EmailAddress, Password, Type, FullName, PhoneNumber, Address, City, State, ZipCode)"
-					 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		int addressId = AddressDB.getAddressIdByAddress1(user.getStreetAddress().getAddress1());
+		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, AddressId)"
+					 + "VALUES (?, ?, ?, ?, ?, " + addressId + ")";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getEmailAddress());
 		params.add(user.getPassword());
 		params.add(user.getType());
 		params.add(user.getFullName());
 		params.add(user.getPhoneNumber());
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
 		int i = Database.runUpdate(query, params);
 		if(i == 1) {
 		    return true;
@@ -92,21 +95,16 @@ public class UserDB {
 	//Note: We recognize the inefficiency here and have brainstormed solutions, 
 	//	    but these solutions are too extensive for a project of this scope.
 	public static boolean updateUser(User user) {
-		Address address = user.getStreetAddress();
-		String query = "UPDATE users SET Password=?, Type=?, FullName=?, PhoneNumber=?, Address=?, City=?, State=?, ZipCode=? "
-				     + "WHERE EmailAddress=?";
+		int addressId = AddressDB.getAddressIdByAddress1(user.getStreetAddress().getAddress1());
+		String query = "UPDATE User SET Password=?, Type=?, FullName=?, AddressId=" + addressId + ", PhoneNumber=? "
+				     + "WHERE EmailAddress=?;";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getPassword());
 		params.add(user.getType());
 		params.add(user.getFullName());
 		params.add(user.getPhoneNumber());
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
 		params.add(user.getEmailAddress());
-		
 		int i = Database.runUpdate(query, params);
 	    if(i == 1) {
 	    	return true;
@@ -118,8 +116,8 @@ public class UserDB {
 		return validateUser(user.getEmailAddress());
 	}
 	
-	public static boolean validateUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName;
+	public static boolean validateUser(String userEmailAddress) {
+		String query = "SELECT * FROM User WHERE EmailAddress='" + userEmailAddress + "';";
 		ResultSet rs = Database.runQuery(query);
         try {
 			if(rs.next())

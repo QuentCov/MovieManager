@@ -11,15 +11,12 @@ public class CreditCardsDB {
 	public static CreditCard createCard(ResultSet rs) {
 		CreditCard card = new CreditCard();
 		try {
+			card.setOwner(UserDB.getUserById(rs.getInt("OwnerId")));
 			card.setCardType(rs.getString("CardType"));
-			card.setCardNumber(rs.getString("CreditCardNumber"));
-			card.setCcv(rs.getString("CCV"));
+			card.setCardNumber(rs.getString("CardNumber"));
+			card.setCcv(rs.getInt("CCV"));
 			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
 			card.setExpirationYear(rs.getInt("ExpirationYear"));
-			String query = "SELECT * FROM users WHERE Id=" + rs.getInt("CustomerId");
-			ResultSet rs2 = Database.runQuery(query);
-			card.setOwner(UserDB.createUser(rs2));
-			rs2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +25,7 @@ public class CreditCardsDB {
 	}
 	
 	public static CreditCard getCreditCard(String cardNumber) {
-		String query = "SELECT * FROM creditCardBuildings WHERE Name=" + cardNumber;
+		String query = "SELECT * FROM CreditCard WHERE CardNumber=" + cardNumber;
 		ResultSet rs = Database.runQuery(query);
 		try {
 			if(rs.next())
@@ -45,24 +42,13 @@ public class CreditCardsDB {
 	}
 
 	public static boolean addCreditCard(CreditCard card) {
-		String query = "SELECT Id FROM users WHERE FullName=" + card.getOwner().getFullName();
-		ResultSet rs = Database.runQuery(query);
-		int ownerId = -1;
-		try {
-			if(rs.next()) {
-				ownerId = rs.getInt("Id");
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		query = "INSERT INTO users (CardHolderName, CreditCardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
-				     + "VALUES (?, ?, 0.00, ?, " + ownerId + ", ?, " + card.getExpirationYear() + "," + card.getExpirationMonth() + ")";
+		int ownerId = UserDB.getUserIdByEmailAddress(card.getOwner().getEmailAddress());
+		//TODO TALK ABOUT WHERE THE BALANCE GOES SINCE THIS DOESNT MATCH THE SCHEMA
+		String query = "INSERT INTO CreditCard (OwnerId, CardType, CardNumber, CCV, ExpirationMonth, ExpirationYear) "
+				     + "VALUES (" + ownerId + ", ?, ?, " + card.getCcv() + ", " + card.getExpirationMonth() + ", " + card.getExpirationYear() + ");";
 		ArrayList<String> params = new ArrayList<String>();
-		params.add(card.getOwner().getFullName());
-		params.add(card.getCardNumber());
 		params.add(card.getCardType());
-		params.add(card.getCcv());
+		params.add(card.getCardNumber());
 		int i = Database.runUpdate(query, params);
 		if(i == 1) {
 		    return true;
