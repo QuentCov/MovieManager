@@ -1,7 +1,9 @@
 package data;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 import models.Address;
@@ -35,16 +37,22 @@ public class UserDB {
 	}
 	
 	public static User getUser(int id) {
-		String query = "SELECT * FROM users WHERE Id=" + id;
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT * FROM users WHERE Id=" + id + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
+			ResultSet rs = s.executeQuery(query);
 			if(rs.next())
 			{
 				User user = createUser(rs);
 				rs.close();
+				s.close();
+				c.close();
 			    return user;
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,16 +60,22 @@ public class UserDB {
 	}
 	
 	public static User getUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName;
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT * FROM users WHERE EmailAddress=" + userName + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
+			ResultSet rs = s.executeQuery(query);
 			if(rs.next())
 			{
 				User user = createUser(rs);
 				rs.close();
+				s.close();
+				c.close();
 			    return user;
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -71,7 +85,7 @@ public class UserDB {
 	public static boolean addUser(User user) {
 		Address address = user.getStreetAddress();
 		String query = "INSERT INTO users (EmailAddress, Password, Type, FullName, PhoneNumber, Address, City, State, ZipCode)"
-					 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getEmailAddress());
 		params.add(user.getPassword());
@@ -94,7 +108,7 @@ public class UserDB {
 	public static boolean updateUser(User user) {
 		Address address = user.getStreetAddress();
 		String query = "UPDATE users SET Password=?, Type=?, FullName=?, PhoneNumber=?, Address=?, City=?, State=?, ZipCode=? "
-				     + "WHERE EmailAddress=?";
+				     + "WHERE EmailAddress=?;";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getPassword());
@@ -119,15 +133,21 @@ public class UserDB {
 	}
 	
 	public static boolean validateUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName;
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT * FROM users WHERE EmailAddress=" + userName + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
         try {
+        	ResultSet rs = s.executeQuery(query);
 			if(rs.next())
 			{
 				rs.close();
+				s.close();
+				c.close();
 			    return true;
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

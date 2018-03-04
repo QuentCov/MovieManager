@@ -1,5 +1,7 @@
 package data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,9 +20,12 @@ public class OrdersDB {
 				     + "INNER JOIN orderItems oi ON o.Id=oi.OrderId "
 				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId "
 				     + "INNER JOIN movies m ON ms.movieId=m.Id;";
-		ResultSet rs = Database.runQuery(query);
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
+		
 		try {
+			ResultSet rs = s.executeQuery(query);
 			while(rs.next())
 			{
 			    Order order = new Order();
@@ -49,6 +54,8 @@ public class OrdersDB {
 			    orders.add(order);
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -73,9 +80,12 @@ public class OrdersDB {
 		String query = "SELECT Id FROM users WHERE Email=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(owner.getEmailAddress());
-		ResultSet rs = Database.runQuery(query, params);
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ResultSet rs = null;
 		int id = -1;
 		try {
+			rs = s.executeQuery(query);
 			if(rs.next()) {
 				id = rs.getInt("Id");
 			}
@@ -87,11 +97,10 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "SELECT Id FROM orders WHERE CustomerId=?;";
-		params.clear();
-		params.add(Integer.toString(id));
-		rs = Database.runQuery(query, params);
+		query = "SELECT Id FROM orders WHERE CustomerId=" + id + ";";
+		
 		try {
+			rs = s.executeQuery(query);
 			if(rs.next()) {
 				id = rs.getInt("Id");
 			}
@@ -101,6 +110,13 @@ public class OrdersDB {
 		}
 		
 		if(id == -1) {
+			try {
+				rs.close();
+				c.close();
+				s.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			return false;
 		}
 		
@@ -109,14 +125,26 @@ public class OrdersDB {
 		params.add(Integer.toString(id));
 		int i = Database.runUpdate(query, params);
 		if(i != 0 || i != -1) {
-			query = "DELETE FROM orders WHERE CartId=?;";
-			params.clear();
-			params.add(Integer.toString(order.getID()));
-			i = Database.runUpdate(query, params);
+			query = "DELETE FROM orders WHERE CartId=" + order.getID() + ";";
+			i = Database.runUpdate(query);
 			
 			if(i != 0 || i != -1) {
+				try {
+					rs.close();
+					c.close();
+					s.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				return true;
 			}
+		}
+		try {
+			rs.close();
+			c.close();
+			s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}

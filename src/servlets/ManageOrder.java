@@ -30,12 +30,9 @@ public class ManageOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//TODO: Make sure this works like I think it does.
 		String movieName = request.getParameter("itemIndex");
-		Movie movie = MovieDB.getMovie(movieName);
+		Movie movie = MovieDB.getMovieByName(movieName);
 		if(movie != null) {
-			//TODO: This isn't even used in ManageOrder, because it shows the entire order. 
-			//If there's no point, then just redirect. Discuss with David.
 			session.setAttribute("movie", movie);
 			response.sendRedirect("ManageOrder.jsp");
 		}

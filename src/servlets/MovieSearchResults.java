@@ -30,7 +30,7 @@ public class MovieSearchResults extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		String name = (String) session.getAttribute("searchString");
-		Movie movie = MovieDB.getMovie(name);
+		Movie movie = MovieDB.getMovieByName(name);
 		if(movie != null) {
 			session.setAttribute("movie", movie);
 		}

@@ -81,13 +81,12 @@ public class Movie {
 		this.rating = rating;
 	}
 	
-<<<<<<< HEAD
 	public double getAverageRating() {
 		return MovieDB.getAverageScore(this);
-=======
+	}
+	
 	public String renderImage() throws UnsupportedEncodingException {
         byte[] encodeBase64 = Base64.encodeBase64(this.thumbnailData);
         return new String(encodeBase64, "UTF-8");
->>>>>>> master
 	}
 }
