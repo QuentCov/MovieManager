@@ -1,14 +1,17 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.Database;
-
+import data.OrdersDB;
+import models.Order;
 import models.User;
 
 /**
@@ -32,13 +35,6 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
     	User user = new User(userName, password);
@@ -47,14 +43,30 @@ public class Login extends HttpServlet {
     	if (User.isValidUser(user)) {
     		// check user type to determine where to redirect
     		String userType = User.getUserTypeFromDatabase(user);
+    		
+    		// start a new session for use by MovieManager.
+			request.getSession().invalidate();
+			HttpSession session = request.getSession();
     		if (userType.equals("Customer")) {
+    			//get the user's cart (or make a new one, if there isn't one)
+    			ArrayList<Order> cart = new ArrayList<Order>();
+    			cart = OrdersDB.getOrders(userName);
+    			session.setAttribute("cart", cart);
+    			
             	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");
-            	response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+    		} else {
+    			response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
     		}
     	} else {
         	response.sendRedirect("Jsp/Registration.jsp");
     	}
-    	
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 
 }
