@@ -28,6 +28,24 @@ public class MovieDB {
 		return movie;
 	}
 	
+	public static int getMovieIdByName(String name) {
+		String query = "SELECT ID FROM Movie WHERE Name='" + name + "';";
+		PreparedStatement statement = Database.prepareStatement(query);
+		int id = -1;
+		try {
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				id = rs.getInt("ID");
+		    }
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 	public static ArrayList<Movie> getAllMovies() {
 		String query = "SELECT * FROM Movie;";
 		PreparedStatement statement = Database.prepareStatement(query);
@@ -66,7 +84,7 @@ public class MovieDB {
 	}
 	
 	public static Movie getMovieByName(String name) {
-		String query = "SELECT * FROM Movie WHERE Name=" + name + ";";
+		String query = "SELECT * FROM Movie WHERE Name='" + name + "';";
 		PreparedStatement statement = Database.prepareStatement(query);
 		Movie movie = null;
 		try {
@@ -123,10 +141,30 @@ public class MovieDB {
 	
 	//Note: We recognize the inefficiency here in updating all values in the row and have brainstormed solutions, 
 	//	    but these solutions are too extensive for a project of this scope.
-	public static boolean updateMovie(Movie movie) {
+	public static boolean updateMovieById(Movie movie, int id) {
+		String query = "UPDATE Movie SET Name=?, Genre=?, ThumbnailName=?, ThumbnailData=?, Description=?, Runtime=" + movie.getRuntime() + ", Rating=? "
+				     + "WHERE ID=" + id + ";";
+		
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movie.getName());
+		params.add(movie.getGenre());
+		params.add(movie.getThumbnailName());
+		// set temporary string and instead pass on the stream of image data
+		params.add("temp");
+		InputStream stream = new ByteArrayInputStream(movie.getThumbnailData());
+		params.add(movie.getDescription());
+		params.add(movie.getRating());
+		int i = Database.runUpdate(query, params, stream, 4);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}	
+	
+	public static boolean updateMovieByName(Movie movie) {
 		String query = "UPDATE Movie SET Genre=?, ThumbnailName=?, ThumbnailData=?, Description=?, Runtime=" + movie.getRuntime() + ", Rating=? "
 				     + "WHERE Name=?;";
-		
+
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(movie.getGenre());
 		params.add(movie.getThumbnailName());
@@ -136,7 +174,7 @@ public class MovieDB {
 		params.add(movie.getDescription());
 		params.add(movie.getRating());
 		params.add(movie.getName());
-		int i = Database.runUpdate(query, params, stream, 2);
+		int i = Database.runUpdate(query, params, stream, 3);
 	    if(i == 1) {
 	    	return true;
 	    }

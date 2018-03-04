@@ -59,4 +59,24 @@
     <servlet-name>OwnerMovieSearchResults</servlet-name>
     <url-pattern>/OwnerMovieSearchResults</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MovieDetails</display-name>
+    <servlet-name>MovieDetails</servlet-name>
+    <servlet-class>servlets.MovieDetails</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MovieDetails</servlet-name>
+    <url-pattern>/MovieDetails</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MovieDetailsUpdate</display-name>
+    <servlet-name>MovieDetailsUpdate</servlet-name>
+    <servlet-class>servlets.MovieDetailsUpdate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MovieDetailsUpdate</servlet-name>
+    <url-pattern>/MovieDetailsUpdate</url-pattern>
+  </servlet-mapping>
 </web-app>

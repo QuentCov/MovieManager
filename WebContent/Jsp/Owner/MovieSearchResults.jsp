@@ -24,7 +24,7 @@
 		<div class="row">
 			<div class="col-sm-2"><p>${movie.getName()}</p></div>
 			<div class="col-sm-4"><p>${movie.getDescription()}</p></div>
-			<div class="col-sm-4"><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}"/></div>
+			<div class="col-sm-4"><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}" alt="${movie.getName()} Poster"/></div>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieDetails">
 	            	<input type="hidden" name="movieName" value="${movie.getName()}"/>

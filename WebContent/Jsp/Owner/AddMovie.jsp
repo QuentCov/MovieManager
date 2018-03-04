@@ -30,7 +30,7 @@
 			</div>
 			<div class="form-group">
 				<label for="movieThumbnail">Movie Thumbnail:</label>
-				<input type="file" class="form-control-file" id="movieThumbnail" name="movieThumbnail" placeholder="Movie Thumbnail" required>
+				<input type="file" class="form-control-file" id="movieThumbnail" name="movieThumbnail" required>
 			</div>
 			<div class="form-group">
 				<label for="movieDescription">Movie Description:</label>
