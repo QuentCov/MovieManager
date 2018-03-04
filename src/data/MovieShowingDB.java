@@ -79,11 +79,74 @@ public class MovieShowingDB {
 	}
 	
 	public static boolean addMovieShowing(MovieShowing movieShowing) {
-		String query = "UPDATE movieShowing SET Price=?, NumberPurchased=?, StartTime=?, EndTime=?, movieId=?, showroomId=? "
-				     + "WHERE EmailAddress=?;";
 		
-		ArrayList<String> params = new ArrayList<String>();
-		int i = Database.runUpdate(query, params);
+		String query = "SELECT ID FROM Movie WHERE Name=" + movieShowing.getMovie().getName() + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int movieId = -1;
+		try {
+			ResultSet rs = s.executeQuery(query);
+			movieId = rs.getInt("ID");
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "SELECT ID FROM Showroom WHERE Name=" + movieShowing.getShowroom().getName() + ";";
+		s = Database.prepareStatement(c, query);
+		int showroomId = -1;
+		try {
+			ResultSet rs = s.executeQuery(query);
+			showroomId = rs.getInt("ID");
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "INSERT INTO movieShowing (Price, NumberPurchased, StartTime=, "
+					 + "EndTime, movieId, showroomId "
+				     + "VALUES (" + movieShowing.getCost() + ", " + movieShowing.getNumTicketsSold() + ", " + movieShowing.getStartTime()
+				     + ", " + movieShowing.getEndTime() + ", " + movieId + ", " + showroomId + ");";
+		
+		int i = Database.runUpdate(query);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	public static boolean updateMovieShowing(MovieShowing movieShowing) {
+		
+		String query = "SELECT ID FROM Movie WHERE Name=" + movieShowing.getMovie().getName() + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int movieId = -1;
+		try {
+			ResultSet rs = s.executeQuery(query);
+			movieId = rs.getInt("ID");
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "SELECT ID FROM Showroom WHERE Name=" + movieShowing.getShowroom().getName() + ";";
+		s = Database.prepareStatement(c, query);
+		int showroomId = -1;
+		try {
+			ResultSet rs = s.executeQuery(query);
+			showroomId = rs.getInt("ID");
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "INSERT INTO MovieShowing (NumTicketsSold) VALUES (" + movieShowing.getNumTicketsSold() + ") "
+			  + "WHERE MovieId=" + movieId + " AND ShowroomId=" + showroomId + ";";
+		int i = Database.runUpdate(query);
 	    if(i == 1) {
 	    	return true;
 	    }

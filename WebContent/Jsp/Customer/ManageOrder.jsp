@@ -12,7 +12,7 @@
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>Manage Your Orders</h1>
+		<h1>Manage Your Order</h1>
 		<table border="1">
 	        <tr>
 		        <td>Movie Title</td>
@@ -24,24 +24,19 @@
 				<td>Tickets Bought</td>
 				<td>Actions</td>
 	        </tr>
-	        <c:forEach items="${cart}" var="current">
-		    	<tr>
-		    		<c:forEach items="${current.getMovies()}" var="movie">
-			    		<td>movie.getMovie().getName()></td>
-			            <td>movie.getShowroom().getTheatre().getName()></td>
-			            <td>movie.getStartTime()></td>
-			            <td>movie.getShowroom().getCapacity()></td>
-			            <td>movie.getCost()></td>
-			            <td>movie.getMovie().getThumbnailFile()</td>
-			            <td>current.getTicketsBoughtByMovie(movie)</td>
-			            <form name="item" method="GET" action="ViewOrders">
-			            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-			            	<input type="submit" name="action" value="View">
-			            </form>
-			         </c:forEach>
-			         <td>Order Cost: current.getCost()</td>
-		        </tr>
-			</c:forEach>
+	    		<c:forEach items="${order}" var="movie">
+		    		<td>movie.getMovie().getName()></td>
+		            <td>movie.getShowroom().getTheatre().getName()></td>
+		            <td>movie.getStartTime()></td>
+		            <td>movie.getShowroom().getCapacity()></td>
+		            <td>movie.getCost()></td>
+		            <td>movie.getMovie().getThumbnailFile()</td>
+		            <td>current.getTicketsBoughtByMovie(movie)</td>
+		            <form name="item" method="GET" action="CancelOrder">
+		            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
+		            	<input type="submit" name="action" value="View">
+		            </form>
+		         </c:forEach>
 		</table>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

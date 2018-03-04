@@ -2,13 +2,13 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Order {
-	//This ID is used by the shopping cart to identify each of its orders.
-	private int ID;
+	private UUID ID;
 	private Date date;
 	private User customer;
-	private ArrayList<Movie> movies;
+	private ArrayList<MovieShowing> movies;
 	private ArrayList<Integer> tickets;
 	private double cost;
 	private CreditCard creditCard;
@@ -31,13 +31,7 @@ public class Order {
 		this.customer = customer;
 	}
 
-	public ArrayList<Movie> getMovies() {
-		return movies;
-	}
-
-	public void setMovies(ArrayList<Movie> movies) {
-		this.movies = movies;
-	}
+	
 
 	public ArrayList<Integer> getTickets() {
 		return tickets;
@@ -91,6 +85,12 @@ public class Order {
 
 	// checks if the order makes the showroom(s) over capacity
 	public boolean isNotOverCapacity() {
+		for(int i = 0; i < movies.size(); i++) {
+			Showroom room = movies.get(i).getShowroom();
+			if(room.getCapacity() < (movies.get(i).getNumTicketsSold() + tickets.get(i))) {
+				return false;
+			}
+		}
 		return true;
 	}
 	
@@ -103,19 +103,28 @@ public class Order {
 	}
 	
 	public int getTicketsByMovie(Movie movie) {
-		if(!movies.contains(movie)) {
-			return 0;
+		for(int i = 0; i < movies.size(); i++) {
+			if(movies.get(i).getMovie() == movie) {
+				return tickets.get(i);
+			}
 		}
 		
-		int i = movies.indexOf(movie);
-		return tickets.get(i);
+		return 0;
 	}
 
-	public int getID() {
+	public ArrayList<MovieShowing> getMovies() {
+		return movies;
+	}
+
+	public void setMovies(ArrayList<MovieShowing> movies) {
+		this.movies = movies;
+	}
+
+	public UUID getID() {
 		return ID;
 	}
 
-	public void setID(int iD) {
+	public void setID(UUID iD) {
 		ID = iD;
 	}
 }

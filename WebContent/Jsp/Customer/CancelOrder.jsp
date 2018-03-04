@@ -12,7 +12,7 @@
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>Do you want to cancel this order?</h1>
+		<h1>Do you want to cancel your tickets for this movie??</h1>
 		<table border="1">
 	        <tr>
 		        <td>Movie Title</td>
@@ -24,16 +24,13 @@
 				<td>Tickets Bought</td>
 	        </tr>
     		<tr>
-	    		<c:forEach items="${order.getMovies()}" var="movie">
-		    		<td>movie.getMovie().getName()></td>
-		            <td>movie.getShowroom().getTheatre().getName()></td>
-		            <td>movie.getStartTime()></td>
-		            <td>movie.getShowroom().getCapacity()></td>
-		            <td>movie.getCost()></td>
-		            <td>movie.getMovie().getThumbnailFile()</td>
-		            <td>current.getTicketsBoughtByMovie(movie)</td>
-		         </c:forEach>
-		         <td>Total Price: current.getTotalPrice()</td>
+	    		<td>${movie.getMovie().getName()}</td>
+	            <td>${movie.getShowroom().getTheatre().getName()}</td>
+	            <td>${movie.getStartTime()}</td>
+	            <td>${movie.getShowroom().getCapacity()}</td>
+	            <td>${movie.getCost()}</td>
+	            <td>${movie.getMovie().getThumbnailFile()}</td>
+	            <td>${order.getTicketsBoughtByMovie(movie)}</td>
 	         </tr>
 		</table>
 		<div class="offset-md-3 col-sm-3">

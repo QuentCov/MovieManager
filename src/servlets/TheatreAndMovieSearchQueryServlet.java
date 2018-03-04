@@ -33,12 +33,14 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 		
 		String name = (String) session.getAttribute("searchString");
 		
-		ArrayList<Movie> movie = MovieDB.searchMoviesByName(name);
-		if(movie != null) {
-			session.setAttribute("movie", movie);
+		ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
+		if(movies != null) {
+			session.setAttribute("movies", movies);
+		} else {
+			session.setAttribute("results", "No Movies Found");
+			session.setAttribute("movies", null);
 		}
 		
-		session.setAttribute("results", "Movie Not Found");
 		response.sendRedirect("MovieSearchResults.jsp");
 	}
 

@@ -149,7 +149,28 @@ public class MovieDB {
 	}
 
 	public static double getAverageScore(Movie movie) {
-		//TODO
-		return 0;
+		String query = "SELECT r.Rating FROM movies m WHERE Name=? "
+					 + "INNER JOIN reviews r ON m.ID=r.movieId";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movie.getName());
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
+		
+		double i = 0;
+		int count = 0;
+		try {
+			ResultSet rs = statement.executeQuery(query);
+			while(rs.next()) {
+				i = i + rs.getInt("Rating");
+				count++;
+			}
+			if(count != 0) {
+				i = (i / count);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return i;
 	}
 }

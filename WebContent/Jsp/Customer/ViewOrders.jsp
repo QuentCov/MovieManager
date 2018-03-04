@@ -25,22 +25,21 @@
 				<td>Actions</td>
 	        </tr>
 	        <c:forEach items="${cart}" var="current">
-		    	<tr>
-		    		<c:forEach items="${current.getMovies()}" var="movie">
-			    		<td>movie.getMovie().getName()></td>
-			            <td>movie.getShowroom().getTheatre().getName()></td>
-			            <td>movie.getStartTime()></td>
-			            <td>movie.getShowroom().getCapacity()></td>
-			            <td>movie.getCost()></td>
-			            <td>movie.getMovie().getThumbnailFile()</td>
-			            <td>current.getTicketsBoughtByMovie(movie)</td>
-			            <form name="item" action="ManageOrder">
-			            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-			            	<input type="submit" name="action" value="View">
-			            </form>
-  					</c:forEach>
-			    	<td>Total Cost: current.getTotalPrice()</td>
-		        </tr>
+	    		<c:forEach items="${current.getMovies()}" var="movie">
+		    		<td>movie.getMovie().getName()></td>
+		            <td>movie.getShowroom().getTheatre().getName()></td>
+		            <td>movie.getStartTime()></td>
+		            <td>movie.getShowroom().getCapacity()></td>
+		            <td>movie.getCost()></td>
+		            <td>movie.getMovie().getThumbnailFile()</td>
+		            <td>current.getTicketsBoughtByMovie(movie)</td>
+		
+						</c:forEach>
+		    	<td>Total Cost: current.getTotalPrice()</td>
+		    	<form name="item" action="ManageOrder">
+		        	<input type='hidden' name='itemIndex' value='<c:out value="${current.getID()}"/>'>
+		            <input type="submit" name="action" value="View">
+		        </form>
 			</c:forEach>
 		</table>
 		<div class="offset-md-3 col-sm-3">

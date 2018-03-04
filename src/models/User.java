@@ -1,5 +1,7 @@
 package models;
 
+import data.UserDB;
+
 public class User {
 	private String emailAddress;
 	private String password;
@@ -84,5 +86,17 @@ public class User {
 	public boolean isValidEmailAddress() {
         String pattern = "\\w+@\\w+.\\w";
         return this.emailAddress.matches(pattern);
+	}
+	
+	// checks if the given user is registered in the system
+	public static boolean isValidUser(User user) {
+		User dbUser = UserDB.getUser(user.getEmailAddress());
+		return (user.getEmailAddress().equals(dbUser.getEmailAddress()) && user.getPassword().equals(dbUser.getPassword()));
+	}
+
+	//Gets the user's type from the database.
+	public static String getUserTypeFromDatabase(User user) {
+		User dbUser = UserDB.getUser(user.getEmailAddress());
+		return dbUser.getType();
 	}
 }

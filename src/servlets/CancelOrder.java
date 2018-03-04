@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.OrdersDB;
+import models.Movie;
 import models.Order;
 
 /**
@@ -30,13 +31,18 @@ public class CancelOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//We assume that the order to be deleted exists.
-		models.Order order = (Order) session.getAttribute("cancelOrder");
-		boolean deleted = OrdersDB.deleteOrder(order);
-		if(deleted) {
-			response.sendRedirect("CancellationConfirmation.jsp");
+		Order order = (Order) session.getAttribute("cancelOrder");
+		Movie movie = (Movie) session.getAttribute("movie");
+		order = OrdersDB.getOrder(order.getID());
+		
+		if(order != null) {
+			session.setAttribute("cancelOrder", order);
+			session.setAttribute("cancelShowingItem", movie);
+			session.setAttribute("cancelShowingTicketCount", order.getTicketsByMovie(movie));
+			response.sendRedirect("CancelOrder.jsp");
 		}
-		response.sendError(500, "Error in order cancellation");
+		
+		response.sendError(500, "Error in movie fetching");
 	}
 
 	/**

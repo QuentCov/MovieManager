@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.OrdersDB;
+import models.MovieShowing;
 import models.Order;
 
 /**
@@ -37,10 +38,17 @@ public class CancelOrderTransaction extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		//We assume that the order to be deleted exists.
-		models.Order order = (Order) session.getAttribute("cancelOrder");
-		boolean deleted = OrdersDB.refundOrder(order);
+		MovieShowing showing = (MovieShowing) session.getAttribute("cancelShowingItem");
+		int ticketCount = (Integer) session.getAttribute("cancelShowingTicketCount");
+		Order order = (Order) session.getAttribute("order");
+		double cost = showing.getCost() * ticketCount;
+		
+		boolean deleted = OrdersDB.refundOrder(order, cost, showing);
 		if(deleted) {
-			response.sendRedirect("CancelOrder");
+			deleted = OrdersDB.deleteOrderItem(order, showing);
+			if(deleted) {
+				response.sendRedirect("CancellationConfirmation");
+			}
 		}
 		response.sendError(500, "Error in order cancellation");
 	}

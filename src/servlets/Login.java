@@ -2,7 +2,6 @@ package servlets;
 
 import java.io.IOException;
 
-//import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,27 +9,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import data.Database;
 
-//import models.User;
+import models.User;
 
 /**
  * Servlet implementation class Login
  */
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	//private ServletContext sc;
-	//private String path;
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Login() {
         super();
-        // Auto-generated constructor stub
     }
     
     protected void init(HttpServletRequest request, HttpServletResponse response) {
-        //this.sc = this.getServletContext(); 
-    	//this.path = sc.getRealPath("/WEB-INF/users.properties");
+    	Database.setupDatabase();
     }
 
 	/**
@@ -44,29 +39,22 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Database.setupDatabase();
-		//this.sc = this.getServletContext(); 
-    	//this.path = sc.getRealPath("/WEB-INF/users.properties");
-		//String userName = request.getParameter("userName"); 
-    	//String password = request.getParameter("password");
-    	//User user = new User(userName, password);
+		String userName = request.getParameter("userName"); 
+    	String password = request.getParameter("password");
+    	User user = new User(userName, password);
+    	
     	// check if valid user
-    	
-    	// TODO CHANGE TO VALIDATE USER AND GET USER TYPE
-    	/*
-    	
-    	if (User.isValidUser(user, this.path)) {
+    	if (User.isValidUser(user)) {
     		// check user type to determine where to redirect
-    		if (User.getUserType(user, this.path).equals("Customer")) {
-            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");    			
-    		} else {
+    		String userType = User.getUserTypeFromDatabase(user);
+    		if (userType.equals("Customer")) {
+            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");
             	response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
     		}
     	} else {
         	response.sendRedirect("Jsp/Registration.jsp");
     	}
     	
-    	*/
 	}
 
 }
