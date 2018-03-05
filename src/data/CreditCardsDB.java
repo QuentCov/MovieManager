@@ -19,11 +19,11 @@ public class CreditCardsDB {
 			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
 			card.setExpirationYear(rs.getInt("ExpirationYear"));
 			
-			String query = "SELECT * FROM user WHERE ID=" + rs.getInt("CustomerId") + ";";
+			String query = "SELECT * FROM User WHERE ID=" + rs.getInt("CustomerId") + ";";
 			Connection c = Database.getConnection();
 			PreparedStatement s = Database.prepareStatement(c, query);
 			
-			ResultSet rs2 = s.executeQuery(query);
+			ResultSet rs2 = s.executeQuery();
 			card.setOwner(UserDB.createUser(rs2));
 			rs2.close();
 			s.close();
@@ -40,7 +40,7 @@ public class CreditCardsDB {
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 				CreditCard card = createCard(rs);
@@ -57,14 +57,14 @@ public class CreditCardsDB {
 	}
 
 	public static boolean addCreditCard(CreditCard card) {
-		String query = "SELECT Id FROM user WHERE FullName=" + card.getOwner().getFullName() + ";";
+		String query = "SELECT ID FROM User WHERE FullName=" + card.getOwner().getFullName() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int ownerId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			if(rs.next()) {
-				ownerId = rs.getInt("Id");
+				ownerId = rs.getInt("ID");
 			}
 			rs.close();
 			s.close();
@@ -87,7 +87,7 @@ public class CreditCardsDB {
 	}
 
 	public static boolean updateBalance(CreditCard card) {
-		String query = "UPDATE CreditCard SET balance = " + card.getBalance() + " WHERE CardHolderName=?;";
+		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE CardHolderName=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(card.getOwner().getFullName());
 		int i = Database.runUpdate(query, params);

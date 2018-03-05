@@ -20,8 +20,9 @@ public class TheatresDB {
 			if(rs.next())
 			{
 			    Address address = new Address();
-			    User owner = UserDB.getUser(rs.getInt("Theatre.ownerId"));
+			    User owner = UserDB.getUser(rs.getInt("Theatre.OwnerId"));
 			    address.setAddress1(rs.getString("Address.Address1"));
+			    address.setAddress2(rs.getString("Address.Address2"));
 			    address.setCity(rs.getString("Address.City"));
 			    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
 			    address.setZipCode(rs.getString("Address.ZipCode"));
@@ -63,7 +64,7 @@ public class TheatresDB {
 	
 	public static Theatre getTheatre(String name) {
 		String query = "SELECT Theatre.ownerId, Theatre.ID, Address.Address1, "
-						    + "Address.City, Address.State, Address.ZipCode, "
+						    + "Address.Address2, Address.City, Address.State, Address.ZipCode, "
 						    + "Theatre.Name, Showroom.ID, Showroom.Name, Showroom.Capacity, "
 						    + "FROM Theatre t WHERE Name=" + name + " "
 						    + "INNER JOIN Showroom ON Theatre.ID=Showroom.TheatreId "
@@ -72,7 +73,7 @@ public class TheatresDB {
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Theatre theatre = null;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			theatre = createTheatre(rs);
 			rs.close();
 			s.close();
@@ -87,14 +88,15 @@ public class TheatresDB {
 		User owner = theatre.getOwner();
 		
 		String query = "SELECT ID, AddressId FROM User "
-				     + "WHERE EmailAddress=" + owner.getEmailAddress() + ";";
+				     + "WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		
 		int ownerId = -1;
 		int addressId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			s.setString(1, owner.getEmailAddress());
+			ResultSet rs = s.executeQuery();
 			if(rs.next()) {
 				ownerId = rs.getInt("ID");
 				addressId = rs.getInt("AddressId");
@@ -119,6 +121,7 @@ public class TheatresDB {
 	    return false;
 	}
 	
+	//TODO: Discuss this.
 	//Note: We recognize the inefficiency here and have brainstormed solutions, 
 	//	    but these solutions are too intensive for a project of this scope.
 //	public static boolean updateTheatre(Theatre theatre) {
@@ -130,7 +133,7 @@ public class TheatresDB {
 //		PreparedStatement s = Database.prepareStatement(c, query);
 //		int ownerId = -1;
 //		try {
-//			ResultSet rs = s.executeQuery(query);
+//			ResultSet rs = s.executeQuery();
 //			if(rs.next()) {
 //				ownerId = rs.getInt("ID");
 //			}

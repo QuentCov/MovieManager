@@ -34,6 +34,10 @@
 			</div>
 			
 			<div class="form-group">
+				<label for="fullName">Full Name:</label>
+				<input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full Name">
+			</div>
+			<div class="form-group">
 				<label for="address1">Address 1:</label>
 				<input type="text" class="form-control" id="address1" name="address1" placeholder="Address 1">
 			</div>
@@ -118,6 +122,7 @@
 			var type = document.forms["userForm"]["userType"].value;
 			var pass = document.forms["userForm"]["password"].value;
 			var passConf = document.forms["userForm"]["passwordConfirm"].value;
+			var fullName = document.forms["userForm"]["fullName"].value;
 			var address = document.forms["userForm"]["address1"].value;
 			var city = document.forms["userForm"]["city"].value;
 			var state = document.forms["userForm"]["stateAbbreviation"].value;
@@ -145,6 +150,11 @@
 
 			if(!pass.equals(passConf)) {
 				alert("Your password and password confirmation must match.");
+				return false;
+			}
+			
+			if(fullName === "") {
+				alert("Please give us the name you want us to call you by.");
 				return false;
 			}
 			

@@ -32,17 +32,8 @@ public class Database {
 	    	while((query = setupScriptReader.readLine()) != null) {
 	    		i = stmt.executeUpdate(query);
 	    	}
-            
-            setupScriptReader.close();
         	createdDB = true;
         	
-        	//Add our sample data.
-        	setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/SampleData.sql"));
-        	query = "";
-	    	i = 0;
-	    	while((query = setupScriptReader.readLine()) != null) {
-	    		i = stmt.executeUpdate(query);
-	    	}
         	connection.close();
             stmt.close();
             setupScriptReader.close();
@@ -80,6 +71,25 @@ public class Database {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			statement = c.prepareStatement(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return statement;
+    }
+    
+    public static PreparedStatement prepareStatement(Connection c, String query, ArrayList<String> params){
+		if(!createdDB) {
+			setupDatabase();
+        }
+		PreparedStatement statement = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			statement = c.prepareStatement(query);
+			for(int j = 1; j < params.size() + 1; j++) {
+	        	statement.setString(j, params.get(j-1));
+	        }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e1) {
