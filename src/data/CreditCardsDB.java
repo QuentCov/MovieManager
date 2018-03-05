@@ -19,7 +19,7 @@ public class CreditCardsDB {
 			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
 			card.setExpirationYear(rs.getInt("ExpirationYear"));
 			
-			String query = "SELECT * FROM users WHERE Id=" + rs.getInt("CustomerId") + ";";
+			String query = "SELECT * FROM user WHERE ID=" + rs.getInt("CustomerId") + ";";
 			Connection c = Database.getConnection();
 			PreparedStatement s = Database.prepareStatement(c, query);
 			
@@ -36,7 +36,7 @@ public class CreditCardsDB {
 	}
 	
 	public static CreditCard getCreditCard(String cardNumber) {
-		String query = "SELECT * FROM creditCardBuildings WHERE CreditCardNumber=" + cardNumber + ";";
+		String query = "SELECT * FROM CreditCard WHERE CreditCardNumber=" + cardNumber + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
@@ -57,7 +57,7 @@ public class CreditCardsDB {
 	}
 
 	public static boolean addCreditCard(CreditCard card) {
-		String query = "SELECT Id FROM users WHERE FullName=" + card.getOwner().getFullName() + ";";
+		String query = "SELECT Id FROM user WHERE FullName=" + card.getOwner().getFullName() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int ownerId = -1;
@@ -73,7 +73,7 @@ public class CreditCardsDB {
 			e.printStackTrace();
 		}
 		
-		query = "INSERT INTO users (CardHolderName, CreditCardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
+		query = "INSERT INTO CreditCard (CardHolderName, CreditCardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
 				     + "VALUES (?, ?, 0.00, ?, " + ownerId + ", " + card.getCcv() + ", " + card.getExpirationYear() + "," + card.getExpirationMonth() + ");";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(card.getOwner().getFullName());
@@ -87,7 +87,7 @@ public class CreditCardsDB {
 	}
 
 	public static boolean updateBalance(CreditCard card) {
-		String query = "UPDATE creditCards SET balance = " + card.getBalance() + " WHERE CardHolderName=?;";
+		String query = "UPDATE CreditCard SET balance = " + card.getBalance() + " WHERE CardHolderName=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(card.getOwner().getFullName());
 		int i = Database.runUpdate(query, params);

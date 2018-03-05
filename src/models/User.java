@@ -91,6 +91,9 @@ public class User {
 	// checks if the given user is registered in the system
 	public static boolean isValidUser(User user) {
 		User dbUser = UserDB.getUser(user.getEmailAddress());
+		if(dbUser == null || user == null) {
+			return false;
+		}
 		return (user.getEmailAddress().equals(dbUser.getEmailAddress()) && user.getPassword().equals(dbUser.getPassword()));
 	}
 
