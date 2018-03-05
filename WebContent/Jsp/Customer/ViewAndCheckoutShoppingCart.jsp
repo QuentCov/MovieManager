@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>
 		<table border="1">
@@ -27,16 +27,16 @@
 	        <c:forEach items="${cart}" var="current">
 		    		<c:forEach items="${current.getMovies()}" var="movie">
 		    		<tr>
-			    		<td>movie.getMovie().getName()></td>
-			            <td>movie.getShowroom().getTheatre().getName()></td>
-			            <td>movie.getStartTime()></td>
-			            <td>movie.getShowroom().getCapacity()></td>
-			            <td>movie.getCost()></td>
-			            <td>movie.getMovie().getThumbnailFile()</td>
-			            <td>current.getTicketsBoughtByMovie(movie)</td>
+			    		<td>${movie.getMovie().getName()}</td>
+			            <td>${movie.getShowroom().getTheatre().getName()}</td>
+			            <td>${movie.getStartTime()}</td>
+			            <td>${movie.getShowroom().getCapacity()}</td>
+			            <td>${movie.getCost()}</td>
+			            <td>${movie.getMovie().getThumbnailFile()}</td>
+			            <td>${current.getTicketsBoughtByMovie(movie)}</td>
 			         </tr>
 			         </c:forEach>
-			         <td>Total Price: current.getTotalPrice()</td>
+			         <td>Total Price: ${current.getCost()}</td>
 			         <form name="item" action="UpdateCard">
 		            	<input type='hidden' name='itemIndex' value='<c:out value="${current.getID()}"/>'>
 		            	<input type="submit" name="action" value="Remove Order">

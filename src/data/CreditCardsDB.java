@@ -14,17 +14,21 @@ public class CreditCardsDB {
 		CreditCard card = new CreditCard();
 		try {
 			card.setCardType(rs.getString("CardType"));
-			card.setCardNumber(rs.getString("CreditCardNumber"));
+			card.setCardNumber(rs.getString("CardNumber"));
 			card.setCcv(rs.getInt("CCV"));
 			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
 			card.setExpirationYear(rs.getInt("ExpirationYear"));
 			
-			String query = "SELECT * FROM User WHERE ID=" + rs.getInt("CustomerId") + ";";
+			String query = "SELECT * FROM User "
+						 + "INNER JOIN Address on Address.ID=User.AddressId "
+						 + "WHERE User.ID=?;";
 			Connection c = Database.getConnection();
 			PreparedStatement s = Database.prepareStatement(c, query);
-			
+			s.setInt(1, rs.getInt("OwnerId"));
 			ResultSet rs2 = s.executeQuery();
-			card.setOwner(UserDB.createUser(rs2));
+			if(rs2.next()) {
+				card.setOwner(UserDB.createUser(rs2));
+			}
 			rs2.close();
 			s.close();
 			c.close();
@@ -36,7 +40,7 @@ public class CreditCardsDB {
 	}
 	
 	public static CreditCard getCreditCard(String cardNumber) {
-		String query = "SELECT * FROM CreditCard WHERE CreditCardNumber=" + cardNumber + ";";
+		String query = "SELECT * FROM CreditCard WHERE CardNumber=" + cardNumber + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
@@ -73,7 +77,7 @@ public class CreditCardsDB {
 			e.printStackTrace();
 		}
 		
-		query = "INSERT INTO CreditCard (CardHolderName, CreditCardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
+		query = "INSERT INTO CreditCard (CardHolderName, CardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
 				     + "VALUES (?, ?, 0.00, ?, " + ownerId + ", " + card.getCcv() + ", " + card.getExpirationYear() + "," + card.getExpirationMonth() + ");";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(card.getOwner().getFullName());

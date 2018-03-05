@@ -11,7 +11,7 @@
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Details:</h1>
 		<br>
@@ -28,14 +28,14 @@
 				<td>Actions</td>
 			</tr>
 			<tr>
-	    		<td>movieShowing.getMovie().getName()</td>
-	            <td>movieShowing.getMovie().getDescription()</td>
-	            <td>movieShowing.getMovie().getRating</td>
-	            <td>movieShowing.getMovie().getThumbnailFile()</td>
-	            <td>movieShowing.getShowroom().getTheatre().getName()</td>
-	            <td>movieShwoing.getStartTime()</td>
-	            <td>movie.getCost()</td>
-	            <td>movie.getShowroom().getCapacity()</td>
+	    		<td>${movieShowing.getMovie().getName()}</td>
+	            <td>${movieShowing.getMovie().getDescription()}</td>
+	            <td>${movieShowing.getMovie().getRating}</td>
+	            <td>${movieShowing.getMovie().getThumbnailFile()}</td>
+	            <td>${movieShowing.getShowroom().getTheatre().getName()}</td>
+	            <td>${movieShwoing.getStartTime()}</td>
+	            <td>${movie.getCost()}</td>
+	            <td>${movie.getShowroom().getCapacity()}</td>
 	         </tr>
 		</table>
 		<form name="item" action="UpdateCart">
@@ -49,7 +49,7 @@
 		<h2>Viewer Reviews:</h2>
 		<table border="1">
 			<tr>
-				<td>Total Rating: movieShowing.getMovie().getAverageRating()</td>
+				<td>Total Rating: ${movieShowing.getMovie().getAverageRating()}</td>
 			</tr>
 			<tr>
 				<td>Reviewer</td>
@@ -59,10 +59,10 @@
 			</tr>
     		<c:forEach items="${reviews}" var="review">
     		<tr>
-	    		<td>review.getUser().getFullName()></td>
-	            <td>review.getDate()></td>
-	            <td>review.getRating()></td>
-	            <td>review.getReview()></td>
+	    		<td>${review.getUser().getFullName()}</td>
+	            <td>${review.getDate()}</td>
+	            <td>${review.getRating()}</td>
+	            <td>${review.getReview()}</td>
 	        <tr>
 	        </c:forEach>
 		</table>

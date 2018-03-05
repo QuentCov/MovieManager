@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Do you want to cancel your tickets for this movie??</h1>
 		<table border="1">

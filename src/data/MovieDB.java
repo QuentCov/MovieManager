@@ -149,8 +149,9 @@ public class MovieDB {
 	}
 
 	public static double getAverageScore(Movie movie) {
-		String query = "SELECT r.Rating FROM Movies m WHERE Name=? "
-					 + "INNER JOIN Review r ON m.ID=r.MovieId";
+		String query = "SELECT r.Rating FROM Movies m "
+					 + "INNER JOIN Review r ON m.ID=r.MovieId "
+					 + "WHERE Name=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(movie.getName());
 		Connection c = Database.getConnection();

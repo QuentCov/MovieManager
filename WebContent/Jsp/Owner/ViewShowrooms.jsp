@@ -11,7 +11,7 @@
 			<a href="AddMovie.jsp" class="btn btn-primary">Add Movie</a>
 			<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>Theatre 13 Showrooms</h1>

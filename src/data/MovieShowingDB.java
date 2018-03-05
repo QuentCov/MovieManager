@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import models.MovieShowing;
 import models.Showroom;
@@ -15,9 +18,20 @@ public class MovieShowingDB {
 	public static MovieShowing createMovieShowing(ResultSet rs) {
 		MovieShowing showing = new MovieShowing();
 		try {
-			showing.setStartTime(rs.getDate("StartTime"));
-			showing.setEndTime(rs.getDate("EndTime"));
-			showing.setCost(rs.getDouble("Price"));
+			
+			SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+			Date sDate = null;
+			Date eDate = null;
+			try {
+				sDate = sdfmt1.parse(rs.getString("StartTime"));
+				eDate = sdfmt1.parse(rs.getString("EndTime"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			showing.setStartTime(sDate);
+			showing.setEndTime(eDate);
+			showing.setCost(rs.getDouble("Cost"));
 			showing.setNumTicketsSold(rs.getInt("NumTicketsSold"));
 			
 			String query = "SELECT * FROM Movie WHERE ID=" + rs.getInt("MovieId") + ";";

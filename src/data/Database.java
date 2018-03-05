@@ -17,7 +17,7 @@ public class Database {
     private static final String USER = "qcovert";
     private static final String PASS = "qJ3zTz";
     
-    private static boolean createdDB = false;
+    private static boolean createdDB = true;
     
     public static int setupDatabase() {
     	try {

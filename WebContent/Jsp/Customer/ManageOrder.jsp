@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Manage Your Order</h1>
 		<table border="1">
@@ -25,13 +25,13 @@
 				<td>Actions</td>
 	        </tr>
 	    		<c:forEach items="${order}" var="movie">
-		    		<td>movie.getMovie().getName()></td>
-		            <td>movie.getShowroom().getTheatre().getName()></td>
-		            <td>movie.getStartTime()></td>
-		            <td>movie.getShowroom().getCapacity()></td>
-		            <td>movie.getCost()></td>
-		            <td>movie.getMovie().getThumbnailFile()</td>
-		            <td>current.getTicketsBoughtByMovie(movie)</td>
+		    		<td>${movie.getMovie().getName()}</td>
+		            <td>${movie.getShowroom().getTheatre().getName()}</td>
+		            <td>${movie.getStartTime()}</td>
+		            <td>${movie.getShowroom().getCapacity()}</td>
+		            <td>${movie.getCost()}</td>
+		            <td>${movie.getMovie().getThumbnailFile()}</td>
+		            <td>${current.getTicketsBoughtByMovie(movie)}</td>
 		            <form name="item" method="GET" action="CancelOrder">
 		            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
 		            	<input type="submit" name="action" value="View">

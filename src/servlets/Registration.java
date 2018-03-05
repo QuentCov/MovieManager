@@ -50,8 +50,12 @@ public class Registration extends HttpServlet {
     	
     	Address address = new Address();
     	
-    	String address1 = request.getParameter("address1"); 
+    	String address1 = request.getParameter("address1");
     	String address2 = request.getParameter("address2");
+    	if(address2 == null) {
+    		address2 = "";
+    	}
+    	
     	String city = request.getParameter("city");
     	String stateAbbreviation = request.getParameter("stateAbbreviation");
     	String zipCode = request.getParameter("zipCode");

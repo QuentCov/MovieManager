@@ -36,8 +36,9 @@ public class ReviewDB {
 			ArrayList<Review> reviews = new ArrayList<Review>();
 			if(rs.next())
 			{
-			    query = "SELECT * FROM Review r WHERE ReviewerId=" + rs.getInt("ID") + " "
-			    	  + "INNER JOIN Movies m on r.MovieId=m.ID" + ";";
+			    query = "SELECT * FROM Review r "
+			    	  + "INNER JOIN Movies m on r.MovieId=m.ID "
+			    	  + "WHERE ReviewerId=" + rs.getInt("ID") + ";";
 			    s = Database.prepareStatement(c, query);
 				rs = s.executeQuery();
 			    while(rs.next()) {
@@ -66,8 +67,9 @@ public class ReviewDB {
 			ArrayList<Review> reviews = new ArrayList<Review>();
 			if(rs.next())
 			{
-			    query = "SELECT * FROM Review r WHERE MovieId=" + rs.getInt("ID") + " "
-			    	  + "INNER JOIN User u on r.ReviewerId=m.Id;";
+			    query = "SELECT * FROM Review r "
+			    	  + "INNER JOIN User u on r.ReviewerId=m.Id "
+			    	  + "WHERE MovieId=" + rs.getInt("ID") + ";";
 			    s = Database.prepareStatement(c, query);
 				rs = s.executeQuery();
 			    while(rs.next()) {

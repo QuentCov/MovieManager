@@ -66,9 +66,10 @@ public class TheatresDB {
 		String query = "SELECT Theatre.ownerId, Theatre.ID, Address.Address1, "
 						    + "Address.Address2, Address.City, Address.State, Address.ZipCode, "
 						    + "Theatre.Name, Showroom.ID, Showroom.Name, Showroom.Capacity, "
-						    + "FROM Theatre t WHERE Name=" + name + " "
+						    + "FROM Theatre t "
 						    + "INNER JOIN Showroom ON Theatre.ID=Showroom.TheatreId "
-						    + "INNER JOIN Address ON Address.ID=Theatre.AddressId;";
+						    + "INNER JOIN Address ON Address.ID=Theatre.AddressId "
+						    + "WHERE Name=" + name + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Theatre theatre = null;

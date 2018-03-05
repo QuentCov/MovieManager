@@ -17,13 +17,14 @@ import models.User;
 
 public class OrdersDB {
 	public static Order getOrder(UUID id) {
-		String query = "SELECT * FROM Order o WHERE OurID=" + id.toString() + " "
+		String query = "SELECT * FROM Order o "
 			     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
 			     + "INNER JOIN User u ON u.ID=o.CustomerId "
 			     + "INNER JOIN OrdersMovies oi ON o.ID=oi.OrderId "
 			     + "INNER JOIN MovieShowing ms ON ms.ID=oi.ShowingId "
 			     + "INNER JOIN Movie m ON ms.movieId=m.ID "
-			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID;";
+			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID "
+			     + "WHERE OurID=" + id.toString() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Order order = new Order();
@@ -37,7 +38,7 @@ public class OrdersDB {
 			    order.setCustomer(customer);
 			    order.setDate(new Date());
 			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.TotalCost"));
+			    order.setCost(rs.getInt("o.Cost"));
 			    
 			    //Get the billing address.
 			    Address address = new Address();
@@ -72,17 +73,17 @@ public class OrdersDB {
 	}
 	
 	public static ArrayList<Order> getOrders(String email) {
-		String query = "SELECT * FROM User u WHERE EmailAddress=? "
-				     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
-				     + "INNER JOIN Order o ON u.Id=o.CustomerId "
-				     + "INNER JOIN OrdersMovies oi ON o.Id=oi.OrderId "
-				     + "INNER JOIN MovieShowing ms ON ms.Id=oi.ShowingId "
-				     + "INNER JOIN Movie m ON ms.movieId=m.Id " 
-				     + "INNER JOIN Address a ON o.BillingAddressId=a.ID;";
+		String query = "SELECT * FROM User u "
+				     + "INNER JOIN CreditCard cc ON cc.OwnerId=u.ID "
+				     + "INNER JOIN Orders o ON o.CustomerId=u.ID "
+				     + "INNER JOIN OrdersMovies oi ON oi.OrdersId=o.ID "
+				     + "INNER JOIN MovieShowing ms ON oi.MovieId=ms.ID "
+				     + "INNER JOIN Movie m ON m.ID=ms.movieId " 
+				     + "INNER JOIN Address a ON a.ID=o.BillingAddressId "
+				     + "WHERE EmailAddress=?";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
-		
 		try {
 			s.setString(1, email);
 			ResultSet rs = s.executeQuery();
@@ -95,7 +96,7 @@ public class OrdersDB {
 			    order.setCustomer(customer);
 			    order.setDate(new Date());
 			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.TotalCost"));
+			    order.setCost(rs.getInt("o.Cost"));
 
 			    //Get the billing address.
 			    Address address = new Address();
@@ -109,15 +110,26 @@ public class OrdersDB {
 			    order.setShippingAddress(customer.getStreetAddress());
 			    order.setBillingAddress(address);
 			    
+			    //Get the tickets and movie showings
 			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<Movie> movies = new ArrayList<Movie>();
-			    tickets.add(rs.getInt("oi.NumTickets"));
-			    movies.add(MovieDB.createMovie(rs));
+			    ArrayList<MovieShowing> movies = new ArrayList<MovieShowing>();
+			    query = "SELECT * FROM Orders o "
+			    	  + "INNER JOIN OrdersMovies om ON om.OrdersId=o.ID "
+					  + "INNER JOIN MovieShowing ms ON ms.ID=om.MovieId "
+					  + "WHERE o.ID=?";
 			    
-			    while(rs.next()) {
-			    	tickets.add(rs.getInt("oi.NumTickets"));
-			    	movies.add(MovieDB.createMovie(rs));
+			    Connection c2 = Database.getConnection();
+				PreparedStatement s2 = Database.prepareStatement(c2, query);
+			    s2.setInt(1, rs.getInt("o.ID"));
+			    
+			    ResultSet rs2 = s2.executeQuery();
+			    while(rs2.next()) {
+			    	tickets.add(rs.getInt("NumTickets"));
+				    movies.add(MovieShowingDB.createMovieShowing(rs2));
 			    }
+			    
+			    s2.close();
+			    rs2.close();
 			
 			    orders.add(order);
 			}
@@ -152,7 +164,7 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "INSERT INTO Order (OurID, OrderDate, CustomerId, TotalCost, BillingAddress, CreditCardNumber)"
+		query = "INSERT INTO Orders (OurID, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
 				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(order.getBillingAddress().getAddress1());
@@ -186,7 +198,7 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "SELECT ID FROM Order WHERE CustomerId=" + id + ";";
+		query = "SELECT ID FROM Orders WHERE CustomerId=" + id + ";";
 		
 		try {
 			rs = s.executeQuery();
@@ -212,7 +224,7 @@ public class OrdersDB {
 		query = "DELETE FROM OrdersMovies WHERE OrderId=" + id +";";
 		int i = Database.runUpdate(query);
 		if(i != 0 || i != -1) {
-			query = "DELETE FROM Order WHERE OurId=" + order.getID().toString() + ";";
+			query = "DELETE FROM Orders WHERE OurId=" + order.getID().toString() + ";";
 			i = Database.runUpdate(query);
 			
 			if(i != 0 || i != -1) {
@@ -264,7 +276,7 @@ public class OrdersDB {
 					e.printStackTrace();
 				}
 				
-				query = "SELECT ID FROM Order WHERE OurId=" + order.getID().toString() + ";";
+				query = "SELECT ID FROM Orders WHERE OurId=" + order.getID().toString() + ";";
 				s = Database.prepareStatement(c, query);
 				int orderId = -1;
 				try {
@@ -290,7 +302,7 @@ public class OrdersDB {
 
 	private static boolean updateOrder(Order order) {
 
-		String query = "UPDATE Order SET Cost=" + order.getCost()
+		String query = "UPDATE Orders SET Cost=" + order.getCost()
 					 + "WHERE OurId=" + order.getID().toString() + ";";
 		int i = Database.runUpdate(query);
 		if(i == 1) {
