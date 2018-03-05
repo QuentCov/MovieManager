@@ -17,7 +17,7 @@ import models.User;
 
 public class OrdersDB {
 	public static Order getOrder(UUID id) {
-		String query = "SELECT * FROM Order o "
+		String query = "SELECT * FROM Orders o "
 			     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
 			     + "INNER JOIN User u ON u.ID=o.CustomerId "
 			     + "INNER JOIN OrdersMovies oi ON o.ID=oi.OrderId "
