@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -19,6 +20,7 @@ public class MovieShowingDB {
 		try {
 			Movie movie = MovieDB.getMovieById(rs.getInt("MovieId"));
 			Showroom showroom = ShowroomDB.getShowroomById(rs.getInt("ShowroomId"));
+			showing.setId(rs.getInt("ID"));
 			showing.setMovie(movie);
 			showing.setShowroom(showroom);
 			
@@ -40,16 +42,38 @@ public class MovieShowingDB {
 		return showing;
 	}
 	
+	public static MovieShowing getMovieShowingById(int id) {
+		String query = "SELECT * FROM MovieShowing WHERE ID=" + id + ";";
+		MovieShowing showing = null;
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				showing = createMovieShowing(rs);
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return showing;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static ArrayList<MovieShowing> getMovieShowingsByShowroomId(int showroomId) {
 		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=" + showroomId + ";";
-		ResultSet rs = Database.runQuery(query);
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			while(rs.next())
 			{
 			    showings.add(createMovieShowing(rs));
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 			return showings;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -59,14 +83,17 @@ public class MovieShowingDB {
 	
 	public static ArrayList<MovieShowing> getMovieShowingsByMovieId(int movieId) {
 		String query = "SELECT * FROM MovieShowing WHERE MovieId=" + movieId + ";";
-		ResultSet rs = Database.runQuery(query);
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			while(rs.next())
 			{
 			    showings.add(createMovieShowing(rs));
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 			return showings;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,6 +111,16 @@ public class MovieShowingDB {
 		params.add(movieShowing.getStartTime().toString());
 		params.add(movieShowing.getEndTime().toString());
 		int i = Database.runUpdate(query, params);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	public static boolean deleteMovieShowing(int id) {
+		String query = "DELETE FROM MovieShowing "
+							+ " WHERE ID=" + id + ";";
+		int i = Database.runUpdate(query);
 	    if(i == 1) {
 	    	return true;
 	    }

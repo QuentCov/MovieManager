@@ -3,6 +3,7 @@ package models;
 import java.util.Date;
 
 public class MovieShowing {
+	private int id;
 	private Movie movie;
 	private Showroom showroom;
 	private Date startTime;
@@ -12,6 +13,15 @@ public class MovieShowing {
 	
 	public MovieShowing() {}
 
+	public MovieShowing(Movie movie, Showroom showroom, Date startTime, Date endTime, int numTicketsSold,
+			double cost) {
+		this.movie = movie;
+		this.showroom = showroom;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.cost = cost;
+	}
+	
 	public Movie getMovie() {
 		return movie;
 	}
@@ -60,5 +70,11 @@ public class MovieShowing {
 		this.cost = cost;
 	}
 
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}	
 }

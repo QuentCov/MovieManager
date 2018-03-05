@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ public class ShowroomDB {
 			Showroom showroom = new Showroom();
 			showroom.setName(rs.getString("Name"));
 			showroom.setCapacity(rs.getInt("Capacity"));
-			int showroomId = getShowroomIdByName(showroom.getName());
-			showroom.setShowings(MovieShowingDB.getMovieShowingsByShowroomId(showroomId));
 			int theatreId = rs.getInt("TheatreId");
 			showroom.setTheatre(TheatreDB.getTheatreById(theatreId));
 		    return showroom;
@@ -39,14 +38,15 @@ public class ShowroomDB {
 	public static int getShowroomIdByName(String name) {
 		String query = "SELECT ID FROM Showroom WHERE Name='" + name + "';";
 		int id = -1;
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
-				rs.close();
-			    return id;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,14 +55,19 @@ public class ShowroomDB {
 	
 	public static Showroom getShowroomById(int id) {
 		String query = "SELECT * FROM Showroom WHERE ID=" + id + ";";
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				Showroom showroom = createShowroom(rs);
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 			    return showroom;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -71,14 +76,19 @@ public class ShowroomDB {
 	
 	public static Showroom getShowroomByName(String name) {
 		String query = "SELECT * FROM Showroom WHERE Name='" + name + "';";
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				Showroom showroom = createShowroom(rs);
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 			    return showroom;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,15 +97,17 @@ public class ShowroomDB {
 	
 	public static ArrayList<Showroom> getShowroomsByTheatreId(int theatreId) {
 		String query = "SELECT * FROM Showroom WHERE TheatreId=" + theatreId + ";";
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			ArrayList<Showroom> showrooms = new ArrayList<Showroom>();
 			while(rs.next()) {
 				showrooms.add(createShowroom(rs));
-				rs.close();
-			    return showrooms;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return showrooms;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -67,29 +67,6 @@ public class Database {
 		return -1;
     }
     
-    // TODO Needs to be removed since the returned ResultSet will be null due to closing connections before returning
-    public static ResultSet runQuery(String query){
-		ResultSet results = null;
-    	try {
-    		if(!createdDB) {
-    			setupDatabase();
-            }
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(URL, USER, PASS);
-	    	PreparedStatement stmt = connection.prepareStatement(query);
-	        ResultSet rs = stmt.executeQuery();
-    		results = rs;
-    		connection.close();
-    		stmt.close();
-    	} catch (SQLException e) {
-    		e.printStackTrace();
-    	} catch (ClassNotFoundException e) {
-    		e.printStackTrace();
-    	}
-
-		return results;
-    }
-    
     public static int runUpdate(String query) {
 		try {
 			if(!createdDB) {

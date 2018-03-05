@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,14 +29,15 @@ public class UserDB {
 	public static int getUserIdByEmailAddress(String emailAddress) {
 		String query = "SELECT ID FROM User WHERE EmailAddress='" + emailAddress + "';";
 		int id = -1;
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
-				rs.close();
-			    return id;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -44,14 +46,19 @@ public class UserDB {
 	
 	public static User getUserById(int id) {
 		String query = "SELECT * FROM User WHERE ID=" + id + ";";
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				User user = createUser(rs);
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 			    return user;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -60,15 +67,20 @@ public class UserDB {
 	
 	public static User getUserByEmailAddress(String emailAddress) {
 		String query = "SELECT * FROM User WHERE EmailAddress='" + emailAddress + "';";
-		ResultSet rs = Database.runQuery(query);
 		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next())
 			{
 				User user = createUser(rs);
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 			    return user;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -118,14 +130,19 @@ public class UserDB {
 	
 	public static boolean validateUser(String userEmailAddress) {
 		String query = "SELECT * FROM User WHERE EmailAddress='" + userEmailAddress + "';";
-		ResultSet rs = Database.runQuery(query);
         try {
+        	PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			if(rs.next())
 			{
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 			    return true;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

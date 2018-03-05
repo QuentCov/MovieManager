@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import java.sql.PreparedStatement;
+
 import models.Theatre;
 
 public class TheatreDB {
@@ -13,7 +15,6 @@ public class TheatreDB {
 		try {
 			theatre.setName(rs.getString("Name"));
 			theatre.setAddress(AddressDB.getAddressById(rs.getInt("AddressId")));
-			theatre.setShowrooms(ShowroomDB.getShowroomsByTheatreId(getTheatreIdByName(theatre.getName())));
 			theatre.setOwner(UserDB.getUserById(rs.getInt("OwnerId")));
 			return theatre;
 		} catch (SQLException e) {
@@ -24,15 +25,16 @@ public class TheatreDB {
 	
 	public static int getTheatreIdByName(String name) {
 		String query = "SELECT ID FROM Theatre WHERE Name='" + name + "';";
+		PreparedStatement statement = Database.prepareStatement(query);
 		int id = -1;
-		ResultSet rs = Database.runQuery(query);
 		try {
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
-				rs.close();
-			    return id;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,14 +43,19 @@ public class TheatreDB {
 	
 	public static Theatre getTheatreByName(String name) {
 		String query = "SELECT * FROM Theatre WHERE Name='" + name + "';";
-		ResultSet rs = Database.runQuery(query);
+		PreparedStatement statement = Database.prepareStatement(query);
 		try {
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				Theatre theatre = createTheatre(rs);
 				rs.close();
+				statement.getConnection().close();
+				statement.close();
 				return theatre;
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,14 +64,36 @@ public class TheatreDB {
 	
 	public static Theatre getTheatreById(int theatreId) {
 		String query = "SELECT * FROM Theatre WHERE ID=" + theatreId + ";";
-		ResultSet rs = Database.runQuery(query);
+		PreparedStatement statement = Database.prepareStatement(query);
 		Theatre theatre = new Theatre();
 		try {
+			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				theatre = createTheatre(rs);
 			}
 			rs.close();
+			statement.getConnection().close();
+			statement.close();
 			return theatre;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static ArrayList<Theatre> getTheatresByOwnerId(int ownerId) {
+		String query = "SELECT * FROM Theatre WHERE OwnerId=" + ownerId + ";";
+		PreparedStatement statement = Database.prepareStatement(query);
+		try {
+			ResultSet rs = statement.executeQuery();
+			ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+			while(rs.next()) {
+				theatres.add(createTheatre(rs));
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return theatres;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -14,7 +14,7 @@
 		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
 		</div>
 
-		<h1>Cancellation Confirmed</h1>
+		<h1>${ result ? "Cancellation Confirmed" : "Cancellation Error" }</h1>
 		<p>Please review details below.</p>
 
 		<div class="row">
@@ -25,9 +25,9 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-3">Star Trek</div>
-			<div class="col-sm-3">Theatre 13</div>
-			<div class="col-sm-3">Showroom 1</div>
+			<div class="col-sm-3">${showing.getMovie().getName() }</div>
+			<div class="col-sm-3">${showing.getShowroom().getTheatre().getName() }</div>
+			<div class="col-sm-3">${showing.getShowroom().getName() }</div>
 			<div class="col-sm-3">$123.45</div>
 		</div>
 	</div>
