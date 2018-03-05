@@ -20,33 +20,33 @@ public class TheatresDB {
 			if(rs.next())
 			{
 			    Address address = new Address();
-			    User owner = UserDB.getUser(rs.getInt("theatreBuildings.ownerId"));
-			    address.setAddress1(rs.getString("theatreBuildings.Address"));
-			    address.setCity(rs.getString("theatreBuildings.City"));
-			    address.setStateAbbreviation(rs.getString("theatreBuildings.State"));
-			    address.setZipCode(rs.getString("theatreBuildings.ZipCode"));
-			    theatre.setName(rs.getString("theatreBuildings.Name"));
+			    User owner = UserDB.getUser(rs.getInt("Theatre.ownerId"));
+			    address.setAddress1(rs.getString("Address.Address1"));
+			    address.setCity(rs.getString("Address.City"));
+			    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
+			    address.setZipCode(rs.getString("Address.ZipCode"));
+			    theatre.setName(rs.getString("Theatre.Name"));
 			    theatre.setAddress(address);
 			    theatre.setOwner(owner);
 			    
 			    ArrayList<Showroom> showrooms = new ArrayList<Showroom>();
 				Showroom showroom = new Showroom();
-				showroom.setName(rs.getString("showrooms.Name"));
-				showroom.setCapacity(rs.getInt("showrooms.AvailableSeats"));
+				showroom.setName(rs.getString("Showroom.Name"));
+				showroom.setCapacity(rs.getInt("Showroom.Capacity"));
 				showroom.setTheatre(theatre);
 				
-				ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("showrooms.Id"));
+				ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
 				showroom.setShowings(showings);
 				showrooms.add(showroom);
 				
 				
 				while(rs.next()) {
 					showroom = new Showroom();
-					showroom.setName(rs.getString("showrooms.Name"));
-					showroom.setCapacity(rs.getInt("showrooms.AvailableSeats"));
+					showroom.setName(rs.getString("Showroom.Name"));
+					showroom.setCapacity(rs.getInt("Showroom.Capacity"));
 					showroom.setTheatre(theatre);
 					
-					showings = MovieShowingDB.getMovieShowings(rs.getInt("showrooms.Id"));
+					showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
 					showroom.setShowings(showings);
 					showrooms.add(showroom);
 				}
@@ -62,11 +62,12 @@ public class TheatresDB {
 	}
 	
 	public static Theatre getTheatre(String name) {
-		String query = "SELECT theatreBuildings.ownerId, theatreBuildings.Id, theatreBuildings.Address, "
-						    + "theatreBuildings.City, theatreBuildings.State, theatreBuildings.ZipCode,"
-						    + "theatreBuildings.Name, showrooms.Id, showrooms.Name, showrooms.AvailableSeats,"
-						    + "FROM theatreBuildings t WHERE Name=" + name 
-						    + "INNER JOIN showrooms ON theatreBuildings.Id=showrooms.theatreId;";
+		String query = "SELECT Theatre.ownerId, Theatre.ID, Address.Address1, "
+						    + "Address.City, Address.State, Address.ZipCode, "
+						    + "Theatre.Name, Showroom.ID, Showroom.Name, Showroom.Capacity, "
+						    + "FROM Theatre t WHERE Name=" + name + " "
+						    + "INNER JOIN Showroom ON Theatre.ID=Showroom.TheatreId "
+						    + "INNER JOIN Address ON Address.ID=Theatre.AddressId;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Theatre theatre = null;
@@ -83,18 +84,20 @@ public class TheatresDB {
 	}
 	
 	public static boolean addTheatre(Theatre theatre) {
-		Address address = theatre.getAddress();
 		User owner = theatre.getOwner();
 		
-		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress() + ";";
+		String query = "SELECT ID, AddressId FROM User "
+				     + "WHERE EmailAddress=" + owner.getEmailAddress() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		
 		int ownerId = -1;
+		int addressId = -1;
 		try {
 			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
-				ownerId = rs.getInt("Id");
+				ownerId = rs.getInt("ID");
+				addressId = rs.getInt("AddressId");
 			}
 			rs.close();
 			s.close();
@@ -103,15 +106,11 @@ public class TheatresDB {
 			e.printStackTrace();
 		}
 		
-		query = "INSERT INTO users (Name, Address, ownerId, City, State, ZipCode)"
-			  + "VALUES (?, ?," + ownerId + ", ?, ?, ?);";
+		query = "INSERT INTO Theatre (Name, AddressId, ownerId) "
+			  + "VALUES (?, " + addressId + ", " + ownerId + ");";
 		
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(theatre.getName());
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
 		
 		int i = Database.runUpdate(query, params);
 	    if(i == 1) {
@@ -122,39 +121,39 @@ public class TheatresDB {
 	
 	//Note: We recognize the inefficiency here and have brainstormed solutions, 
 	//	    but these solutions are too intensive for a project of this scope.
-	public static boolean updateTheatre(Theatre theatre) {
-		Address address = theatre.getAddress();
-		User owner = theatre.getOwner();
-		
-		String query = "SELECT Id from users where EmailAddress=" + owner.getEmailAddress() + ";";
-		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
-		int ownerId = -1;
-		try {
-			ResultSet rs = s.executeQuery(query);
-			if(rs.next()) {
-				ownerId = rs.getInt("Id");
-			}
-			rs.close();
-			s.close();
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		query = "UPDATE theatres SET Address=?, ownerId=" + ownerId + ", City=?, State=?, ZipCode=? WHERE Name=?);";
-		
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
-		params.add(theatre.getName());
-		
-		int i = Database.runUpdate(query, params);
-	    if(i == 1) {
-	    	return true;
-	    }
-	    return false;
-	}
+//	public static boolean updateTheatre(Theatre theatre) {
+//		Address address = theatre.getAddress();
+//		User owner = theatre.getOwner();
+//		
+//		String query = "SELECT ID from User where EmailAddress=" + owner.getEmailAddress() + ";";
+//		Connection c = Database.getConnection();
+//		PreparedStatement s = Database.prepareStatement(c, query);
+//		int ownerId = -1;
+//		try {
+//			ResultSet rs = s.executeQuery(query);
+//			if(rs.next()) {
+//				ownerId = rs.getInt("ID");
+//			}
+//			rs.close();
+//			s.close();
+//			c.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		query = "UPDATE Theatre SET Address=?, ownerId=" + ownerId + ", City=?, State=?, ZipCode=? WHERE Name=?);";
+//		
+//		ArrayList<String> params = new ArrayList<String>();
+//		params.add(address.getAddress1());
+//		params.add(address.getCity());
+//		params.add(address.getStateAbbreviation());
+//		params.add(address.getZipCode());
+//		params.add(theatre.getName());
+//		
+//		int i = Database.runUpdate(query, params);
+//	    if(i == 1) {
+//	    	return true;
+//	    }
+//	    return false;
+//	}
 }

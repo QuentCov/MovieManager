@@ -37,7 +37,7 @@ public class UserDB {
 	}
 	
 	public static User getUser(int id) {
-		String query = "SELECT * FROM users WHERE Id=" + id + ";";
+		String query = "SELECT * FROM User WHERE Id=" + id + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
@@ -60,7 +60,7 @@ public class UserDB {
 	}
 	
 	public static User getUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName + ";";
+		String query = "SELECT * FROM User WHERE EmailAddress=" + userName + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
@@ -84,7 +84,7 @@ public class UserDB {
 	
 	public static boolean addUser(User user) {
 		Address address = user.getStreetAddress();
-		String query = "INSERT INTO users (EmailAddress, Password, Type, FullName, PhoneNumber, Address, City, State, ZipCode)"
+		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, Address, City, State, ZipCode)"
 					 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getEmailAddress());
@@ -107,7 +107,7 @@ public class UserDB {
 	//	    but these solutions are too extensive for a project of this scope.
 	public static boolean updateUser(User user) {
 		Address address = user.getStreetAddress();
-		String query = "UPDATE users SET Password=?, Type=?, FullName=?, PhoneNumber=?, Address=?, City=?, State=?, ZipCode=? "
+		String query = "UPDATE User SET Password=?, Type=?, FullName=?, PhoneNumber=?, Address=?, City=?, State=?, ZipCode=? "
 				     + "WHERE EmailAddress=?;";
 		
 		ArrayList<String> params = new ArrayList<String>();
@@ -133,7 +133,7 @@ public class UserDB {
 	}
 	
 	public static boolean validateUser(String userName) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + userName + ";";
+		String query = "SELECT * FROM User WHERE EmailAddress=" + userName + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
         try {

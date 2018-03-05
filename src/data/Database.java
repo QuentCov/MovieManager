@@ -19,6 +19,46 @@ public class Database {
     
     private static boolean createdDB = false;
     
+    public static int setupDatabase() {
+    	try {
+			Class.forName("com.mysql.jdbc.Driver");
+	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
+	    	Statement stmt = connection.createStatement();
+
+	    	// unfortunately needs absolute path of the Setup.sql file
+	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/Setup.sql"));
+	    	String query = "";
+	    	int i = 0;
+	    	while((query = setupScriptReader.readLine()) != null) {
+	    		i = stmt.executeUpdate(query);
+	    	}
+            
+            setupScriptReader.close();
+        	createdDB = true;
+        	
+        	//Add our sample data.
+        	setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/SampleData.sql"));
+        	query = "";
+	    	i = 0;
+	    	while((query = setupScriptReader.readLine()) != null) {
+	    		i = stmt.executeUpdate(query);
+	    	}
+        	connection.close();
+            stmt.close();
+            setupScriptReader.close();
+            return i;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return -1;
+    }
+    
     public static Connection getConnection() {
     	Connection conn = null;
     	try {
@@ -46,36 +86,6 @@ public class Database {
 			e1.printStackTrace();
 		}
 		return statement;
-    }
-    
-    public static int setupDatabase() {
-    	try {
-			Class.forName("com.mysql.jdbc.Driver");
-	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
-	    	Statement stmt = connection.createStatement();
-
-	    	// unfortunately needs absolute path of the Setup.sql file
-	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/Setup.sql"));
-	    	String query = "";
-	    	int i = 0;
-	    	while((query = setupScriptReader.readLine()) != null) {
-	    		i = stmt.executeUpdate(query);
-	    	}
-            connection.close();
-            stmt.close();
-            setupScriptReader.close();
-        	createdDB = true;
-            return i;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return -1;
     }
     
     public static int runUpdate(String query) {
