@@ -24,7 +24,7 @@ public class OrdersDB {
 			     + "INNER JOIN MovieShowing ms ON ms.ID=oi.ShowingId "
 			     + "INNER JOIN Movie m ON ms.movieId=m.ID "
 			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID "
-			     + "WHERE OurID=" + id.toString() + ";";
+			     + "WHERE OurId=" + id.toString() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Order order = new Order();
@@ -164,7 +164,7 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "INSERT INTO Orders (OurID, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
+		query = "INSERT INTO Orders (OurId, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
 				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(order.getBillingAddress().getAddress1());
