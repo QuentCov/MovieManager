@@ -11,10 +11,10 @@
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Cancelled</h1>
-		<p>Your order has been cancelled and your account has been refunded ${current.getTotalPrice()}.</p>
+		<p>Your order has been cancelled and your account has been refunded ${current.getCost()}.</p>
 		<table border="1">
 	        <tr>
 		        <td>Movie Title</td>
@@ -27,13 +27,13 @@
 	        </tr>
     		<tr>
 	    		<c:forEach items="${cancelOrder.getMovies()}" var="movie">
-		    		<td>movie.getMovie().getName()></td>
-		            <td>movie.getShowroom().getTheatre().getName()></td>
-		            <td>movie.getStartTime()></td>
-		            <td>movie.getShowroom().getCapacity()></td>
-		            <td>movie.getCost()></td>
-		            <td>movie.getMovie().getThumbnailFile()</td>
-		            <td>current.getTicketsBoughtByMovie(movie)</td>
+		    		<td>${movie.getMovie().getName()}</td>
+		            <td>${movie.getShowroom().getTheatre().getName()}</td>
+		            <td>${movie.getStartTime()}</td>
+		            <td>${movie.getShowroom().getCapacity()}</td>
+		            <td>${movie.getCost()}</td>
+		            <td>${movie.getMovie().getThumbnailFile()}</td>
+		            <td>${current.getTicketsBoughtByMovie(movie)}</td>
 		         </c:forEach>
 	         </tr>
 		</table>

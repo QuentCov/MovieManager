@@ -11,7 +11,7 @@
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Transaction Page</h1>
 		<h3>Purchases</h3>
@@ -23,10 +23,10 @@
 	        </tr>
 	        <tr>
     			<c:forEach items="${order.getMovies()}" var="movie">
-	    			<td>movie.getMovie().getName()></td>
+	    			<td>${movie.getMovie().getName()}</td>
 	        	</c:forEach>
-	            <td>order.getTicketCount()></td>
-	            <td>order.getTotalCost</td>
+	            <td>${order.getTicketCount()}</td>
+	            <td>${order.getTotalCost}</td>
 	    	</tr>
 		</table>
 		<br>

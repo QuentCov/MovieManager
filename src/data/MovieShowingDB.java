@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import models.MovieShowing;
 import models.Showroom;
@@ -15,29 +18,40 @@ public class MovieShowingDB {
 	public static MovieShowing createMovieShowing(ResultSet rs) {
 		MovieShowing showing = new MovieShowing();
 		try {
-			showing.setStartTime(rs.getDate("StartTime"));
-			showing.setEndTime(rs.getDate("EndTime"));
-			showing.setCost(rs.getDouble("Price"));
-			showing.setNumTicketsSold(rs.getInt("NumberPurchased"));
 			
-			String query = "SELECT * FROM movie WHERE Id=" + rs.getInt("movieId") + ";";
+			SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+			Date sDate = null;
+			Date eDate = null;
+			try {
+				sDate = sdfmt1.parse(rs.getString("StartTime"));
+				eDate = sdfmt1.parse(rs.getString("EndTime"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			showing.setStartTime(sDate);
+			showing.setEndTime(eDate);
+			showing.setCost(rs.getDouble("Cost"));
+			showing.setNumTicketsSold(rs.getInt("NumTicketsSold"));
+			
+			String query = "SELECT * FROM Movie WHERE ID=" + rs.getInt("MovieId") + ";";
 			Connection c = Database.getConnection();
 			PreparedStatement s = Database.prepareStatement(c, query);
-			ResultSet rs2 = s.executeQuery(query);
+			ResultSet rs2 = s.executeQuery();
 			if(rs2.next()) {
 				showing.setMovie(MovieDB.createMovie(rs2));
 			}
-			query = "SELECT * FROM showrooms WHERE Id=" + rs.getInt("showroomId") + ";";
+			query = "SELECT * FROM Showroom WHERE ID=" + rs.getInt("ShowroomId") + ";";
 			s = Database.prepareStatement(c, query);
-			rs2 = s.executeQuery(query);
+			rs2 = s.executeQuery();
 			if(rs2.next()) {
 				Showroom showroom = new Showroom();
 				showroom.setName(rs2.getString("Name"));
-				showroom.setCapacity(rs2.getInt("AvailableSeats"));
+				showroom.setCapacity(rs2.getInt("Capacity"));
 				
-				query = "SELECT * FROM theatreBuildings WHERE Id=" + rs2.getInt("theatreBuilding") + ";";
+				query = "SELECT * FROM Theatre WHERE ID=" + rs2.getInt("TheatreID") + ";";
 				s = Database.prepareStatement(c, query);
-				ResultSet rs3 = s.executeQuery(query);
+				ResultSet rs3 = s.executeQuery();
 				if(rs3.next()) {
 					Theatre theatre = TheatresDB.createTheatre(rs3);
 					showroom.setTheatre(theatre);
@@ -58,12 +72,12 @@ public class MovieShowingDB {
 	}
 	
 	public static ArrayList<MovieShowing> getMovieShowings(int showroomId) {
-		String query = "SELECT * FROM movieShowings WHERE showroomId=" + showroomId + ";";
+		String query = "SELECT * FROM MovieShowings WHERE ShowroomId=" + showroomId + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			while(rs.next())
 			{
 			    showings.add(createMovieShowing(rs));
@@ -85,7 +99,7 @@ public class MovieShowingDB {
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int movieId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			movieId = rs.getInt("ID");
 			rs.close();
 		} catch (SQLException e) {
@@ -96,7 +110,7 @@ public class MovieShowingDB {
 		s = Database.prepareStatement(c, query);
 		int showroomId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			showroomId = rs.getInt("ID");
 			rs.close();
 			s.close();
@@ -105,8 +119,7 @@ public class MovieShowingDB {
 			e.printStackTrace();
 		}
 		
-		query = "INSERT INTO movieShowing (Price, NumberPurchased, StartTime=, "
-					 + "EndTime, movieId, showroomId "
+		query = "INSERT INTO MovieShowing (Price, NumTicketsSold, StartTime, EndTime, MovieId, ShowroomId "
 				     + "VALUES (" + movieShowing.getCost() + ", " + movieShowing.getNumTicketsSold() + ", " + movieShowing.getStartTime()
 				     + ", " + movieShowing.getEndTime() + ", " + movieId + ", " + showroomId + ");";
 		
@@ -124,7 +137,7 @@ public class MovieShowingDB {
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int movieId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			movieId = rs.getInt("ID");
 			rs.close();
 		} catch (SQLException e) {
@@ -135,7 +148,7 @@ public class MovieShowingDB {
 		s = Database.prepareStatement(c, query);
 		int showroomId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			showroomId = rs.getInt("ID");
 			rs.close();
 			s.close();

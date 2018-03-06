@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import data.Database;
+//import data.Database;
 import data.OrdersDB;
+import data.UserDB;
 import models.Order;
 import models.User;
 
@@ -28,7 +29,7 @@ public class Login extends HttpServlet {
     }
     
     protected void init(HttpServletRequest request, HttpServletResponse response) {
-    	Database.setupDatabase();
+    	//Database.setupDatabase();
     }
 
 	/**
@@ -42,15 +43,18 @@ public class Login extends HttpServlet {
     	// check if valid user
     	if (User.isValidUser(user)) {
     		// check user type to determine where to redirect
-    		String userType = User.getUserTypeFromDatabase(user);
+    		User fullUser = UserDB.getUser(userName);
+    		String userType = fullUser.getType();
     		
     		// start a new session for use by MovieManager.
 			request.getSession().invalidate();
 			HttpSession session = request.getSession();
+			session.setAttribute("user", fullUser);
     		if (userType.equals("Customer")) {
     			//get the user's cart (or make a new one, if there isn't one)
     			ArrayList<Order> cart = new ArrayList<Order>();
     			cart = OrdersDB.getOrders(userName);
+    			session.setAttribute("cartSize", cart.size());
     			session.setAttribute("cart", cart);
     			
             	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");

@@ -10,7 +10,7 @@
 		<div class="row justify-content-around">
 			<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
 			<a href="AddMovie.jsp" class="btn btn-primary">Add Movies</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Owner Home Page</h1>
 		<form action="${pageContext.request.contextPath}/OwnerMovieSearchResults" name="searchMoviesForm" method="post">

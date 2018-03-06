@@ -10,7 +10,7 @@
 		<div class="row justify-content-around">
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="AddShowtime.jsp" class="btn btn-primary"><button type="button" class="btn btn-primary">Add Showtime</button></a>
-		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>Manage Showtimes</h1>

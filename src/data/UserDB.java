@@ -11,6 +11,31 @@ import models.User;
 
 public class UserDB {
 	
+	//This method gets an address entry's id. As this is only used by this class, it has been placed here.
+	public static int getAddressId(Address address) {
+		String query = "SELECT ID FROM Address WHERE Address1=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		try {
+			s.setString(1, address.getAddress1());
+			ResultSet rs = s.executeQuery();
+			if(rs.next())
+			{
+				int id = rs.getInt("ID");
+				rs.close();
+				s.close();
+				c.close();
+			    return id;
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public static User createUser(ResultSet rs) {
 		try {
 		    User user = new User();
@@ -18,13 +43,14 @@ public class UserDB {
 		    
 		    user.setEmailAddress(rs.getString("EmailAddress"));
 		    user.setPassword(rs.getString("Password"));
-		    user.setType(Integer.toString(rs.getInt("Type")));
-		    user.setFullName(rs.getString("fullName"));
+		    user.setType(rs.getString("Type"));
+		    user.setFullName(rs.getString("FullName"));
 		    user.setPhoneNumber(rs.getString("PhoneNumber"));
 		    
-		    address.setAddress1(rs.getString("Address"));
+		    address.setAddress1(rs.getString("Address1"));
+		    address.setAddress2(rs.getString("Address2"));
 		    address.setCity(rs.getString("City"));
-		    address.setStateAbbreviation(rs.getString("State"));
+		    address.setStateAbbreviation(rs.getString("StateAbbreviation"));
 		    address.setZipCode(rs.getString("ZipCode"));
 		    
 		    user.setStreetAddress(address);
@@ -41,7 +67,7 @@ public class UserDB {
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 				User user = createUser(rs);
@@ -60,11 +86,17 @@ public class UserDB {
 	}
 	
 	public static User getUser(String userName) {
-		String query = "SELECT * FROM User WHERE EmailAddress=" + userName + ";";
+		//Because email addresses use @ symbols, we cannot use in line queries.
+		String query = "SELECT * FROM User "
+					 + "INNER JOIN Address ON Address.ID=User.AddressId "
+					 + "WHERE EmailAddress=?";
+		
 		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(userName);
+		PreparedStatement s = Database.prepareStatement(c, query, params);
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 				User user = createUser(rs);
@@ -83,19 +115,61 @@ public class UserDB {
 	}
 	
 	public static boolean addUser(User user) {
+		int addressId = -1;
+		addressId = getAddressId(user.getStreetAddress());
 		Address address = user.getStreetAddress();
-		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, Address, City, State, ZipCode)"
-					 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		
+		//The address is new, insert the new value.
+		if (addressId == -1) {
+			String query = "";
+			ArrayList<String> params = new ArrayList<String>();
+			if(address.getAddress2() == null || address.getAddress2().equals("")) {
+				query = "INSERT INTO Address (Address1, City, StateAbbreviation, ZipCode) "
+				      + "VALUES (?, ?, ?, ?)";
+				params.add(address.getAddress1());
+				params.add(address.getCity());
+				params.add(address.getStateAbbreviation());
+				params.add(address.getZipCode());
+			} else {
+				query = "INSERT INTO Address (Address1, Address2, City, StateAbbreviation, ZipCode) "
+					  + "VALUES (?, ?, ?, ?, ?)";
+				params.add(address.getAddress1());
+				params.add(address.getAddress2());
+				params.add(address.getCity());
+				params.add(address.getStateAbbreviation());
+				params.add(address.getZipCode());
+			}
+			int j = Database.runUpdate(query, params);
+			if(j != 1) {
+				return false;
+			}
+			
+			query = "SELECT ID FROM Address WHERE Address1=?";
+			Connection c = Database.getConnection();
+			PreparedStatement s = Database.prepareStatement(c, query);
+			try {
+				s.setString(1, address.getAddress1());
+				ResultSet rs = s.executeQuery();
+				if(rs.next())
+				{
+					addressId = rs.getInt("ID");
+				}
+				rs.close();
+				s.close();
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, AddressId)"
+					 + " VALUES (?, ?, ?, ?, ?, " + addressId + ");";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(user.getEmailAddress());
 		params.add(user.getPassword());
 		params.add(user.getType());
 		params.add(user.getFullName());
 		params.add(user.getPhoneNumber());
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
 		int i = Database.runUpdate(query, params);
 		if(i == 1) {
 		    return true;
@@ -106,8 +180,9 @@ public class UserDB {
 	//Note: We recognize the inefficiency here and have brainstormed solutions, 
 	//	    but these solutions are too extensive for a project of this scope.
 	public static boolean updateUser(User user) {
-		Address address = user.getStreetAddress();
-		String query = "UPDATE User SET Password=?, Type=?, FullName=?, PhoneNumber=?, Address=?, City=?, State=?, ZipCode=? "
+		int addressId = getAddressId(user.getStreetAddress());
+				
+		String query = "UPDATE User SET Password=?, Type=?, FullName=?, PhoneNumber=?, AddressId=" + addressId + " "
 				     + "WHERE EmailAddress=?;";
 		
 		ArrayList<String> params = new ArrayList<String>();
@@ -115,10 +190,6 @@ public class UserDB {
 		params.add(user.getType());
 		params.add(user.getFullName());
 		params.add(user.getPhoneNumber());
-		params.add(address.getAddress1());
-		params.add(address.getCity());
-		params.add(address.getStateAbbreviation());
-		params.add(address.getZipCode());
 		params.add(user.getEmailAddress());
 		
 		int i = Database.runUpdate(query, params);
@@ -133,11 +204,13 @@ public class UserDB {
 	}
 	
 	public static boolean validateUser(String userName) {
-		String query = "SELECT * FROM User WHERE EmailAddress=" + userName + ";";
+		String query = "SELECT * FROM User WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(userName);
+		PreparedStatement s = Database.prepareStatement(c, query, params);
         try {
-        	ResultSet rs = s.executeQuery(query);
+        	ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 				rs.close();

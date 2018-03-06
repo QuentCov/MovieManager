@@ -17,18 +17,19 @@ import models.User;
 
 public class OrdersDB {
 	public static Order getOrder(UUID id) {
-		String query = "SELECT * FROM orders o WHERE ourID=" + id.toString()
-			     + " INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName "
-			     + "INNER JOIN users u ON u.ID=o.CustomerId "
-			     + "INNER JOIN orderItems oi ON o.ID=oi.OrderId "
-			     + "INNER JOIN movieShowing ms ON ms.ID=oi.ShowingId "
-			     + "INNER JOIN movies m ON ms.movieId=m.ID "
-			     + "INNER JOIN address a ON o.BillingAddressId=a.ID;";
+		String query = "SELECT * FROM Orders o "
+			     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
+			     + "INNER JOIN User u ON u.ID=o.CustomerId "
+			     + "INNER JOIN OrdersMovies oi ON o.ID=oi.OrderId "
+			     + "INNER JOIN MovieShowing ms ON ms.ID=oi.ShowingId "
+			     + "INNER JOIN Movie m ON ms.movieId=m.ID "
+			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID "
+			     + "WHERE OurId=" + id.toString() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Order order = new Order();
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 			    User customer = UserDB.createUser(rs);
@@ -37,7 +38,7 @@ public class OrdersDB {
 			    order.setCustomer(customer);
 			    order.setDate(new Date());
 			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.TotalCost"));
+			    order.setCost(rs.getInt("o.Cost"));
 			    
 			    //Get the billing address.
 			    Address address = new Address();
@@ -53,11 +54,11 @@ public class OrdersDB {
 			    
 			    ArrayList<Integer> tickets = new ArrayList<Integer>();
 			    ArrayList<Movie> movies = new ArrayList<Movie>();
-			    tickets.add(rs.getInt("oi.Quantity"));
+			    tickets.add(rs.getInt("oi.NumTickets"));
 			    movies.add(MovieDB.createMovie(rs));
 			    
 			    while(rs.next()) {
-			    	tickets.add(rs.getInt("oi.Quantity"));
+			    	tickets.add(rs.getInt("oi.NumTickets"));
 			    	movies.add(MovieDB.createMovie(rs));
 			    }
 			}
@@ -72,19 +73,20 @@ public class OrdersDB {
 	}
 	
 	public static ArrayList<Order> getOrders(String email) {
-		String query = "SELECT * FROM users u WHERE EmailAddress=" + email 
-				     + " INNER JOIN creditCards cc ON u.FullName=cc.CardHolderName "
-				     + "INNER JOIN orders o ON u.Id=o.CustomerId "
-				     + "INNER JOIN orderItems oi ON o.Id=oi.OrderId "
-				     + "INNER JOIN movieShowing ms ON ms.Id=oi.ShowingId "
-				     + "INNER JOIN movies m ON ms.movieId=m.Id " 
-				     + "INNER JOIN address a ON o.BillingAddressId=a.ID;";
+		String query = "SELECT * FROM User u "
+				     + "INNER JOIN CreditCard cc ON cc.OwnerId=u.ID "
+				     + "INNER JOIN Orders o ON o.CustomerId=u.ID "
+				     + "INNER JOIN OrdersMovies oi ON oi.OrdersId=o.ID "
+				     + "INNER JOIN MovieShowing ms ON oi.MovieId=ms.ID "
+				     + "INNER JOIN Movie m ON m.ID=ms.movieId " 
+				     + "INNER JOIN Address a ON a.ID=o.BillingAddressId "
+				     + "WHERE EmailAddress=?";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
-		
 		try {
-			ResultSet rs = s.executeQuery(query);
+			s.setString(1, email);
+			ResultSet rs = s.executeQuery();
 			while(rs.next())
 			{
 			    Order order = new Order();
@@ -94,7 +96,7 @@ public class OrdersDB {
 			    order.setCustomer(customer);
 			    order.setDate(new Date());
 			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.TotalCost"));
+			    order.setCost(rs.getInt("o.Cost"));
 
 			    //Get the billing address.
 			    Address address = new Address();
@@ -108,15 +110,26 @@ public class OrdersDB {
 			    order.setShippingAddress(customer.getStreetAddress());
 			    order.setBillingAddress(address);
 			    
+			    //Get the tickets and movie showings
 			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<Movie> movies = new ArrayList<Movie>();
-			    tickets.add(rs.getInt("oi.Quantity"));
-			    movies.add(MovieDB.createMovie(rs));
+			    ArrayList<MovieShowing> movies = new ArrayList<MovieShowing>();
+			    query = "SELECT * FROM Orders o "
+			    	  + "INNER JOIN OrdersMovies om ON om.OrdersId=o.ID "
+					  + "INNER JOIN MovieShowing ms ON ms.ID=om.MovieId "
+					  + "WHERE o.ID=?";
 			    
-			    while(rs.next()) {
-			    	tickets.add(rs.getInt("oi.Quantity"));
-			    	movies.add(MovieDB.createMovie(rs));
+			    Connection c2 = Database.getConnection();
+				PreparedStatement s2 = Database.prepareStatement(c2, query);
+			    s2.setInt(1, rs.getInt("o.ID"));
+			    
+			    ResultSet rs2 = s2.executeQuery();
+			    while(rs2.next()) {
+			    	tickets.add(rs.getInt("NumTickets"));
+				    movies.add(MovieShowingDB.createMovieShowing(rs2));
 			    }
+			    
+			    s2.close();
+			    rs2.close();
 			
 			    orders.add(order);
 			}
@@ -131,13 +144,14 @@ public class OrdersDB {
 	
 	public static boolean addOrder(Order order) {
 		
-		String query = "SELECT ID FROM users WHERE EmailAddress=" + order.getCustomer().getEmailAddress() + ";";
+		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
 		
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int custId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			s.setString(1, order.getCustomer().getEmailAddress());
+			ResultSet rs = s.executeQuery();
 			custId = rs.getInt("ID");
 			rs.close();
 			s.close();
@@ -150,7 +164,7 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "INSERT INTO orders (OurID, OrderDate, CustomerId, TotalCost, BillingAddress, CreditCardNumber)"
+		query = "INSERT INTO Orders (OurId, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
 				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", ?, ?);";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(order.getBillingAddress().getAddress1());
@@ -165,17 +179,16 @@ public class OrdersDB {
 	
 	public static boolean deleteOrder(Order order) {
 		User owner = order.getCustomer();
-		String query = "SELECT Id FROM users WHERE Email=?;";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(owner.getEmailAddress());
+		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ResultSet rs = null;
 		int id = -1;
 		try {
-			rs = s.executeQuery(query);
+			s.setString(1, owner.getEmailAddress());
+			rs = s.executeQuery();
 			if(rs.next()) {
-				id = rs.getInt("Id");
+				id = rs.getInt("ID");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -185,12 +198,12 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "SELECT Id FROM orders WHERE CustomerId=" + id + ";";
+		query = "SELECT ID FROM Orders WHERE CustomerId=" + id + ";";
 		
 		try {
-			rs = s.executeQuery(query);
+			rs = s.executeQuery();
 			if(rs.next()) {
-				id = rs.getInt("Id");
+				id = rs.getInt("ID");
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -208,10 +221,10 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "DELETE FROM orderItems WHERE OrderId=" + id +";";
+		query = "DELETE FROM OrdersMovies WHERE OrderId=" + id +";";
 		int i = Database.runUpdate(query);
 		if(i != 0 || i != -1) {
-			query = "DELETE FROM orders WHERE CartId=" + order.getID() + ";";
+			query = "DELETE FROM Orders WHERE OurId=" + order.getID().toString() + ";";
 			i = Database.runUpdate(query);
 			
 			if(i != 0 || i != -1) {
@@ -256,7 +269,7 @@ public class OrdersDB {
 				PreparedStatement s = Database.prepareStatement(c, query);
 				int movieId = -1;
 				try {
-					ResultSet rs = s.executeQuery(query);
+					ResultSet rs = s.executeQuery();
 					movieId = rs.getInt("ID");
 					rs.close();
 				} catch (SQLException e) {
@@ -267,7 +280,7 @@ public class OrdersDB {
 				s = Database.prepareStatement(c, query);
 				int orderId = -1;
 				try {
-					ResultSet rs = s.executeQuery(query);
+					ResultSet rs = s.executeQuery();
 					orderId = rs.getInt("ID");
 					rs.close();
 					s.close();
@@ -289,7 +302,7 @@ public class OrdersDB {
 
 	private static boolean updateOrder(Order order) {
 
-		String query = "UPDATE orders SET Cost=" + order.getCost()
+		String query = "UPDATE Orders SET Cost=" + order.getCost()
 					 + "WHERE OurId=" + order.getID().toString() + ";";
 		int i = Database.runUpdate(query);
 		if(i == 1) {
@@ -309,7 +322,7 @@ public class OrdersDB {
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int movieId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			movieId = rs.getInt("ID");
 			rs.close();
 		} catch (SQLException e) {
@@ -320,7 +333,7 @@ public class OrdersDB {
 		s = Database.prepareStatement(c, query);
 		int showroomId = -1;
 		try {
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery();
 			showroomId = rs.getInt("ID");
 			rs.close();
 			s.close();
