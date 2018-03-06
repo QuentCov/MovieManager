@@ -96,7 +96,7 @@ public class MovieDB {
 				movie = createMovie(rs);
 			}
 			rs.close();
-			c.close();
+			statement.getConnection().close();
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

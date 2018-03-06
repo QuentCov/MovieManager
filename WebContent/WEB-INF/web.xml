@@ -209,16 +209,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>CancelShowing</display-name>
-    <servlet-name>CancelShowing</servlet-name>
-    <servlet-class>servlets.CancelShowing</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CancelShowing</servlet-name>
-    <url-pattern>/CancelShowing</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>CancelShowingConfirmation</display-name>
     <servlet-name>CancelShowingConfirmation</servlet-name>
     <servlet-class>servlets.CancelShowingConfirmation</servlet-class>

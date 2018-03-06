@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
     	// check if valid user
     	if (User.isValidUser(user)) {
     		// check user type to determine where to redirect
-    		User fullUser = UserDB.getUser(userName);
+    		User fullUser = UserDB.getUserByEmailAddress(userName);
     		String userType = fullUser.getType();
     		
     		// start a new session for use by MovieManager.

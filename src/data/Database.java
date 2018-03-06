@@ -63,6 +63,23 @@ public class Database {
 		return conn;
     }
     
+    public static PreparedStatement prepareStatement(String query){ 
+        if(!createdDB) { 
+            setupDatabase(); 
+        } 
+        PreparedStatement statement = null; 
+        try { 
+            Class.forName("com.mysql.jdbc.Driver"); 
+            Connection conn = DriverManager.getConnection(URL, USER, PASS); 
+            statement = conn.prepareStatement(query); 
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        } catch (ClassNotFoundException e1) { 
+            e1.printStackTrace(); 
+        } 
+        return statement; 
+    }
+    
     public static PreparedStatement prepareStatement(Connection c, String query){
 		if(!createdDB) {
 			setupDatabase();
