@@ -1,5 +1,7 @@
 package data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,15 +27,20 @@ public class ReviewDB {
 	}
 	
 	public static ArrayList<Review> getReviewsByUser(User user) {
-		String query = "SELECT * FROM users WHERE EmailAddress=" + user.getEmailAddress();
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT * FROM User WHERE EmailAddress=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
+			s.setString(1, user.getEmailAddress());
+			ResultSet rs = s.executeQuery();
 			ArrayList<Review> reviews = new ArrayList<Review>();
 			if(rs.next())
 			{
-			    query = "SELECT * FROM reviews r WHERE userId=" + rs.getInt("Id")
-			    	  + "INNER JOIN movies m on r.movieId=m.Id";
-			    rs = Database.runQuery(query);
+			    query = "SELECT * FROM Review r "
+			    	  + "INNER JOIN Movies m on r.MovieId=m.ID "
+			    	  + "WHERE ReviewerId=" + rs.getInt("ID") + ";";
+			    s = Database.prepareStatement(c, query);
+				rs = s.executeQuery();
 			    while(rs.next()) {
 			    	Movie movie = MovieDB.createMovie(rs);
 			    	Review review = createReview(rs, user, movie);
@@ -41,6 +48,8 @@ public class ReviewDB {
 			    }
 			}
 			rs.close();
+			s.close();
+			c.close();
 			return reviews;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -49,15 +58,20 @@ public class ReviewDB {
 	}
 	
 	public static ArrayList<Review> getReviewByMovie(Movie movie) {
-		String query = "SELECT * FROM users WHERE Name=" + movie.getName();
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT * FROM User WHERE Name=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
+			s.setString(1, movie.getName());
+			ResultSet rs = s.executeQuery();
 			ArrayList<Review> reviews = new ArrayList<Review>();
 			if(rs.next())
 			{
-			    query = "SELECT * FROM reviews r WHERE movieId=" + rs.getInt("Id")
-			    	  + "INNER JOIN users u on r.userId=m.Id";
-			    rs = Database.runQuery(query);
+			    query = "SELECT * FROM Review r "
+			    	  + "INNER JOIN User u on r.ReviewerId=m.Id "
+			    	  + "WHERE MovieId=" + rs.getInt("ID") + ";";
+			    s = Database.prepareStatement(c, query);
+				rs = s.executeQuery();
 			    while(rs.next()) {
 			    	User user = UserDB.createUser(rs);
 			    	Review review = createReview(rs, user, movie);
@@ -65,6 +79,8 @@ public class ReviewDB {
 			    }
 			}
 			rs.close();
+			s.close();
+			c.close();
 			return reviews;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,29 +89,37 @@ public class ReviewDB {
 	}
 	
 	public static boolean addReview(Review review) {
-		String query = "SELECT Id FROM users WHERE EmailAddress=" + review.getReviewer().getEmailAddress();
-		ResultSet rs = Database.runQuery(query);
+		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		
 		int ownerId = -1;
 		int movieId = -1;
 		try {
+			s.setString(1, review.getReviewer().getEmailAddress());
+			ResultSet rs = s.executeQuery();
 			if(rs.next()) {
-				ownerId = rs.getInt("Id");
+				ownerId = rs.getInt("ID");
 			}
 			
-			query = "SELECT Id FROM movies WHERE Name=" + review.getMovie().getName();
-			rs = Database.runQuery(query);
+			query = "SELECT ID FROM Movie WHERE Name=?;";
+			s = Database.prepareStatement(c, query);
+			s.setString(1, review.getMovie().getName());
+			rs = s.executeQuery();
 			if(rs.next()) {
-					movieId = rs.getInt("Id");
+					movieId = rs.getInt("ID");
 				
 			}
 			rs.close();
+			s.close();
+			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		Date date = new Date();
-	    query = "INSERT INTO reviews (Review, userId, movieId, Rating, ReviewDate) "
-	    	  + "VALUES (?, " + ownerId + ", " + movieId + ", " + review.getRating() + ", "+ date + ")";
+	    query = "INSERT INTO Review (Review, ReviewerId, MovieId, Rating, ReviewDate) "
+	    	  + "VALUES (?, " + ownerId + ", " + movieId + ", " + review.getRating() + ", "+ date + ");";
 	    ArrayList<String> params = new ArrayList<String>();
 	    params.add(review.getReview());
 		int i = Database.runUpdate(query);

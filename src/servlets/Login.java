@@ -1,73 +1,76 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-//import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import data.Database;
-
-
-//import models.User;
+//import data.Database;
+import data.OrdersDB;
+import data.UserDB;
+import models.Order;
+import models.User;
 
 /**
  * Servlet implementation class Login
  */
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	//private ServletContext sc;
-	//private String path;
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Login() {
         super();
-        // Auto-generated constructor stub
     }
     
     protected void init(HttpServletRequest request, HttpServletResponse response) {
-        //this.sc = this.getServletContext(); 
-    	//this.path = sc.getRealPath("/WEB-INF/users.properties");
+    	//Database.setupDatabase();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+		String userName = request.getParameter("userName"); 
+    	String password = request.getParameter("password");
+    	User user = new User(userName, password);
+    	
+    	// check if valid user
+    	if (User.isValidUser(user)) {
+    		// check user type to determine where to redirect
+    		User fullUser = UserDB.getUser(userName);
+    		String userType = fullUser.getType();
+    		
+    		// start a new session for use by MovieManager.
+			request.getSession().invalidate();
+			HttpSession session = request.getSession();
+			session.setAttribute("user", fullUser);
+    		if (userType.equals("Customer")) {
+    			//get the user's cart (or make a new one, if there isn't one)
+    			ArrayList<Order> cart = new ArrayList<Order>();
+    			cart = OrdersDB.getOrders(userName);
+    			session.setAttribute("cartSize", cart.size());
+    			session.setAttribute("cart", cart);
+    			
+            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");
+    		} else {
+    			response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+    		}
+    	} else {
+        	response.sendRedirect("Jsp/Registration.jsp");
+    	}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Database.setupDatabase();
-		//this.sc = this.getServletContext(); 
-    	//this.path = sc.getRealPath("/WEB-INF/users.properties");
-		//String userName = request.getParameter("userName"); 
-    	//String password = request.getParameter("password");
-    	//User user = new User(userName, password);
-    	// check if valid user
-    	
-    	// TODO CHANGE TO VALIDATE USER AND GET USER TYPE
-    	/*
-    	
-    	if (User.isValidUser(user, this.path)) {
-    		// check user type to determine where to redirect
-    		if (User.getUserType(user, this.path).equals("Customer")) {
-            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");    			
-    		} else {
-            	response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
-    		}
-    	} else {
-        	response.sendRedirect("Jsp/Registration.jsp");
-    	}
-    	
-    	*/
+		doGet(request, response);
 	}
 
 }

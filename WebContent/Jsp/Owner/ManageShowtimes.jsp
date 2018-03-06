@@ -15,7 +15,7 @@
             	<input type="hidden" name="theatreId" value="${theatreId}"/>
             	<input type="submit" class="btn btn-primary" value="Add Showtime">
             </form>
-		   	<a href="Jsp/Login.jsp" class="btn btn-primary">Log Out</a>
+		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>Manage Showtimes</h1>

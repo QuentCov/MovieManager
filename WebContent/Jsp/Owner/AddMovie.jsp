@@ -9,7 +9,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h2>Add Movie</h2>
 		<form action="${pageContext.request.contextPath}/AddMovie" name="addMovieForm" method="post" enctype="multipart/form-data">

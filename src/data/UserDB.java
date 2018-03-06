@@ -1,13 +1,40 @@
 package data;
 
 import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 import models.User;
 
 public class UserDB {
+	
+	//This method gets an address entry's id. As this is only used by this class, it has been placed here.
+	public static int getAddressId(Address address) {
+		String query = "SELECT ID FROM Address WHERE Address1=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		try {
+			s.setString(1, address.getAddress1());
+			ResultSet rs = s.executeQuery();
+			if(rs.next())
+			{
+				int id = rs.getInt("ID");
+				rs.close();
+				s.close();
+				c.close();
+			    return id;
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 	
 	public static User createUser(ResultSet rs) {
 		try {

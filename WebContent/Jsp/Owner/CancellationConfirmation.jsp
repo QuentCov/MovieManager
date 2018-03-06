@@ -11,7 +11,7 @@
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="ViewShowrooms.jsp" class="btn btn-primary">View Showrooms</a>
 		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
-		   	<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>${ result ? "Cancellation Confirmed" : "Cancellation Error" }</h1>

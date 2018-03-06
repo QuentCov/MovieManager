@@ -11,7 +11,7 @@
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="Jsp/Owner/ViewShowrooms.jsp" class="btn btn-primary">View Showroom</a>
 		   	<a href="Jsp/Owner/ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
-		    <a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>${result}</h1>

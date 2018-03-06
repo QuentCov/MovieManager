@@ -11,7 +11,7 @@
 		<div class="row justify-content-around">
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
 			<a href="AddMovie.jsp" class="btn btn-primary">Add Movie</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>View Theatres</h1>

@@ -40,7 +40,105 @@
     <url-pattern>/Login</url-pattern>
   </servlet-mapping>
   <servlet>
+    <display-name>TheatreAndMovieSearchQueryServlet</display-name>
+    <servlet-name>TheatreAndMovieSearchQueryServlet</servlet-name>
+    <servlet-class>servlets.TheatreAndMovieSearchQueryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TheatreAndMovieSearchQueryServlet</servlet-name>
+    <url-pattern>/TheatreAndMovieSearchQueryServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <description></description>
+    <display-name>MovieSearchResults</display-name>
+    <servlet-name>MovieSearchResults</servlet-name>
+    <servlet-class>servlets.MovieSearchResults</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MovieSearchResults</servlet-name>
+    <url-pattern>/MovieSearchResults</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CustomerReview</display-name>
+    <servlet-name>CustomerReview</servlet-name>
+    <servlet-class>servlets.CustomerReview</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerReview</servlet-name>
+    <url-pattern>/CustomerReview</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateShoppingCart</display-name>
+    <servlet-name>UpdateShoppingCart</servlet-name>
+    <servlet-class>servlets.UpdateShoppingCart</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateShoppingCart</servlet-name>
+    <url-pattern>/UpdateShoppingCart</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CustomerTransactionConfirmation</display-name>
+    <servlet-name>CustomerTransactionConfirmation</servlet-name>
+    <servlet-class>servlets.CustomerTransactionConfirmation</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerTransactionConfirmation</servlet-name>
+    <url-pattern>/CustomerTransactionConfirmation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CancelShowing</display-name>
+    <servlet-name>CancelShowing</servlet-name>
+    <servlet-class>servlets.CancelShowing</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CancelShowing</servlet-name>
+    <url-pattern>/CancelShowing</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewOrders</display-name>
+    <servlet-name>ViewOrders</servlet-name>
+    <servlet-class>servlets.ViewOrders</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewOrders</servlet-name>
+    <url-pattern>/ViewOrders</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ManageOrders</display-name>
+    <servlet-name>ManageOrders</servlet-name>
+    <servlet-class>servlets.ManageOrders</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageOrders</servlet-name>
+    <url-pattern>/ManageOrders</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CancelOrder</display-name>
+    <servlet-name>CancelOrder</servlet-name>
+    <servlet-class>servlets.CancelOrder</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CancelOrder</servlet-name>
+    <url-pattern>/CancelOrder</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CancelOrderTransaction</display-name>
+    <servlet-name>CancelOrderTransaction</servlet-name>
+    <servlet-class>servlets.CancelOrderTransaction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CancelOrderTransaction</servlet-name>
+    <url-pattern>/CancelOrderTransaction</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <display-name>AddMovie</display-name>
     <servlet-name>AddMovie</servlet-name>
     <servlet-class>servlets.AddMovie</servlet-class>
@@ -148,5 +246,15 @@
   <servlet-mapping>
     <servlet-name>AddShowtimeConfirmation</servlet-name>
     <url-pattern>/AddShowtimeConfirmation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Logout</display-name>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>servlets.Logout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/Logout</url-pattern>
   </servlet-mapping>
 </web-app>

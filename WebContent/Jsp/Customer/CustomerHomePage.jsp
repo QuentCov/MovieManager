@@ -3,6 +3,7 @@
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
+	<%@ page import="data.TheatresDB" %>
 	<title>Customer Home Page</title>
 </head>
 <body>
@@ -10,7 +11,7 @@
 		<h1>Movie Manager! Your Ticket to the Silver Screen!</h1>
 		<div class="row justify-content-around">
 			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
-			<a href="../Login.jsp" class="btn btn-primary">Log Out</a>
+			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<form>
 			<div class="form-group">
@@ -19,23 +20,29 @@
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Select Theatre
 					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Theatre 1</a>
-						<a class="dropdown-item" href="#">Theatre 2</a>
-						<a class="dropdown-item" href="#">Theatre 3</a>
-						<a class="dropdown-item" href="#">Theatre 4</a>
-						<a class="dropdown-item" href="#">Theatre 5</a>
-						<a class="dropdown-item" href="#">Theatre 6</a>
+					<div id="theatres" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item">Loading...</a>
 					</div>
 				</div>
 			</div>
+		</form>
+	    <form>
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Search Movies">
+				<input type="text" class="form-control" name="movieSearchString" placeholder="Search Movies">
 				<span class="input-group-btn">
-		        	<a href="MovieSearchResults.jsp" class="btn btn-light" type="button">Go!</a>
+		        	<a href="TheatreAndMovieSearchQuery" class="btn btn-light" type="button">Go!</a>
 		      	</span>
 			</div>
 		</form>
+		<form>
+			<div class="form-group">
+				<input id="date" type="date">
+			</div>
+			<span class="input-group-btn">
+				<!-- TODO: There has to be a better way to do this. -->
+	        	<a href="SearchMovieByDate" class="btn btn-light" type="button">Search By Date</a>
+	      	</span>
+        </form>
 	</div>
 
 	<%@ include file="/_partials/scripts.html" %>

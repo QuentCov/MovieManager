@@ -146,4 +146,40 @@ public class MovieShowingDB {
 	    }
 	    return false;
 	}
+	
+	public static boolean updateMovieShowing(MovieShowing movieShowing) {
+		
+		String query = "SELECT ID FROM Movie WHERE Name=" + movieShowing.getMovie().getName() + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int movieId = -1;
+		try {
+			ResultSet rs = s.executeQuery();
+			movieId = rs.getInt("ID");
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "SELECT ID FROM Showroom WHERE Name=" + movieShowing.getShowroom().getName() + ";";
+		s = Database.prepareStatement(c, query);
+		int showroomId = -1;
+		try {
+			ResultSet rs = s.executeQuery();
+			showroomId = rs.getInt("ID");
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "INSERT INTO MovieShowing (NumTicketsSold) VALUES (" + movieShowing.getNumTicketsSold() + ") "
+			  + "WHERE MovieId=" + movieId + " AND ShowroomId=" + showroomId + ";";
+		int i = Database.runUpdate(query);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
 }

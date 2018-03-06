@@ -8,34 +8,16 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Database {
-	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/dcao";
-    private static final String USER = "dcao";
-    private static final String PASS = "testPass1!";
+	private static final String URL = "jdbc:mysql://cse.unl.edu:3306/qcovert";
+    private static final String USER = "qcovert";
+    private static final String PASS = "qJ3zTz";
     
-    private static boolean createdDB = false;
-    
-    public static PreparedStatement prepareStatement(String query){
-		if(!createdDB) {
-			setupDatabase();
-        }
-		PreparedStatement statement = null;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(URL, USER, PASS);
-			statement = conn.prepareStatement(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		return statement;
-    }
+    private static boolean createdDB = true;
     
     public static int setupDatabase() {
     	try {
@@ -44,16 +26,17 @@ public class Database {
 	    	Statement stmt = connection.createStatement();
 
 	    	// unfortunately needs absolute path of the Setup.sql file
-	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("D:/Documents/Dropbox/Eclipse Workspace/JavaEE/MovieManager/src/data/Setup.sql"));
+	    	BufferedReader setupScriptReader = new BufferedReader(new FileReader("C:/Users/Quentin Covert/MovieManager/src/data/Setup.sql"));
 	    	String query = "";
 	    	int i = 0;
 	    	while((query = setupScriptReader.readLine()) != null) {
 	    		i = stmt.executeUpdate(query);
 	    	}
-            connection.close();
+        	createdDB = true;
+        	
+        	connection.close();
             stmt.close();
             setupScriptReader.close();
-        	createdDB = true;
             return i;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -65,6 +48,54 @@ public class Database {
 			e.printStackTrace();
 		}
 		return -1;
+    }
+    
+    public static Connection getConnection() {
+    	Connection conn = null;
+    	try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(URL, USER, PASS);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return conn;
+    }
+    
+    public static PreparedStatement prepareStatement(Connection c, String query){
+		if(!createdDB) {
+			setupDatabase();
+        }
+		PreparedStatement statement = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			statement = c.prepareStatement(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return statement;
+    }
+    
+    public static PreparedStatement prepareStatement(Connection c, String query, ArrayList<String> params){
+		if(!createdDB) {
+			setupDatabase();
+        }
+		PreparedStatement statement = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			statement = c.prepareStatement(query);
+			for(int j = 1; j < params.size() + 1; j++) {
+	        	statement.setString(j, params.get(j-1));
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		return statement;
     }
     
     public static int runUpdate(String query) {
