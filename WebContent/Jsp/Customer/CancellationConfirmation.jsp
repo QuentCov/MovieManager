@@ -10,33 +10,34 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="ViewOrders.jsp" class="btn btn-primary">View All Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View All Orders</a>
+			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Cancelled</h1>
 		<p>Your order has been cancelled and your account has been refunded ${current.getCost()}.</p>
-		<table border="1">
-	        <tr>
-		        <td>Movie Title</td>
-		        <td>Theatre</td>
-		        <td>Start Time</td>
-		        <td>Seats Available</td>
-		        <td>Cost per Ticket</td>
-		        <td>Poster</td>
-				<td>Tickets Bought</td>
-	        </tr>
-    		<tr>
+		<div class="container">
+	        <div class="row">
+		        <div class="col-sm-1">Movie Title</div>
+		        <div class="col-sm-1">Theatre</div>
+		        <div class="col-sm-1">Start Time</div>
+		        <div class="col-sm-1">Seats Available</div>
+		        <div class="col-sm-1">Cost per Ticket</div>
+		        <div class="col-sm-1">Poster</div>
+				<div class="col-sm-1">Tickets Bought</div>
+	        </div>
+    		<div class="row">
 	    		<c:forEach items="${cancelOrder.getMovies()}" var="movie">
-		    		<td>${movie.getMovie().getName()}</td>
-		            <td>${movie.getShowroom().getTheatre().getName()}</td>
-		            <td>${movie.getStartTime()}</td>
-		            <td>${movie.getShowroom().getCapacity()}</td>
-		            <td>${movie.getCost()}</td>
-		            <td>${movie.getMovie().getThumbnailFile()}</td>
-		            <td>${current.getTicketsBoughtByMovie(movie)}</td>
+		    		<div class="col-sm-1">${movie.getMovie().getName()}</div>
+		            <div class="col-sm-1">${movie.getShowroom().getTheatre().getName()}</div>
+		            <div class="col-sm-1">${movie.getStartTime()}</div>
+		            <div class="col-sm-1">${movie.getShowroom().getCapacity()}</div>
+		            <div class="col-sm-1">${movie.getCost()}</div>
+		            <div class="col-sm-1">${movie.getMovie().getThumbnailFile()}</div>
+		            <div class="col-sm-1">${current.getTicketsBoughtByMovie(movie)}</div>
 		         </c:forEach>
-	         </tr>
-		</table>
+	         </div>
+		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 </body>

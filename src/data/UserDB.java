@@ -233,4 +233,25 @@ public class UserDB {
 		}
         return false;
 	}
+
+	public static int getID(User user) {
+		String query = "SELECT ID FROM User WHERE EmailAddress=?";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int ownerId = -1;
+		try {
+			s.setString(1, user.getEmailAddress());
+			ResultSet rs = s.executeQuery();
+			if(rs.next())
+			{
+				ownerId = rs.getInt("ID");
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ownerId;
+	}
 }

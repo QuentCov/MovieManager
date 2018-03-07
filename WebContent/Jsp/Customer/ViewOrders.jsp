@@ -10,6 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>View All Orders</h1>
@@ -45,8 +46,8 @@
 						</div>
 				    	<div class="col-sm-1">Total Cost: ${current.getCost()}</div>
 				    	<div class="col-sm-2">
-					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrder" >
-					    		<input type="hidden" name="order" value="${current}"/>
+					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrders" >
+					    		<input type="hidden" name="order" value="${current.getID()}"/>
 					            <input type="submit" class="btn btn-primary" value="View Order">
 					        </form>
 				        </div>

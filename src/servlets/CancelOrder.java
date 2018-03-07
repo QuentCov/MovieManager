@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import data.MovieDB;
 import data.OrdersDB;
 import models.Movie;
+import models.MovieShowing;
 import models.Order;
 
 /**
@@ -37,14 +39,12 @@ public class CancelOrder extends HttpServlet {
 		String orderId = request.getParameter("order");
 		Order order = OrdersDB.getOrder(UUID.fromString(orderId));
 		Movie movie = MovieDB.getMovieByName(movieName);
+		MovieShowing showing = order.getShowingByMovie(movie);
 		
-		if(order != null) {
-			session.setAttribute("cancelOrder", order);
-			session.setAttribute("cancelShowingItem", movie);
-			response.sendRedirect("CancelOrder.jsp");
-		}
-		
-		response.sendError(500, "Error in movie fetching");
+		session.setAttribute("cancelOrder", order);
+		session.setAttribute("cancelShowingItem", showing);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancelOrder.jsp");
+  	    dispatcher.forward(request, response);
 	}
 
 	/**

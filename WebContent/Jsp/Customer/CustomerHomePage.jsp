@@ -10,7 +10,8 @@
 	<div class="container">
 		<h1>Movie Manager! Your Ticket to the Silver Screen!</h1>
 		<div class="row justify-content-around">
-			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<form>

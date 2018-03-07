@@ -33,6 +33,7 @@ public class OrdersDB {
 			    User customer = UserDB.createUser(rs);
 			    CreditCard card = CreditCardsDB.createCard(rs);
 			    
+			    order.setID(id);
 			    order.setCustomer(customer);
 			    order.setDate(rs.getString("o.Date"));
 			    order.setCreditCard(card);
@@ -213,16 +214,16 @@ public class OrdersDB {
 		}
 		return false;
 	}
-
-	public static boolean refundOrder(Order order, double cost, Movie movie) {
+	
+	public static boolean refundOrder(Order order, int ownerId, double cost, MovieShowing showing) {
 		CreditCard card = order.getCreditCard();
 		card.setBalance(card.getBalance() + cost);
-		boolean updated = CreditCardsDB.updateBalance(card);
+		boolean updated = CreditCardsDB.updateBalance(card, ownerId);
 		
 		if(updated) {
 			order.setCost(order.getCost() - cost);
 			
-			int i = order.getShowings().indexOf(movie);
+			int i = order.getShowings().indexOf(showing);
 			int tickets = order.getTickets().get(i);
 			order.getShowings().remove(i);
 			order.getTickets().remove(i);
@@ -230,11 +231,12 @@ public class OrdersDB {
 			updated = updateOrder(order);
 			
 			if(updated) {
-				String query = "SELECT ID FROM Movie WHERE Name=" + movie.getName() + ";";
+				String query = "SELECT ID FROM Movie WHERE Name=?;";
 				Connection c = Database.getConnection();
 				PreparedStatement s = Database.prepareStatement(c, query);
 				int movieId = -1;
 				try {
+					s.setString(1, showing.getMovie().getName());
 					ResultSet rs = s.executeQuery();
 					movieId = rs.getInt("ID");
 					rs.close();
@@ -242,10 +244,11 @@ public class OrdersDB {
 					e.printStackTrace();
 				}
 				
-				query = "SELECT ID FROM Orders WHERE OurId=" + order.getID().toString() + ";";
+				query = "SELECT ID FROM Orders WHERE OurId=?;";
 				s = Database.prepareStatement(c, query);
 				int orderId = -1;
 				try {
+					s.setString(1, order.getID().toString());
 					ResultSet rs = s.executeQuery();
 					orderId = rs.getInt("ID");
 					rs.close();
@@ -268,37 +271,49 @@ public class OrdersDB {
 
 	private static boolean updateOrder(Order order) {
 
-		String query = "UPDATE Orders SET Cost=" + order.getCost()
-					 + "WHERE OurId=" + order.getID().toString() + ";";
-		int i = Database.runUpdate(query);
+		//Due to the combination of a double and a string, the update is run here.
+		String query = "UPDATE Orders SET Cost=? "
+					 + "WHERE OurId=?;";
+		Connection c = Database.getConnection();
+    	PreparedStatement s = Database.prepareStatement(c, query);
+    	int i = -1;
+		try {
+			s.setDouble(1, order.getCost());
+			s.setString(2, order.getID().toString());
+	        i = s.executeUpdate();
+	        c.close();
+	        s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(i == 1) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean deleteOrderItem(Order order, Movie movie) {
-		
-		int i = order.getShowings().indexOf(movie);
-		order.getShowings().remove(movie);
-		order.getTickets().remove(i);
-		
-		String query = "SELECT ID FROM Movie WHERE Name=" + movie.getName() + ";";
+	public static boolean deleteOrderItem(Order order, MovieShowing showing, Movie movie) {
+		String query = "SELECT ID FROM Orders WHERE OurId=?";
 		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
-		int movieId = -1;
-		try {
+    	PreparedStatement s = Database.prepareStatement(c, query);
+    	int orderId = -1;
+    	int showingId = showing.getID();
+    	try {
+			s.setString(1, order.getID().toString());
 			ResultSet rs = s.executeQuery();
-			movieId = rs.getInt("ID");
+			orderId = rs.getInt("ID");
 			rs.close();
+			
+			query = "DELETE FROM OrdersMovies WHERE OrderId=? AND ShowingId=?";
+			s = Database.prepareStatement(c, query);
+			s.setInt(1, orderId);
+			s.setInt(2, showingId);
+			int i = s.executeUpdate();
+			if(i == 1) {
+				return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		query = "DELETE FROM OrdersMovies WHERE MovieId=" + movieId + " AND ShowingId=" + showroomId + ";";
-		int j = Database.runUpdate(query);
-		if(j == 1) {
-			return true;
 		}
 		return false;
 	}

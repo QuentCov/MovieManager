@@ -118,11 +118,11 @@ public class CreditCardsDB {
 		return false;
 	}
 	
-	public static boolean updateBalance(CreditCard card) {
-		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE CardHolderName=?;";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(card.getOwner().getFullName());
-		int i = Database.runUpdate(query, params);
+	public static boolean updateBalance(CreditCard card, int ownerId) {
+		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE OwnerId=?;";
+		ArrayList<Integer> params = new ArrayList<Integer>();
+		params.add(ownerId);
+		int i = Database.runUpdateInt(query, params);
 		if(i == 1) {
 			return true;
 		}

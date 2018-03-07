@@ -118,6 +118,15 @@ public class Order {
 		
 		return 0;
 	}
+	
+	public MovieShowing getShowingByMovie(Movie movie) {
+		for(int i = 0; i < showings.size(); i++) {
+			if(showings.get(i).getMovie() != null && movie.getName() != null && showings.get(i).getMovie().getName().equals(movie.getName())) {
+				return showings.get(i);
+			}
+		}
+		return null;
+	}
 
 	public void setDate(Date date) {
 		this.date = date;

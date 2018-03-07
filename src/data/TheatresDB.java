@@ -31,21 +31,25 @@ public class TheatresDB {
 		    ArrayList<Showroom> showrooms = new ArrayList<Showroom>();
 			Showroom showroom = new Showroom();
 			
-			if(!rs.getString("Showroom.Name").equals(null)) {
-				showroom.setName(rs.getString("Showroom.Name"));
+			try {
+				if(!rs.getString("Showroom.Name").equals(null)) {
+					showroom.setName(rs.getString("Showroom.Name"));
+					
+					showroom.setCapacity(rs.getInt("Showroom.Capacity"));
+					showroom.setTheatre(theatre);
+					
+					ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
+					showroom.setShowings(showings);
+					showrooms.add(showroom);
+	
+					theatre.setShowrooms(showrooms);
+				}
+			} catch (SQLException e) {
 				
-				showroom.setCapacity(rs.getInt("Showroom.Capacity"));
-				showroom.setTheatre(theatre);
-				
-				ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
-				showroom.setShowings(showings);
-				showrooms.add(showroom);
-
-				theatre.setShowrooms(showrooms);
 			}
 			
 		}catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 		
 		return theatre;

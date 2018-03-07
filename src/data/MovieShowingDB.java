@@ -18,7 +18,7 @@ public class MovieShowingDB {
 	public static MovieShowing createMovieShowing(ResultSet rs) {
 		MovieShowing showing = new MovieShowing();
 		try {
-			
+			showing.setID(rs.getInt("MovieShowing.ID"));
 			SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
 			Date sDate = null;
 			Date eDate = null;

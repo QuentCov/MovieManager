@@ -10,62 +10,67 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 			<a href="MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Details:</h1>
 		<br>
-		<table border="1">
-			<tr>
-				<td>Movie Name</td>
-				<td>Description</td>
-				<td>Rating</td>
-				<td>Poster</td>
-				<td>Theatre Name/Number</td>
-				<td>Showtime</td>
-				<td>Price per Seat</td>
-				<td>Seats Available</td>
-				<td>Actions</td>
-			</tr>
-			<tr>
-	    		<td>${movieShowing.getMovie().getName()}</td>
-	            <td>${movieShowing.getMovie().getDescription()}</td>
-	            <td>${movieShowing.getMovie().getRating}</td>
-	            <td>${movieShowing.getMovie().getThumbnailFile()}</td>
-	            <td>${movieShowing.getShowroom().getTheatre().getName()}</td>
-	            <td>${movieShwoing.getStartTime()}</td>
-	            <td>${movie.getCost()}</td>
-	            <td>${movie.getShowroom().getCapacity()}</td>
-	         </tr>
-		</table>
-		<form name="item" action="UpdateCart">
-        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-        	<input type="submit" name="action" value="Add to Cart">
-        </form>
-        <form name="item" action="CustomerReview">
-        	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-        	<input type="submit" name="action" value="Add Review">
-        </form>
+		<div class="row">
+		    <div class="col-sm-1">Movie Title</div>
+		    <div class="col-sm-1">Description</div>
+		    <div class="col-sm-1">Rating</div>
+		    <div class="col-sm-3">Poster</div>
+		    <div class="col-sm-1">Theatre</div>
+		    <div class="col-sm-1">Start Time</div>
+			<div class="col-sm-1">Cost per Ticket</div>
+			<div class="col-sm-1">Tickets Available</div>
+			<div class="col-sm-2">Actions</div>
+		</div>
+       	<div class="row">
+       		<div class="col-sm-9">
+	    		<c:forEach items="${current.getShowings()}" var="showing">
+	    			<div class="row">
+		    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
+			            <div class="col-sm-1">${showing.getMovie().getDescription()}</div>
+			            <div class="col-sm-1">${showing.getMovie().getRating}</div>
+			            <div class="col-sm-3">${showing.getMovie().getThumbnailFile()}</div>
+			            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
+			            <div class="col-sm-1">${showing.getStartTime()}</div>
+			            <div class="col-sm-1">${movie.getCost()}</div>
+			            <div class="col-sm-1">${movie.getShowroom().getCapacity()}</div>
+	    			</div>
+				</c:forEach>
+			</div>
+	    	<div class="col-sm-2">
+		    	<form name="item" action="CustomerReview">
+		        	<input type='hidden' name='reviewMovie' value="${movie.getName()}">
+		        	<input type="submit" class="btn btn-primary" value="Add Review">
+		        </form>
+		        <form name="item" action="UpdateShoppingCart">
+		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
+		        	<input type='text' name='ticketCount' value="Ticket Count">
+		        	<input type="submit" class="btn btn-primary" value="Add to Cart">
+		        </form>
+	        </div>
+        </div>
 		<h2>Viewer Reviews:</h2>
-		<table border="1">
-			<tr>
-				<td>Total Rating: ${movieShowing.getMovie().getAverageRating()}</td>
-			</tr>
-			<tr>
-				<td>Reviewer</td>
-				<td>Date</td>
-				<td>Rating</td>
-				<td>Review</td>
-			</tr>
-    		<c:forEach items="${reviews}" var="review">
-    		<tr>
-	    		<td>${review.getUser().getFullName()}</td>
-	            <td>${review.getDate()}</td>
-	            <td>${review.getRating()}</td>
-	            <td>${review.getReview()}</td>
-	        <tr>
-	        </c:forEach>
-		</table>
+		<div class="row">Total Rating: ${movieShowing.getMovie().getAverageRating()}</div>
+		<div class="row">
+			<div class="col-sm-1">Reviewer</div>
+			<div class="col-sm-1">Date</div>
+			<div class="col-sm-1">Rating</div>
+			<div class="col-sm-1">Review</div>
+		</div>
+   		<c:forEach items="${reviews}" var="review">
+   		<div class="row">
+   			<div class="col-sm-1">${review.getUser().getFullName()}</div>
+		    <div class="col-sm-1">${review.getDate()}</div>
+		    <div class="col-sm-1">${review.getRating()}</div>
+		    <div class="col-sm-6">${review.getReview()}</div>
+   		</div>
+        </c:forEach>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
 </body>

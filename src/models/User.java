@@ -102,4 +102,8 @@ public class User {
 		User dbUser = UserDB.getUser(user.getEmailAddress());
 		return dbUser.getType();
 	}
+
+	public int getId(User user) {
+		return UserDB.getID(user);
+	}
 }

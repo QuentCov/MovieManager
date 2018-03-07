@@ -10,25 +10,25 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Transaction Page</h1>
 		<h3>Purchases</h3>
-		<table border="1">
-	        <tr>
-		        <td>Movies</td>
-				<td>Tickets Bought</td>
-				<td>Total Price</td>
-	        </tr>
-	        <tr>
+		<div class="container">
+	        <div class="row">
+		        <div class="col-sm-2">Movies</div>
+				<div class="col-sm-2">Tickets Bought</div>
+				<div class="col-sm-2">Total Price</div>
+	        </div>
+	        <div class="row">
     			<c:forEach items="${order.getShowings()}" var="movie">
-	    			<td>${movie.getMovie().getName()}</td>
+	    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
 	        	</c:forEach>
-	            <td>${order.getTicketCount()}</td>
-	            <td>${order.getTotalCost}</td>
-	    	</tr>
-		</table>
+	            <div class="col-sm-2">${order.getTicketCount()}</div>
+	            <div class="col-sm-2">${order.getTotalCost}</div>
+	    	</div>
+		</div>
 		<br>
 		<form>
 			<div class="form-group">
