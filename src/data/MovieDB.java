@@ -90,7 +90,7 @@ public class MovieDB {
 	}
 	
 	public static ArrayList<Movie> searchMoviesByName(String name) {
-		String query = "SELECT * FROM Movie WHERE Name LIKE '%?%';";
+		String query = "SELECT * FROM Movie WHERE Name LIKE '% ? %';";
 		Connection c = Database.getConnection();
 		PreparedStatement statement = Database.prepareStatement(c, query);
 		ArrayList<Movie> movies = new ArrayList<Movie>();

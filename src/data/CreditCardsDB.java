@@ -89,11 +89,12 @@ public class CreditCardsDB {
 	}
 
 	public static boolean addCreditCard(CreditCard card) {
-		String query = "SELECT ID FROM User WHERE FullName=" + card.getOwner().getFullName() + ";";
+		String query = "SELECT ID FROM User WHERE FullName=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int ownerId = -1;
 		try {
+			s.setString(1, card.getOwner().getFullName());
 			ResultSet rs = s.executeQuery();
 			if(rs.next()) {
 				ownerId = rs.getInt("ID");
@@ -119,11 +120,21 @@ public class CreditCardsDB {
 	}
 	
 	public static boolean updateBalance(CreditCard card, int ownerId) {
-		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE OwnerId=?;";
-		ArrayList<Integer> params = new ArrayList<Integer>();
-		params.add(ownerId);
-		int i = Database.runUpdateInt(query, params);
-		if(i == 1) {
+		String query = "UPDATE CreditCard SET Balance = ? WHERE OwnerId=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setDouble(1, card.getBalance());
+			s.setInt(2, ownerId);
+			i = s.executeUpdate();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(i != -1) {
 			return true;
 		}
 		return false;

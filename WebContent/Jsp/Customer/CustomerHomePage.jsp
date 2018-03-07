@@ -11,7 +11,7 @@
 		<h1>Movie Manager! Your Ticket to the Silver Screen!</h1>
 		<div class="row justify-content-around">
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<form>
@@ -24,20 +24,16 @@
 					<div id="theatres" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<c:forEach items="${theatres}" var="current">
 							<input type="hidden" id="theatre" value="${ current.getName() }"/>
-							<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQuery" class="dropdown-item">${ current.getName() }</a>
+							<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" class="dropdown-item">${ current.getName() }</a>
 						</c:forEach>
 					</div>
 				</div>
 			</div>
 		</form>
-	    <form>
-			<div class="form-group">
-				<input type="text" class="form-control" id="movieSearchString" name="movieSearchString" placeholder="Search Movies">
-				<span class="input-group-btn">
-		        	<a href="TheatreAndMovieSearchQuery" class="btn btn-light" type="button">Go!</a>
-		      	</span>
-			</div>
-		</form>
+		<form name="item" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
+			<input type="text" class="form-control" id="movieSearchString" name="movieSearchString" placeholder="Search Movies">
+        	<input type="submit" class="btn btn-light" type="button" value="Go!"/>
+      	</form>
 		<form>
 			<div class="form-group">
 				<input id="date" type="date">

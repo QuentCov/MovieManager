@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>
@@ -52,7 +52,7 @@
 				Total: ${totalCost.cost}
 			</div>
 			<div class="offset-md-3 col-sm-3">
-				<a href="CustomerTransaction.jsp" class="btn btn-success">Checkout</a>
+				<a href="${pageContext.request.contextPath}/CustomerTransaction.jsp" class="btn btn-success">Checkout</a>
 			</div>
 		</div>
 	</div>

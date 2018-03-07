@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -75,14 +76,18 @@ public class CancelOrderTransaction extends HttpServlet {
 		
 		//Remove the item from the database.
 		boolean deleted = OrdersDB.refundOrder(order, ownerId, cost, showing);
-		if(deleted) {
+		if(!deleted) {
+			response.sendError(500, "Error in order cancellation");
+		} else {
 			deleted = OrdersDB.deleteOrderItem(order, showing, movie);
-			if(deleted) {
-				
-				response.sendRedirect("CancellationConfirmation.jsp");
+			if(!deleted) {
+				response.sendError(500, "Error in order cancellation");
+			} else {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancellationConfirmation.jsp");
+		  	    dispatcher.forward(request, response);
 			}
 		}
-		response.sendError(500, "Error in order cancellation");
+		
 	}
 
 }

@@ -8,13 +8,13 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<div class="row"><h1>Review for: ${movie.getName()}</h1></div>
-		<form action="CustomerReviewConfirmation">
+		<form action="${pageContext.request.contextPath}/CustomerReviewConfirmation">
 			<div class="form-group">
 			  <label for="review">Tell us what you thought:</label>
 			  <textarea class="form-control" rows="5" id="reivew"></textarea>
@@ -37,7 +37,7 @@
 					<input type="radio" name="rating" value="5">
 				</div>
 			</div>
-			<a href="CustomerReview" class="btn btn-primary">Submit Review</a>
+			<a href="${pageContext.request.contextPath}/CustomerReview" class="btn btn-primary">Submit Review</a>
 		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

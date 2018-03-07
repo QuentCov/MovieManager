@@ -111,7 +111,7 @@ public class Order {
 	
 	public int getTicketsByMovie(Movie movie) {
 		for(int i = 0; i < showings.size(); i++) {
-			if(showings.get(i).getMovie() == movie) {
+			if(showings.get(i).getMovie().equals(movie)) {
 				return tickets.get(i);
 			}
 		}

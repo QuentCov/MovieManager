@@ -233,35 +233,37 @@ public class OrdersDB {
 			if(updated) {
 				String query = "SELECT ID FROM Movie WHERE Name=?;";
 				Connection c = Database.getConnection();
+				 
+				
+				query = "SELECT ID FROM Orders WHERE OurId=?;";
 				PreparedStatement s = Database.prepareStatement(c, query);
-				int movieId = -1;
+				int orderId = -1;
 				try {
-					s.setString(1, showing.getMovie().getName());
+					s.setString(1, order.getID().toString());
 					ResultSet rs = s.executeQuery();
-					movieId = rs.getInt("ID");
+					if(rs.next()) {
+						orderId = rs.getInt("ID");
+					}
 					rs.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				
-				query = "SELECT ID FROM Orders WHERE OurId=?;";
+				query = "DELETE FROM OrdersMovies " + 
+						"WHERE OrdersId=? AND NumTickets=?;";
 				s = Database.prepareStatement(c, query);
-				int orderId = -1;
+				int j = -1;
 				try {
-					s.setString(1, order.getID().toString());
-					ResultSet rs = s.executeQuery();
-					orderId = rs.getInt("ID");
-					rs.close();
+					s.setInt(1, orderId);
+					s.setDouble(2, tickets);
+					j = s.executeUpdate();
 					s.close();
 					c.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				
-				query = "INSERT INTO OrdersMovies (OrdersId, MovieId, NumTickets) "
-							 + "VALUES (" + orderId + ", " + movieId + ", " + tickets + ");";
-				i = Database.runUpdate(query);
-				if(i == 1) {
+				if(j != -1) {
 					return true;
 				}
 			}
@@ -301,7 +303,9 @@ public class OrdersDB {
     	try {
 			s.setString(1, order.getID().toString());
 			ResultSet rs = s.executeQuery();
-			orderId = rs.getInt("ID");
+			if(rs.next()) {
+				orderId = rs.getInt("ID");
+			}
 			rs.close();
 			
 			query = "DELETE FROM OrdersMovies WHERE OrderId=? AND ShowingId=?";

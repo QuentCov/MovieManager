@@ -9,13 +9,13 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View All Orders</a>
-			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Cancelled</h1>
-		<p>Your order has been cancelled and your account has been refunded ${current.getCost()}.</p>
+		<p>Your movie order has been cancelled and your account has been refunded.</p>
 		<div class="container">
 	        <div class="row">
 		        <div class="col-sm-1">Movie Title</div>
@@ -27,15 +27,13 @@
 				<div class="col-sm-1">Tickets Bought</div>
 	        </div>
     		<div class="row">
-	    		<c:forEach items="${cancelOrder.getMovies()}" var="movie">
-		    		<div class="col-sm-1">${movie.getMovie().getName()}</div>
-		            <div class="col-sm-1">${movie.getShowroom().getTheatre().getName()}</div>
-		            <div class="col-sm-1">${movie.getStartTime()}</div>
-		            <div class="col-sm-1">${movie.getShowroom().getCapacity()}</div>
-		            <div class="col-sm-1">${movie.getCost()}</div>
-		            <div class="col-sm-1">${movie.getMovie().getThumbnailFile()}</div>
-		            <div class="col-sm-1">${current.getTicketsBoughtByMovie(movie)}</div>
-		         </c:forEach>
+	    		<div class="col-sm-1">${movie.getMovie().getName()}</div>
+	            <div class="col-sm-1">${movie.getShowroom().getTheatre().getName()}</div>
+	            <div class="col-sm-1">${movie.getStartTime()}</div>
+	            <div class="col-sm-1">${movie.getShowroom().getCapacity()}</div>
+	            <div class="col-sm-1">${movie.getCost()}</div>
+	            <div class="col-sm-1">${movie.getMovie().getThumbnailFile()}</div>
+	            <div class="col-sm-1">${current.getTicketsBoughtByMovie(movie)}</div>
 	         </div>
 		</div>
 	</div>

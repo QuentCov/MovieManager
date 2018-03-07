@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -84,7 +85,8 @@ public class UpdateShoppingCart extends HttpServlet {
 		}
 		
 		session.setAttribute("cart", cart);
-		response.sendRedirect("ViewAndCheckoutShoppingCart.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+  	    dispatcher.forward(request, response);
 	}
 
 }

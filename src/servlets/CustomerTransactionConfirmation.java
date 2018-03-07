@@ -40,7 +40,6 @@ public class CustomerTransactionConfirmation extends HttpServlet {
 		HttpSession session = request.getSession();
 		User owner = (User) session.getAttribute("user");
 		
-		//We assume that the order to be deleted exists.
 		CreditCard card = (CreditCard) session.getAttribute("card");
 		boolean exists = CreditCardsDB.verifyCard(card);
 		if(!exists) {

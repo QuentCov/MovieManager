@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -97,10 +97,10 @@
 		</form>
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
+				<a href="${pageContext.request.contextPath}/CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
-			    <a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>
+			    <a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>
 			</div>
 		</div>
 	</div>
