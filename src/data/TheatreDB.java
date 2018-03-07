@@ -3,7 +3,7 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import models.Theatre;
@@ -24,8 +24,11 @@ public class TheatreDB {
 	}
 	
 	public static int getTheatreIdByName(String name) {
-		String query = "SELECT ID FROM Theatre WHERE Name='" + name + "';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		String query = "SELECT ID FROM Theatre WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection conn = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(conn, query, params);
 		int id = -1;
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -42,8 +45,11 @@ public class TheatreDB {
 	}
 	
 	public static Theatre getTheatreByName(String name) {
-		String query = "SELECT * FROM Theatre WHERE Name='" + name + "';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		String query = "SELECT * FROM Theatre WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		try {
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {

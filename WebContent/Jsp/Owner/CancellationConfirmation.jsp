@@ -8,9 +8,9 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="ViewShowrooms.jsp" class="btn btn-primary">View Showrooms</a>
-		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showrooms</a>
+		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
@@ -28,7 +28,7 @@
 			<div class="col-sm-3">${showing.getMovie().getName() }</div>
 			<div class="col-sm-3">${showing.getShowroom().getTheatre().getName() }</div>
 			<div class="col-sm-3">${showing.getShowroom().getName() }</div>
-			<div class="col-sm-3">$123.45</div>
+			<div class="col-sm-3">${refundableAmount }</div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

@@ -8,9 +8,9 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="Jsp/Owner/ViewShowrooms.jsp" class="btn btn-primary">View Showroom</a>
-		   	<a href="Jsp/Owner/ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showroom</a>
+		   	<a href="${pageContext.request.contextPath}/ViewTheatreDetails" class="btn btn-primary">View Theatre Details</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 

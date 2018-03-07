@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,10 +37,13 @@ public class ShowroomDB {
 	}
 	
 	public static int getShowroomIdByName(String name) {
-		String query = "SELECT ID FROM Showroom WHERE Name='" + name + "';";
+		String query = "SELECT ID FROM Showroom WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		int id = -1;
 		try {
-			PreparedStatement statement = Database.prepareStatement(query);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
@@ -75,9 +79,12 @@ public class ShowroomDB {
 	}
 	
 	public static Showroom getShowroomByName(String name) {
-		String query = "SELECT * FROM Showroom WHERE Name='" + name + "';";
+		String query = "SELECT * FROM Showroom WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		try {
-			PreparedStatement statement = Database.prepareStatement(query);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				Showroom showroom = createShowroom(rs);

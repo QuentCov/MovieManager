@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 

@@ -76,7 +76,7 @@ public class AddShowtimeConfirmation extends HttpServlet {
 			request.setAttribute("theatreName", TheatreDB.getTheatreById(theatreId).getName());
 			request.setAttribute("movieName", movie.getName());
 			request.setAttribute("showroomName", showroom.getName());
-			request.setAttribute("runtime", startDateTime.toString() + " " + endDateTime.toString());
+			request.setAttribute("runtime", startDateTime.toString() + " - " + endDateTime.toString());
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/AddShowtimeConfirmation.jsp");
 	  	    dispatcher.forward(request, response);
 		} else {

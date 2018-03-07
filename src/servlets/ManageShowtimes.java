@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.MovieShowingDB;
 import data.ShowroomDB;
@@ -37,12 +38,18 @@ public class ManageShowtimes extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String showroomName = request.getParameter("showroomName");		
-		int theatreId = Integer.parseInt(request.getParameter("theatreId"));		
-		ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowingsByShowroomId(ShowroomDB.getShowroomIdByName(showroomName));
+		HttpSession session = request.getSession();
+		int theatreId = (int) session.getAttribute("theatreId");
+		String showroomName = request.getParameter("showroomName");
+		int showroomId = ShowroomDB.getShowroomIdByName(showroomName);
+		if (showroomId == -1) {
+			showroomId = (int) session.getAttribute("showroomId");
+		}
+		ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowingsByShowroomId(showroomId);
+		session.setAttribute("showroomId", showroomId);
 		request.setAttribute("showings", showings);
 		request.setAttribute("theatreId", theatreId);
-		request.setAttribute("showroomId", ShowroomDB.getShowroomIdByName(showroomName));
+		request.setAttribute("showroomId", showroomId);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ManageShowtimes.jsp");
   	    dispatcher.forward(request, response);
 	}

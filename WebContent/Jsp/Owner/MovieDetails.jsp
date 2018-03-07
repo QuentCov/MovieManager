@@ -52,7 +52,7 @@
 					<input type="text" class="form-control" id="movieRuntime" name="movieRuntime" value="${movie.getRuntime()}">
 				</div>
 				<div class="col-sm-1">
-					109
+					${ticketsSold}
 				</div>
 				<div class="col-sm-1">
 					<input type="text" class="form-control" id="movieRating" name="movieRating" value="${movie.getRating()}">

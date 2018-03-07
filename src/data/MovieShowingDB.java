@@ -62,6 +62,25 @@ public class MovieShowingDB {
 		return null;
 	}
 	
+	public static int getTicketsSoldByMovieId(int movieId) {
+		String query = "SELECT NumTicketsSold FROM MovieShowing WHERE MovieId=" + movieId + ";";
+		int ticketsSold = 0;
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				ticketsSold = rs.getInt("NumTicketsSold");
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return ticketsSold;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ticketsSold;
+	}
+	
 	public static ArrayList<MovieShowing> getMovieShowingsByShowroomId(int showroomId) {
 		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=" + showroomId + ";";
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();

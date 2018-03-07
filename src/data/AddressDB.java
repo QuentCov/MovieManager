@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +24,11 @@ public class AddressDB {
 	}
 	
 	public static int getAddressIdByAddress1(String address1) {
-		String query = "SELECT ID FROM Address WHERE Address1='" + address1 + "';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		String query = "SELECT ID FROM Address WHERE Address1=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(address1);
+		Connection conn = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(conn, query, params);
 		int id = -1;
 		try {
 			ResultSet rs = statement.executeQuery();

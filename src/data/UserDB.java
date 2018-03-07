@@ -54,10 +54,13 @@ public class UserDB {
 	}
 	
 	public static int getUserIdByEmailAddress(String emailAddress) {
-		String query = "SELECT ID FROM User WHERE EmailAddress='" + emailAddress + "';";
+		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(emailAddress);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		int id = -1;
 		try {
-			PreparedStatement statement = Database.prepareStatement(query);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
@@ -93,9 +96,12 @@ public class UserDB {
 	}
 	
 	public static User getUserByEmailAddress(String emailAddress) {
-		String query = "SELECT * FROM User WHERE EmailAddress='" + emailAddress + "';";
+		String query = "SELECT * FROM User WHERE EmailAddress=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(emailAddress);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		try {
-			PreparedStatement statement = Database.prepareStatement(query);
 			ResultSet rs = statement.executeQuery();
 			if(rs.next())
 			{

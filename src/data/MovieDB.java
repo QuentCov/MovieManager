@@ -30,8 +30,11 @@ public class MovieDB {
 	}
 	
 	public static int getMovieIdByName(String name) {
-		String query = "SELECT ID FROM Movie WHERE Name='" + name + "';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		String query = "SELECT ID FROM Movie WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		int id = -1;
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -87,8 +90,11 @@ public class MovieDB {
 	}
 	
 	public static Movie getMovieByName(String name) {
-		String query = "SELECT * FROM Movie WHERE Name='" + name + "';";
-		PreparedStatement statement = Database.prepareStatement(query);
+		String query = "SELECT * FROM Movie WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		Movie movie = null;
 		try {
 			ResultSet rs = statement.executeQuery();
@@ -105,9 +111,11 @@ public class MovieDB {
 	}
 	
 	public static ArrayList<Movie> searchMoviesByName(String name) {
-		String query = "SELECT * FROM Movie WHERE Name LIKE '%" + name + "%';";
+		String query = "SELECT * FROM Movie WHERE Name LIKE ?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add("%" + name + "%");
 		Connection c = Database.getConnection();
-		PreparedStatement statement = Database.prepareStatement(c, query);
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
 			ResultSet rs = statement.executeQuery();

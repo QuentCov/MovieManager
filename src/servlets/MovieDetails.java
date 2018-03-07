@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import data.MovieDB;
+import data.MovieShowingDB;
 import models.Movie;
 
 /**
@@ -31,10 +32,10 @@ public class MovieDetails extends HttpServlet {
 		String movieName = request.getParameter("movieName");		
 		Movie movie = MovieDB.getMovieByName(movieName);
 		int movieId = MovieDB.getMovieIdByName(movieName);
-				
+		int ticketsSold = MovieShowingDB.getTicketsSoldByMovieId(movieId);
 		request.setAttribute("movie", movie);
 		request.setAttribute("movieId", movieId);
-		//TODO get tickets sold for movie
+		request.setAttribute("ticketsSold", ticketsSold);
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/MovieDetails.jsp");
   	    dispatcher.forward(request, response);
 	}
