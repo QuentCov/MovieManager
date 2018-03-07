@@ -33,7 +33,7 @@ public class ViewTheatreDetails extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		User owner = (User) session.getAttribute("owner");
+		User owner = (User) session.getAttribute("user");
 		int ownerId = UserDB.getUserIdByEmailAddress(owner.getEmailAddress());
 		ArrayList<Theatre> theatres = TheatreDB.getTheatresByOwnerId(ownerId);
 		request.setAttribute("theatres", theatres);

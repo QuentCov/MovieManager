@@ -116,6 +116,37 @@ public class UserDB {
 	
 	public static boolean addUser(User user) {
 		int addressId = AddressDB.getAddressIdByAddress1(user.getStreetAddress().getAddress1());
+		
+		// if the address is not already inserted, then insert it
+		if (addressId == -1) {
+			String query = "";
+			Address address = user.getStreetAddress();
+			ArrayList<String> params = new ArrayList<String>();
+			if(address.getAddress2() == null || address.getAddress2().equals("")) {
+				query = "INSERT INTO Address (Address1, City, StateAbbreviation, ZipCode) "
+				      + "VALUES (?, ?, ?, ?);";
+				params.add(address.getAddress1());
+				params.add(address.getCity());
+				params.add(address.getStateAbbreviation());
+				params.add(address.getZipCode());
+			} else {
+				query = "INSERT INTO Address (Address1, Address2, City, StateAbbreviation, ZipCode) "
+					  + "VALUES (?, ?, ?, ?, ?);";
+				params.add(address.getAddress1());
+				params.add(address.getAddress2());
+				params.add(address.getCity());
+				params.add(address.getStateAbbreviation());
+				params.add(address.getZipCode());
+			}
+			int j = Database.runUpdate(query, params);
+			if(j != 1) {
+				return false;
+			} else {
+				addressId = AddressDB.getAddressIdByAddress1(user.getStreetAddress().getAddress1());
+			}
+			
+		}
+		
 		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, AddressId)"
 					 + "VALUES (?, ?, ?, ?, ?, " + addressId + ")";
 		ArrayList<String> params = new ArrayList<String>();

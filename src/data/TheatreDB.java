@@ -113,21 +113,4 @@ public class TheatreDB {
 	    }
 	    return false;
 	}
-	
-	//Note: We recognize the inefficiency here and have brainstormed solutions, 
-	//	    but these solutions are too intensive for a project of this scope.
-	public static boolean updateTheatre(Theatre theatre) {
-		int theatreId = getTheatreIdByName(theatre.getName());
-		int addressId = AddressDB.getAddressIdByAddress1(theatre.getAddress().getAddress1());
-		int ownerId = UserDB.getUserIdByEmailAddress(theatre.getOwner().getEmailAddress());
-		String query = "UPDATE Theatre SET Name=?, AddressId=" + addressId + ", OwnerId=" + ownerId + ", "
-						+ "WHERE ID=" + theatreId + ");";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(theatre.getName());
-		int i = Database.runUpdate(query, params);
-	    if(i == 1) {
-	    	return true;
-	    }
-	    return false;
-	}
 }
