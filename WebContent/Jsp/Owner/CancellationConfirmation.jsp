@@ -8,6 +8,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showrooms</a>
 		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>

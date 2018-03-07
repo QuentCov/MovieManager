@@ -9,6 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="Jsp/Owner/AddMovie.jsp" class="btn btn-primary">Add Movie</a>
 			<a href="${pageContext.request.contextPath}/ViewTheatreDetails" class="btn btn-primary">View Theatre Details</a>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>

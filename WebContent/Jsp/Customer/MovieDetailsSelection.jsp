@@ -9,6 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
