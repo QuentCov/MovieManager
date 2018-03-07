@@ -31,7 +31,7 @@ public class ManageOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String id = request.getParameter("itemIndex");
+		String id = request.getParameter("order");
 		UUID uuid = UUID.fromString(id);
 		Order order = OrdersDB.getOrder(uuid);
 		

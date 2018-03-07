@@ -53,7 +53,7 @@ public class UpdateShoppingCart extends HttpServlet {
 			//Check to ensure that the order is possible.
 			if(newOrder != null) {
 				//Check the capacity of the showrooms of the movie's in the order.
-				ArrayList<MovieShowing> movies = newOrder.getMovies();
+				ArrayList<MovieShowing> movies = newOrder.getShowings();
 				ArrayList<Integer> tickets = newOrder.getTickets();
 				
 				boolean cap = newOrder.isNotOverCapacity();

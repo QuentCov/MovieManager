@@ -22,7 +22,7 @@
 				<td>Total Price</td>
 	        </tr>
 	        <tr>
-    			<c:forEach items="${order.getMovies()}" var="movie">
+    			<c:forEach items="${order.getShowings()}" var="movie">
 	    			<td>${movie.getMovie().getName()}</td>
 	        	</c:forEach>
 	            <td>${order.getTicketCount()}</td>

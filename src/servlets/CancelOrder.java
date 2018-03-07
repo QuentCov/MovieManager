@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import data.MovieDB;
 import data.OrdersDB;
 import models.Movie;
 import models.Order;
@@ -31,14 +33,14 @@ public class CancelOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		Order order = (Order) session.getAttribute("cancelOrder");
-		Movie movie = (Movie) session.getAttribute("movie");
-		order = OrdersDB.getOrder(order.getID());
+		String movieName = request.getParameter("movie");
+		String orderId = request.getParameter("order");
+		Order order = OrdersDB.getOrder(UUID.fromString(orderId));
+		Movie movie = MovieDB.getMovieByName(movieName);
 		
 		if(order != null) {
 			session.setAttribute("cancelOrder", order);
 			session.setAttribute("cancelShowingItem", movie);
-			session.setAttribute("cancelShowingTicketCount", order.getTicketsByMovie(movie));
 			response.sendRedirect("CancelOrder.jsp");
 		}
 		

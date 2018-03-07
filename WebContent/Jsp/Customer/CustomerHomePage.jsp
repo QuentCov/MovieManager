@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib  uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
-	<%@ page import="data.TheatresDB" %>
 	<title>Customer Home Page</title>
 </head>
 <body>
@@ -21,14 +21,17 @@
 						Select Theatre
 					</button>
 					<div id="theatres" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item">Loading...</a>
+						<c:forEach items="${theatres}" var="current">
+							<input type="hidden" id="theatre" value="${ current.getName() }"/>
+							<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQuery" class="dropdown-item">${ current.getName() }</a>
+						</c:forEach>
 					</div>
 				</div>
 			</div>
 		</form>
 	    <form>
 			<div class="form-group">
-				<input type="text" class="form-control" name="movieSearchString" placeholder="Search Movies">
+				<input type="text" class="form-control" id="movieSearchString" name="movieSearchString" placeholder="Search Movies">
 				<span class="input-group-btn">
 		        	<a href="TheatreAndMovieSearchQuery" class="btn btn-light" type="button">Go!</a>
 		      	</span>

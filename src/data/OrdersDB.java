@@ -18,17 +18,15 @@ import models.User;
 public class OrdersDB {
 	public static Order getOrder(UUID id) {
 		String query = "SELECT * FROM Orders o "
-			     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
 			     + "INNER JOIN User u ON u.ID=o.CustomerId "
-			     + "INNER JOIN OrdersMovies oi ON o.ID=oi.OrderId "
-			     + "INNER JOIN MovieShowing ms ON ms.ID=oi.ShowingId "
-			     + "INNER JOIN Movie m ON ms.movieId=m.ID "
-			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID "
-			     + "WHERE OurId=" + id.toString() + ";";
+			     + "INNER JOIN CreditCard cc ON u.ID=cc.OwnerId "
+			     + "INNER JOIN Address ON o.BillingAddressId=Address.ID "
+			     + "WHERE OurId=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Order order = new Order();
 		try {
+			s.setString(1, id.toString());
 			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
@@ -36,31 +34,44 @@ public class OrdersDB {
 			    CreditCard card = CreditCardsDB.createCard(rs);
 			    
 			    order.setCustomer(customer);
-			    order.setDate(new Date());
+			    order.setDate(rs.getString("o.Date"));
 			    order.setCreditCard(card);
 			    order.setCost(rs.getInt("o.Cost"));
+			    order.setShippingAddress(customer.getStreetAddress());
 			    
 			    //Get the billing address.
 			    Address address = new Address();
 			    
-			    address.setAddress1(rs.getString("a.Address1"));
-			    address.setAddress2(rs.getString("a.Address2"));
-			    address.setCity(rs.getString("a.City"));
-			    address.setStateAbbreviation(rs.getString("a.StateAbbreviation"));
-			    address.setZipCode(Integer.toString(rs.getInt("a.ZipCode")));
+			    address.setAddress1(rs.getString("Address.Address1"));
+			    address.setAddress2(rs.getString("Address.Address2"));
+			    address.setCity(rs.getString("Address.City"));
+			    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
+			    address.setZipCode(Integer.toString(rs.getInt("Address.ZipCode")));
 			   
 			    order.setShippingAddress(customer.getStreetAddress());
 			    order.setBillingAddress(address);
 			    
+			    //OrdersMovies contains the MovieShowing and the ticket count that is being ordered.
 			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<Movie> movies = new ArrayList<Movie>();
-			    tickets.add(rs.getInt("oi.NumTickets"));
-			    movies.add(MovieDB.createMovie(rs));
+			    ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 			    
-			    while(rs.next()) {
-			    	tickets.add(rs.getInt("oi.NumTickets"));
-			    	movies.add(MovieDB.createMovie(rs));
+			    query = "SELECT * FROM OrdersMovies "
+			    	  + "INNER JOIN MovieShowing ON OrdersMovies.MovieShowingsId=MovieShowing.ID "
+			    	  + "WHERE OrdersId=?;";
+			    
+			    PreparedStatement s2 = Database.prepareStatement(c, query);
+			    s2.setInt(1, rs.getInt("o.ID"));
+			    
+			    ResultSet rs2 = s2.executeQuery();
+			    while(rs2.next()) {
+			    	tickets.add(rs2.getInt("NumTickets"));
+			    	showings.add(MovieShowingDB.createMovieShowing(rs2));
 			    }
+			    
+			    order.setTickets(tickets);
+			    order.setShowings(showings);
+			    rs2.close();
+			    s2.close();
 			}
 			rs.close();
 			s.close();
@@ -73,14 +84,9 @@ public class OrdersDB {
 	}
 	
 	public static ArrayList<Order> getOrders(String email) {
-		String query = "SELECT * FROM User u "
-				     + "INNER JOIN CreditCard cc ON cc.OwnerId=u.ID "
+		String query = "SELECT o.OurId FROM User u "
 				     + "INNER JOIN Orders o ON o.CustomerId=u.ID "
-				     + "INNER JOIN OrdersMovies oi ON oi.OrdersId=o.ID "
-				     + "INNER JOIN MovieShowing ms ON oi.MovieId=ms.ID "
-				     + "INNER JOIN Movie m ON m.ID=ms.movieId " 
-				     + "INNER JOIN Address a ON a.ID=o.BillingAddressId "
-				     + "WHERE EmailAddress=?";
+				     + "WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
@@ -89,48 +95,8 @@ public class OrdersDB {
 			ResultSet rs = s.executeQuery();
 			while(rs.next())
 			{
-			    Order order = new Order();
-			    User customer = UserDB.createUser(rs);
-			    CreditCard card = CreditCardsDB.createCard(rs);
-			    
-			    order.setCustomer(customer);
-			    order.setDate(new Date());
-			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.Cost"));
-
-			    //Get the billing address.
-			    Address address = new Address();
-			    
-			    address.setAddress1(rs.getString("a.Address1"));
-			    address.setAddress2(rs.getString("a.Address2"));
-			    address.setCity(rs.getString("a.City"));
-			    address.setStateAbbreviation(rs.getString("a.StateAbbreviation"));
-			    address.setZipCode(Integer.toString(rs.getInt("a.ZipCode")));
-			   
-			    order.setShippingAddress(customer.getStreetAddress());
-			    order.setBillingAddress(address);
-			    
-			    //Get the tickets and movie showings
-			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<MovieShowing> movies = new ArrayList<MovieShowing>();
-			    query = "SELECT * FROM Orders o "
-			    	  + "INNER JOIN OrdersMovies om ON om.OrdersId=o.ID "
-					  + "INNER JOIN MovieShowing ms ON ms.ID=om.MovieId "
-					  + "WHERE o.ID=?";
-			    
-			    Connection c2 = Database.getConnection();
-				PreparedStatement s2 = Database.prepareStatement(c2, query);
-			    s2.setInt(1, rs.getInt("o.ID"));
-			    
-			    ResultSet rs2 = s2.executeQuery();
-			    while(rs2.next()) {
-			    	tickets.add(rs.getInt("NumTickets"));
-				    movies.add(MovieShowingDB.createMovieShowing(rs2));
-			    }
-			    
-			    s2.close();
-			    rs2.close();
-			
+				UUID id = UUID.fromString(rs.getString("o.OurId"));
+			    Order order = getOrder(id);
 			    orders.add(order);
 			}
 			rs.close();
@@ -248,17 +214,17 @@ public class OrdersDB {
 		return false;
 	}
 
-	public static boolean refundOrder(Order order, double cost, MovieShowing showing) {
+	public static boolean refundOrder(Order order, double cost, Movie movie) {
 		CreditCard card = order.getCreditCard();
 		card.setBalance(card.getBalance() + cost);
 		boolean updated = CreditCardsDB.updateBalance(card);
 		
 		if(updated) {
 			order.setCost(order.getCost() - cost);
-			int i = order.getMovies().indexOf(showing);
-			Movie movie = order.getMovies().get(i).getMovie();
+			
+			int i = order.getShowings().indexOf(movie);
 			int tickets = order.getTickets().get(i);
-			order.getMovies().remove(i);
+			order.getShowings().remove(i);
 			order.getTickets().remove(i);
 			
 			updated = updateOrder(order);
@@ -311,13 +277,13 @@ public class OrdersDB {
 		return false;
 	}
 
-	public static boolean deleteOrderItem(Order order, MovieShowing showing) {
+	public static boolean deleteOrderItem(Order order, Movie movie) {
 		
-		int i = order.getMovies().indexOf(showing);
-		order.getMovies().remove(showing);
+		int i = order.getShowings().indexOf(movie);
+		order.getShowings().remove(movie);
 		order.getTickets().remove(i);
 		
-		String query = "SELECT ID FROM Movie WHERE Name=" + showing.getMovie().getName() + ";";
+		String query = "SELECT ID FROM Movie WHERE Name=" + movie.getName() + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int movieId = -1;
@@ -329,20 +295,7 @@ public class OrdersDB {
 			e.printStackTrace();
 		}
 		
-		query = "SELECT ID FROM Showroom WHERE Name=" + showing.getShowroom().getName() + ";";
-		s = Database.prepareStatement(c, query);
-		int showroomId = -1;
-		try {
-			ResultSet rs = s.executeQuery();
-			showroomId = rs.getInt("ID");
-			rs.close();
-			s.close();
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		query = "DELETE FROM OrdersMovies WHERE MovieId=" + movieId + " AND ShowingId=" + showroomId + "";
+		query = "DELETE FROM OrdersMovies WHERE MovieId=" + movieId + " AND ShowingId=" + showroomId + ";";
 		int j = Database.runUpdate(query);
 		if(j == 1) {
 			return true;

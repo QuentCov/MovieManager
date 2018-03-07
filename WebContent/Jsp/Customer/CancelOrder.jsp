@@ -12,32 +12,23 @@
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>Do you want to cancel your tickets for this movie??</h1>
-		<table border="1">
-	        <tr>
-		        <td>Movie Title</td>
-		        <td>Theatre</td>
-		        <td>Start Time</td>
-		        <td>Seats Available</td>
-		        <td>Cost per Ticket</td>
-		        <td>Poster</td>
-				<td>Tickets Bought</td>
-	        </tr>
-    		<tr>
-	    		<td>${movie.getMovie().getName()}</td>
-	            <td>${movie.getShowroom().getTheatre().getName()}</td>
-	            <td>${movie.getStartTime()}</td>
-	            <td>${movie.getShowroom().getCapacity()}</td>
-	            <td>${movie.getCost()}</td>
-	            <td>${movie.getMovie().getThumbnailFile()}</td>
-	            <td>${order.getTicketsBoughtByMovie(movie)}</td>
-	         </tr>
-		</table>
+		<h1>Do you want to cancel your tickets for this movie?</h1>
+		<div class="row">
+		    <div class="col-sm-1">Movie Title</div>
+			<div class="col-sm-2">Actions</div>
+		</div>
+       	<div class="row">
+       		<div class="col-sm-9">
+    			<div class="row">
+	    			<div class="col-sm-1">${cancelShowingItem.getMovie().getName()}</div>
+    			</div>
+			</div>
+        </div>
 		<div class="offset-md-3 col-sm-3">
-			<a href="CancelOrder" class="btn btn-success">Confirm Cancellation</a>
+			<a href="CancelOrderTransaction" class="btn btn-success">Confirm Cancellation</a>
 		</div>
 		<div class="offset-md-3 col-sm-3">
-			<a href="ViewAndCheckoutShoppingCart" class="btn btn-success">Discard Cancellation</a>
+			<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-success">Discard Cancellation</a>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

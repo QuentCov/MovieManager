@@ -10,6 +10,34 @@ import models.CreditCard;
 
 public class CreditCardsDB {
 	
+	public static CreditCard createCard(ResultSet rs, Connection c) {
+		CreditCard card = new CreditCard();
+		try {
+			card.setCardType(rs.getString("CardType"));
+			card.setCardNumber(rs.getString("CardNumber"));
+			card.setCcv(rs.getInt("CCV"));
+			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
+			card.setExpirationYear(rs.getInt("ExpirationYear"));
+			
+			String query = "SELECT * FROM User "
+						 + "INNER JOIN Address on Address.ID=User.AddressId "
+						 + "WHERE User.ID=?;";
+			
+			PreparedStatement s = Database.prepareStatement(c, query);
+			s.setInt(1, rs.getInt("OwnerId"));
+			ResultSet rs2 = s.executeQuery();
+			if(rs2.next()) {
+				card.setOwner(UserDB.createUser(rs2));
+			}
+			rs2.close();
+			s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return card;
+	}
+	
 	public static CreditCard createCard(ResultSet rs) {
 		CreditCard card = new CreditCard();
 		try {
@@ -89,7 +117,7 @@ public class CreditCardsDB {
 		}
 		return false;
 	}
-
+	
 	public static boolean updateBalance(CreditCard card) {
 		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE CardHolderName=?;";
 		ArrayList<String> params = new ArrayList<String>();
