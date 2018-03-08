@@ -109,6 +109,31 @@ public class OrdersDB {
 		return orders;
 	}
 	
+	public static ArrayList<Order> getOrdersByMovieShowingId(int movieShowingsId) {
+		String query = "SELECT o.OurId FROM Orders o "
+			     		+ "INNER JOIN OrdersMovies om ON om.OrdersID=o.ID "
+			     		+ "WHERE om.MovieShowingsId=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<Order> orders = new ArrayList<Order>();
+		try {
+			s.setInt(1, movieShowingsId);
+			ResultSet rs = s.executeQuery();
+			while(rs.next())
+			{
+				UUID id = UUID.fromString(rs.getString("o.OurId"));
+			    Order order = getOrder(id);
+			    orders.add(order);
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orders;
+	}
+	
 	public static boolean addOrder(Order order) {
 		
 		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
@@ -131,10 +156,11 @@ public class OrdersDB {
 			return false;
 		}
 		
+		int addressId = AddressDB.getAddressIdByAddress1(order.getBillingAddress().getAddress1());
+		
 		query = "INSERT INTO Orders (OurId, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
-				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", ?, ?);";
+				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", " + addressId + ", ?);";
 		ArrayList<String> params = new ArrayList<String>();
-		params.add(order.getBillingAddress().getAddress1());
 		params.add(order.getCreditCard().getCardNumber());
 		
 		int i = Database.runUpdate(query, params);
@@ -308,7 +334,7 @@ public class OrdersDB {
 			}
 			rs.close();
 			
-			query = "DELETE FROM OrdersMovies WHERE OrderId=? AND ShowingId=?";
+			query = "DELETE FROM OrdersMovies WHERE OrdersId=? AND MovieShowingsId=?";
 			s = Database.prepareStatement(c, query);
 			s.setInt(1, orderId);
 			s.setInt(2, showingId);

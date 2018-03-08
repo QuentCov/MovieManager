@@ -39,7 +39,7 @@
 			<div class="col-sm-2">${showing.getCost()}</div>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowing">
-	            	<input type="hidden" name="showingId" value="${showing.getId()}"/>
+	            	<input type="hidden" name="showingId" value="${showing.getID()}"/>
 	            	<input type="submit" class="btn btn-danger" value="Cancel Showtime">
 	            </form>	            
 			</div>

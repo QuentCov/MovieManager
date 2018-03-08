@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import data.MovieShowingDB;
+import data.OrdersDB;
 import models.MovieShowing;
+import models.Order;
 
 /**
  * Servlet implementation class CancelShowingConfirmation
@@ -37,9 +40,15 @@ public class CancelShowingConfirmation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int showingId = Integer.parseInt(request.getParameter("showingId"));
 		MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
-		boolean result1 = MovieShowingDB.deleteMovieShowing(showingId);
+		ArrayList<Order> orders = OrdersDB.getOrdersByMovieShowingId(showingId);
+		boolean result1 = false;
+		for(int i = 0; i < orders.size(); i++) {
+			Order order = orders.get(i);
+			result1 = OrdersDB.deleteOrderItem(order, showing, showing.getMovie());
+		}
+		boolean result2 = MovieShowingDB.deleteMovieShowing(showingId);
 		//TODO refund credit cards
-		if (result1) {
+		if (result1 && result2) {
 			request.setAttribute("result", true);
 			request.setAttribute("showing", showing);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancellationConfirmation.jsp");
