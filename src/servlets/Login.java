@@ -11,8 +11,10 @@ import javax.servlet.http.HttpSession;
 
 //import data.Database;
 import data.OrdersDB;
+import data.TheatresDB;
 import data.UserDB;
 import models.Order;
+import models.Theatre;
 import models.User;
 
 /**
@@ -56,6 +58,11 @@ public class Login extends HttpServlet {
     			cart = OrdersDB.getOrders(userName);
     			session.setAttribute("cartSize", cart.size());
     			session.setAttribute("cart", cart);
+    			
+    			//get the list of theatre's for use on CustomerHomePage.jsp
+    			ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+    			theatres = TheatresDB.getTheatres();
+    			session.setAttribute("theatres", theatres);
     			
             	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");
     		} else {

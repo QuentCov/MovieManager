@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class UpdateShoppingCart extends HttpServlet {
 			//Check to ensure that the order is possible.
 			if(newOrder != null) {
 				//Check the capacity of the showrooms of the movie's in the order.
-				ArrayList<MovieShowing> movies = newOrder.getMovies();
+				ArrayList<MovieShowing> movies = newOrder.getShowings();
 				ArrayList<Integer> tickets = newOrder.getTickets();
 				
 				boolean cap = newOrder.isNotOverCapacity();
@@ -84,7 +85,8 @@ public class UpdateShoppingCart extends HttpServlet {
 		}
 		
 		session.setAttribute("cart", cart);
-		response.sendRedirect("ViewAndCheckoutShoppingCart.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+  	    dispatcher.forward(request, response);
 	}
 
 }

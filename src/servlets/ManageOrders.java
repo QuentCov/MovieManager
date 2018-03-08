@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +16,13 @@ import models.Order;
 /**
  * Servlet implementation class ManageOrders
  */
-public class ManageOrder extends HttpServlet {
+public class ManageOrders extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ManageOrder() {
+    public ManageOrders() {
         super();
     }
 
@@ -31,15 +32,17 @@ public class ManageOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String id = request.getParameter("itemIndex");
+		String id = request.getParameter("order");
 		UUID uuid = UUID.fromString(id);
 		Order order = OrdersDB.getOrder(uuid);
 		
-		if(order != null) {
+		if(order == null) {
+			response.sendError(500, "Unable to retrieve order");
+		} else {
 			session.setAttribute("order", order);
-			response.sendRedirect("ManageOrder.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ManageOrder.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-		response.sendError(500, "Unable to retrieve order");
 	}
 
 	/**

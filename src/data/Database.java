@@ -158,6 +158,29 @@ public class Database {
 		return -1;
     }
     
+    public static int runUpdateInt(String query, ArrayList<Integer> params) {
+    	try {
+    		if(!createdDB) {
+    			setupDatabase();
+            }
+			Class.forName("com.mysql.jdbc.Driver");
+	    	Connection connection = DriverManager.getConnection(URL, USER, PASS);
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        for(int j = 1; j < params.size() + 1; j++) {
+	        	stmt.setInt(j, params.get(j-1));
+	        }
+	        int i = stmt.executeUpdate();
+	        connection.close();
+	        stmt.close();
+	        return i;
+		} catch (SQLException ex) {
+	        ex.printStackTrace();
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return -1;
+    }
+    
     // specific method for adding blob data like images
     public static int runUpdate(String query, ArrayList<String> params, InputStream stream, int blobIndex) {
     	try {

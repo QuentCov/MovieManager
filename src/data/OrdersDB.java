@@ -18,49 +18,61 @@ import models.User;
 public class OrdersDB {
 	public static Order getOrder(UUID id) {
 		String query = "SELECT * FROM Orders o "
-			     + "INNER JOIN CreditCard cc ON u.FullName=cc.CardHolderName "
 			     + "INNER JOIN User u ON u.ID=o.CustomerId "
-			     + "INNER JOIN OrdersMovies oi ON o.ID=oi.OrderId "
-			     + "INNER JOIN MovieShowing ms ON ms.ID=oi.ShowingId "
-			     + "INNER JOIN Movie m ON ms.movieId=m.ID "
-			     + "INNER JOIN Address a ON o.BillingAddressId=a.ID "
-			     + "WHERE OurId=" + id.toString() + ";";
+			     + "INNER JOIN CreditCard cc ON u.ID=cc.OwnerId "
+			     + "INNER JOIN Address ON o.BillingAddressId=Address.ID "
+			     + "WHERE OurId=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		Order order = new Order();
 		try {
+			s.setString(1, id.toString());
 			ResultSet rs = s.executeQuery();
 			if(rs.next())
 			{
 			    User customer = UserDB.createUser(rs);
 			    CreditCard card = CreditCardsDB.createCard(rs);
 			    
+			    order.setID(id);
 			    order.setCustomer(customer);
-			    order.setDate(new Date());
+			    order.setDate(rs.getString("o.Date"));
 			    order.setCreditCard(card);
 			    order.setCost(rs.getInt("o.Cost"));
+			    order.setShippingAddress(customer.getStreetAddress());
 			    
 			    //Get the billing address.
 			    Address address = new Address();
 			    
-			    address.setAddress1(rs.getString("a.Address1"));
-			    address.setAddress2(rs.getString("a.Address2"));
-			    address.setCity(rs.getString("a.City"));
-			    address.setStateAbbreviation(rs.getString("a.StateAbbreviation"));
-			    address.setZipCode(Integer.toString(rs.getInt("a.ZipCode")));
+			    address.setAddress1(rs.getString("Address.Address1"));
+			    address.setAddress2(rs.getString("Address.Address2"));
+			    address.setCity(rs.getString("Address.City"));
+			    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
+			    address.setZipCode(Integer.toString(rs.getInt("Address.ZipCode")));
 			   
 			    order.setShippingAddress(customer.getStreetAddress());
 			    order.setBillingAddress(address);
 			    
+			    //OrdersMovies contains the MovieShowing and the ticket count that is being ordered.
 			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<Movie> movies = new ArrayList<Movie>();
-			    tickets.add(rs.getInt("oi.NumTickets"));
-			    movies.add(MovieDB.createMovie(rs));
+			    ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 			    
-			    while(rs.next()) {
-			    	tickets.add(rs.getInt("oi.NumTickets"));
-			    	movies.add(MovieDB.createMovie(rs));
+			    query = "SELECT * FROM OrdersMovies "
+			    	  + "INNER JOIN MovieShowing ON OrdersMovies.MovieShowingsId=MovieShowing.ID "
+			    	  + "WHERE OrdersId=?;";
+			    
+			    PreparedStatement s2 = Database.prepareStatement(c, query);
+			    s2.setInt(1, rs.getInt("o.ID"));
+			    
+			    ResultSet rs2 = s2.executeQuery();
+			    while(rs2.next()) {
+			    	tickets.add(rs2.getInt("NumTickets"));
+			    	showings.add(MovieShowingDB.createMovieShowing(rs2));
 			    }
+			    
+			    order.setTickets(tickets);
+			    order.setShowings(showings);
+			    rs2.close();
+			    s2.close();
 			}
 			rs.close();
 			s.close();
@@ -73,14 +85,9 @@ public class OrdersDB {
 	}
 	
 	public static ArrayList<Order> getOrders(String email) {
-		String query = "SELECT * FROM User u "
-				     + "INNER JOIN CreditCard cc ON cc.OwnerId=u.ID "
+		String query = "SELECT o.OurId FROM User u "
 				     + "INNER JOIN Orders o ON o.CustomerId=u.ID "
-				     + "INNER JOIN OrdersMovies oi ON oi.OrdersId=o.ID "
-				     + "INNER JOIN MovieShowing ms ON oi.MovieId=ms.ID "
-				     + "INNER JOIN Movie m ON m.ID=ms.movieId " 
-				     + "INNER JOIN Address a ON a.ID=o.BillingAddressId "
-				     + "WHERE EmailAddress=?";
+				     + "WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
@@ -89,48 +96,8 @@ public class OrdersDB {
 			ResultSet rs = s.executeQuery();
 			while(rs.next())
 			{
-			    Order order = new Order();
-			    User customer = UserDB.createUser(rs);
-			    CreditCard card = CreditCardsDB.createCard(rs);
-			    
-			    order.setCustomer(customer);
-			    order.setDate(new Date());
-			    order.setCreditCard(card);
-			    order.setCost(rs.getInt("o.Cost"));
-
-			    //Get the billing address.
-			    Address address = new Address();
-			    
-			    address.setAddress1(rs.getString("a.Address1"));
-			    address.setAddress2(rs.getString("a.Address2"));
-			    address.setCity(rs.getString("a.City"));
-			    address.setStateAbbreviation(rs.getString("a.StateAbbreviation"));
-			    address.setZipCode(Integer.toString(rs.getInt("a.ZipCode")));
-			   
-			    order.setShippingAddress(customer.getStreetAddress());
-			    order.setBillingAddress(address);
-			    
-			    //Get the tickets and movie showings
-			    ArrayList<Integer> tickets = new ArrayList<Integer>();
-			    ArrayList<MovieShowing> movies = new ArrayList<MovieShowing>();
-			    query = "SELECT * FROM Orders o "
-			    	  + "INNER JOIN OrdersMovies om ON om.OrdersId=o.ID "
-					  + "INNER JOIN MovieShowing ms ON ms.ID=om.MovieId "
-					  + "WHERE o.ID=?";
-			    
-			    Connection c2 = Database.getConnection();
-				PreparedStatement s2 = Database.prepareStatement(c2, query);
-			    s2.setInt(1, rs.getInt("o.ID"));
-			    
-			    ResultSet rs2 = s2.executeQuery();
-			    while(rs2.next()) {
-			    	tickets.add(rs.getInt("NumTickets"));
-				    movies.add(MovieShowingDB.createMovieShowing(rs2));
-			    }
-			    
-			    s2.close();
-			    rs2.close();
-			
+				UUID id = UUID.fromString(rs.getString("o.OurId"));
+			    Order order = getOrder(id);
 			    orders.add(order);
 			}
 			rs.close();
@@ -247,52 +214,56 @@ public class OrdersDB {
 		}
 		return false;
 	}
-
-	public static boolean refundOrder(Order order, double cost, MovieShowing showing) {
+	
+	public static boolean refundOrder(Order order, int ownerId, double cost, MovieShowing showing) {
 		CreditCard card = order.getCreditCard();
 		card.setBalance(card.getBalance() + cost);
-		boolean updated = CreditCardsDB.updateBalance(card);
+		boolean updated = CreditCardsDB.updateBalance(card, ownerId);
 		
 		if(updated) {
 			order.setCost(order.getCost() - cost);
-			int i = order.getMovies().indexOf(showing);
-			Movie movie = order.getMovies().get(i).getMovie();
+			
+			int i = order.getShowings().indexOf(showing);
 			int tickets = order.getTickets().get(i);
-			order.getMovies().remove(i);
+			order.getShowings().remove(i);
 			order.getTickets().remove(i);
 			
 			updated = updateOrder(order);
 			
 			if(updated) {
-				String query = "SELECT ID FROM Movie WHERE Name=" + movie.getName() + ";";
+				String query = "SELECT ID FROM Movie WHERE Name=?;";
 				Connection c = Database.getConnection();
+				 
+				
+				query = "SELECT ID FROM Orders WHERE OurId=?;";
 				PreparedStatement s = Database.prepareStatement(c, query);
-				int movieId = -1;
+				int orderId = -1;
 				try {
+					s.setString(1, order.getID().toString());
 					ResultSet rs = s.executeQuery();
-					movieId = rs.getInt("ID");
+					if(rs.next()) {
+						orderId = rs.getInt("ID");
+					}
 					rs.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				
-				query = "SELECT ID FROM Orders WHERE OurId=" + order.getID().toString() + ";";
+				query = "DELETE FROM OrdersMovies " + 
+						"WHERE OrdersId=? AND NumTickets=?;";
 				s = Database.prepareStatement(c, query);
-				int orderId = -1;
+				int j = -1;
 				try {
-					ResultSet rs = s.executeQuery();
-					orderId = rs.getInt("ID");
-					rs.close();
+					s.setInt(1, orderId);
+					s.setDouble(2, tickets);
+					j = s.executeUpdate();
 					s.close();
 					c.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				
-				query = "INSERT INTO OrdersMovies (OrdersId, MovieId, NumTickets) "
-							 + "VALUES (" + orderId + ", " + movieId + ", " + tickets + ");";
-				i = Database.runUpdate(query);
-				if(i == 1) {
+				if(j != -1) {
 					return true;
 				}
 			}
@@ -302,50 +273,51 @@ public class OrdersDB {
 
 	private static boolean updateOrder(Order order) {
 
-		String query = "UPDATE Orders SET Cost=" + order.getCost()
-					 + "WHERE OurId=" + order.getID().toString() + ";";
-		int i = Database.runUpdate(query);
+		//Due to the combination of a double and a string, the update is run here.
+		String query = "UPDATE Orders SET Cost=? "
+					 + "WHERE OurId=?;";
+		Connection c = Database.getConnection();
+    	PreparedStatement s = Database.prepareStatement(c, query);
+    	int i = -1;
+		try {
+			s.setDouble(1, order.getCost());
+			s.setString(2, order.getID().toString());
+	        i = s.executeUpdate();
+	        c.close();
+	        s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(i == 1) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean deleteOrderItem(Order order, MovieShowing showing) {
-		
-		int i = order.getMovies().indexOf(showing);
-		order.getMovies().remove(showing);
-		order.getTickets().remove(i);
-		
-		String query = "SELECT ID FROM Movie WHERE Name=" + showing.getMovie().getName() + ";";
+	public static boolean deleteOrderItem(Order order, MovieShowing showing, Movie movie) {
+		String query = "SELECT ID FROM Orders WHERE OurId=?";
 		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
-		int movieId = -1;
-		try {
+    	PreparedStatement s = Database.prepareStatement(c, query);
+    	int orderId = -1;
+    	int showingId = showing.getID();
+    	try {
+			s.setString(1, order.getID().toString());
 			ResultSet rs = s.executeQuery();
-			movieId = rs.getInt("ID");
+			if(rs.next()) {
+				orderId = rs.getInt("ID");
+			}
 			rs.close();
+			
+			query = "DELETE FROM OrdersMovies WHERE OrderId=? AND ShowingId=?";
+			s = Database.prepareStatement(c, query);
+			s.setInt(1, orderId);
+			s.setInt(2, showingId);
+			int i = s.executeUpdate();
+			if(i == 1) {
+				return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		query = "SELECT ID FROM Showroom WHERE Name=" + showing.getShowroom().getName() + ";";
-		s = Database.prepareStatement(c, query);
-		int showroomId = -1;
-		try {
-			ResultSet rs = s.executeQuery();
-			showroomId = rs.getInt("ID");
-			rs.close();
-			s.close();
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		query = "DELETE FROM OrdersMovies WHERE MovieId=" + movieId + " AND ShowingId=" + showroomId + "";
-		int j = Database.runUpdate(query);
-		if(j == 1) {
-			return true;
 		}
 		return false;
 	}

@@ -10,26 +10,26 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Transaction Page</h1>
 		<h3>Purchases</h3>
-		<table border="1">
-	        <tr>
-		        <td>Movies</td>
-				<td>Tickets Bought</td>
-				<td>Total Price</td>
-	        </tr>
-	        <tr>
-    			<c:forEach items="${order.getMovies()}" var="movie">
-	    			<td>${movie.getMovie().getName()}</td>
+		<div class="container">
+	        <div class="row">
+		        <div class="col-sm-2">Movies</div>
+				<div class="col-sm-2">Tickets Bought</div>
+				<div class="col-sm-2">Total Price</div>
+	        </div>
+	        <div class="row">
+    			<c:forEach items="${order.getShowings()}" var="movie">
+	    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
 	        	</c:forEach>
-	            <td>${order.getTicketCount()}</td>
-	            <td>${order.getTotalCost}</td>
-	    	</tr>
-		</table>
+	            <div class="col-sm-2">${order.getTicketCount()}</div>
+	            <div class="col-sm-2">${order.getTotalCost}</div>
+	    	</div>
+		</div>
 		<br>
 		<form>
 			<div class="form-group">
@@ -98,10 +98,10 @@
 		</form>
 		<div class="row">
 			<div class="offset-md-7 col-md-2">
-				<a href="CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
+				<a href="${pageContext.request.contextPath}/CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
 			</div>
 			<div class="offset-md-1 col-md-2">
-			    <a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>
+			    <a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>
 			</div>
 		</div>
 	</div>

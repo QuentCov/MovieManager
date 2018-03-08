@@ -10,8 +10,9 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Search Results</h1>
@@ -35,7 +36,7 @@
 		            <td>${current.getCost()}</td>
 		            <td>${current.getMovie().getThumbnailFile()}</td>
 		    	</tr>
-		    	<form name="item" action="UpdateCart">
+		    	<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
 	            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
 	            	<input type="submit" name="action" value="Add to Cart">
 	            </form>

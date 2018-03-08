@@ -3,7 +3,7 @@ package models;
 import java.util.Date;
 
 public class MovieShowing {
-	private int id;
+	private int ID;
 	private Movie movie;
 	private Showroom showroom;
 	private Date startTime;
@@ -70,11 +70,11 @@ public class MovieShowing {
 		this.cost = cost;
 	}
 
-	public int getId() {
-		return id;
+	public int getID() {
+		return ID;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}	
+	public void setID(int iD) {
+		ID = iD;
+	}
 }

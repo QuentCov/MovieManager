@@ -71,11 +71,12 @@ public class MovieDB {
 	}
 	
 	public static Movie getMovieById(int id) {
-		String query = "SELECT * FROM Movie WHERE ID=" + id + ";";
+		String query = "SELECT * FROM Movie WHERE ID=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement statement = Database.prepareStatement(c, query);
 		Movie movie = null;
 		try {
+			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				movie = createMovie(rs);
@@ -97,6 +98,7 @@ public class MovieDB {
 		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		Movie movie = null;
 		try {
+			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				movie = createMovie(rs);
@@ -118,6 +120,7 @@ public class MovieDB {
 		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
+			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 		    	Movie movie = MovieDB.createMovie(rs);

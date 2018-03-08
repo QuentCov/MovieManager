@@ -10,26 +10,27 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="ViewOrders.jsp" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h3>Purchases</h3>
-		<table border="1">
-	        <tr>
-		        <td>Movies</td>
-				<td>Tickets Bought</td>
-				<td>Total Price</td>
-	        </tr>
-	        <tr>
+		<div class="container">
+	        <div class="row">
+	        	<div class="col-sm-2">Movies</div>
+				<div class="col-sm-2">Tickets Bought</div>
+				<div class="col-sm-2">Total Price</div>
+	        </div>
+	        <div class="row">
     			<c:forEach items="${order.getMovies()}" var="movie">
-	    			<td>${movie.getMovie().getName()}</td>
+	    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
 	        	</c:forEach>
-	            <td>${order.getTicketCount()}</td>
-	            <td>${order.getTotalCost}</td>
-	    	</tr>
-		</table>
-		<a href="PrintOrder" class="btn btn-primary">Print your order details</a>
+	            <div class="col-sm-2">${order.getTicketCount()}</div>
+	            <div class="col-sm-2">${order.getTotalCost}</div>
+	    	</div>
+		</div>
+		<a href="#" class="btn btn-primary">Print your order details (COMING SOON!)</a>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 </body>
