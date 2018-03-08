@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>

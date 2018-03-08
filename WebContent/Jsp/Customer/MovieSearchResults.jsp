@@ -10,38 +10,46 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>Search Results</h1>
-			<p>You searched for "${searchString.string}"</p>
-		<br>
-		<table border="1">
-	        <tr>
-	            <td>Movie Name:</td>
-	            <td>Theatre Name:</td>
-	            <td>Showtime:</td>
-	            <td>Available Seats:</td>
-	            <td>Price:</td>
-	            <td>Thumbnail:</td>
-	        </tr>
-	        <c:forEach items="${allMovies}" var="current">
-		    	<tr>
-		    		<td>${current.getMovie().getName()}</td>
-		            <td>${current.getShowroom().getTheatre().getName()}</td>
-		            <td>${current.getStartTime()}</td>
-		            <td>${current.getShowroom().getCapacity()}</td>
-		            <td>${current.getCost()}</td>
-		            <td>${current.getMovie().getThumbnailFile()}</td>
-		    	</tr>
-		    	<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
-	            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-	            	<input type="submit" name="action" value="Add to Cart">
-	            </form>
-		    </c:forEach>
-	    </table>
+	    <div class="row">
+			<div class="col-sm-2"><h4>Movie Name</h4></div>
+			<div class="col-sm-1"><h4>Theatre Name</h4></div>
+			<div class="col-sm-2"><h4>Showtime</h4></div>
+			<div class="col-sm-1"><h4>Available Seats</h4></div>
+			<div class="col-sm-1"><h4>Price</h4></div>
+			<div class="col-sm-3"><h4>Thumbnail</h4></div>
+			<div class="col-sm-2"><h4>Actions</h4></div>
+		</div>
+        <c:forEach items="${movies}" var="movie">
+    		<div class="row">
+				<div class="col-sm-2">${movie.getName()}</div>
+				<div class="col-sm-1"></div>
+				<div class="col-sm-2"></div>
+				<div class="col-sm-1"></div>
+				<div class="col-sm-1"></div>
+				<div class="col-sm-3">
+					<c:set var="data" value="${movie.getThumbnailData()}"/>
+					<c:choose>
+						<c:when test="${empty data}">
+							<td>Sorry! No thumbnail available</td>
+						</c:when>
+						<c:otherwise>
+							<td><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}" alt="${movie.getName()} Poster"/></td>
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<div class="col-sm-2">
+					<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+		            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
+		            	<input type="submit" class="btn btn-primary" name="action" value="Add to Cart">
+		            </form>
+				</div>
+			</div>
+	    </c:forEach>
     </div>
 	<%@ include file="/_partials/scripts.html" %>
 </body>

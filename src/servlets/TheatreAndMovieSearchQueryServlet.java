@@ -42,7 +42,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 			
 			if(name == null) {
 				name = request.getParameter("movieSearchString");
-				ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
+				ArrayList<Movie> movies = MovieDB.getAllMovies();
 				if(movies != null) {
 					session.setAttribute("movies", movies);
 				} else {
@@ -50,15 +50,15 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 					session.setAttribute("movies", null);
 				}
 			}
-			
-			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
-			if(theatres != null) {
-				session.setAttribute("movies", theatres);
-			} else {
-				session.setAttribute("results", "No Movies Found");
-				session.setAttribute("movies", null);
-			}
-			
+			else {
+				ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
+				if(theatres != null) {
+					session.setAttribute("movies", theatres);
+				} else {
+					session.setAttribute("results", "No Movies Found");
+					session.setAttribute("movies", null);
+				}
+			}			
 		} else {
 			ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
 			if(movies != null) {
