@@ -34,7 +34,7 @@
 			<div class="col-sm-2">
 				<div class="row">
 					<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowingConfirmation">
-		            	<input type="hidden" name="showingId" value="${showing.getId()}"/>
+		            	<input type="hidden" name="showingId" value="${showing.getID()}"/>
 		            	<input type="submit" class="btn btn-danger" value="Confirm Cancellation">
 		            </form>
 					<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Discard Cancellation</a>
