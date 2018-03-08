@@ -23,6 +23,71 @@ public class TheatreDB {
 		return null;
 	}
 	
+	public static Theatre getTheatre(String name) {
+		String query = "SELECT Theatre.ownerId, Theatre.ID, Address.Address1, "
+						    + "Address.Address2, Address.City, Address.State, Address.ZipCode, "
+						    + "Theatre.Name, Showroom.ID, Showroom.Name, Showroom.Capacity, "
+						    + "FROM Theatre t "
+						    + "INNER JOIN Showroom ON Theatre.ID=Showroom.TheatreId "
+						    + "INNER JOIN Address ON Address.ID=Theatre.AddressId "
+						    + "WHERE Name=" + name + ";";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		Theatre theatre = null;
+		try {
+			ResultSet rs = s.executeQuery();
+			theatre = createTheatre(rs);
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return theatre;
+	}
+
+	public static ArrayList<Theatre> getTheatres() {
+		String query = "SELECT * FROM Theatre "
+					 + "INNER JOIN User ON Theatre.OwnerId=User.ID "
+					 + "INNER JOIN Address ON Address.ID=User.AddressId "
+					 + "INNER JOIN Showroom ON Showroom.TheatreId=Theatre.ID;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+		
+		try {
+			ResultSet rs = s.executeQuery();
+			while(rs.next()) {
+				theatres.add(createTheatre(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return theatres;
+	}
+
+	public static ArrayList<Theatre> searchTheatreByName(String name) {
+		String query = "SELECT * FROM Theatre WHERE Name LIKE '%" + name + "%';";
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
+		ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+		try {
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+		    	Theatre theatre = TheatreDB.createTheatre(rs);
+		    	theatres.add(theatre);
+		    }
+			rs.close();
+			c.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return theatres;
+	}
+	
 	public static int getTheatreIdByName(String name) {
 		String query = "SELECT ID FROM Theatre WHERE Name=?;";
 		ArrayList<String> params = new ArrayList<String>();

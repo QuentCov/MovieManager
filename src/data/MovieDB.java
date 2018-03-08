@@ -98,7 +98,6 @@ public class MovieDB {
 		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		Movie movie = null;
 		try {
-			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				movie = createMovie(rs);
@@ -120,7 +119,6 @@ public class MovieDB {
 		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
-			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 		    	Movie movie = MovieDB.createMovie(rs);
