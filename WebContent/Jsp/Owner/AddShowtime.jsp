@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,49 +9,39 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>Add Showtime</h1>
-		<form>
+		<form name="showtimeForm" method="POST" action="${pageContext.request.contextPath}/AddShowtimeConfirmation">
 			<div class="form-group">
-				<label for="movieGenre">Select Movie:</label>
-				<div class="dropdown">
-					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Select Movie
-					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Die Hard</a>
-						<a class="dropdown-item" href="#">Avatar</a>
-						<a class="dropdown-item" href="#">Romeo/Juliet</a>
-						<a class="dropdown-item" href="#">Star Wars</a>
-					</div>
-				</div>
+				<label for="movie">Select Movie:</label>
+				<select name="movie">
+				<c:forEach items="${movies}" var="movie">
+					<option>${movie.getName() }</option>
+				</c:forEach>
+				</select>
 			</div>
 			<div class="form-group">
-				<label for="showtimeStart">Starting Time:</label>
-				<input type="time" class="form-control" id="showtimeStart" placeholder="1:00">
+				<label for="showtimeStart">Date (mm/dd/yyyy):</label>
+				<input type="text" class="form-control" id="showingDate" name="showingDate" placeholder="mm/dd/yyyy">
 			</div>
 			<div class="form-group">
-				<label for="showtimeEnd">Ending Time</label>
-				<input type="time" class="form-control" id="showtimeEnd" placeholder="2:30">
+				<label for="showtimeStart">Time (hh:mm AM or PM):</label>
+				<input type="text" class="form-control" id="showingTime" name="showingTime" placeholder="hh:mm (AM or PM)">
 			</div>
-			<!-- TODO Hook up action to add showtime -->
-			<a href="AddShowtimeConfirmation.jsp" class="btn btn-primary">Add Showtime</a>
+			<div class="form-group">
+				<label for="showtimeStart">Cost:</label>
+				<input type="text" class="form-control" id="cost" name="cost" placeholder="xx.xx">
+			</div>
+			<input type="hidden" name="showroomId" value="${showroomId}"/>
+			<input type="hidden" name="theatreId" value="${theatreId}"/>
+           	<input type="submit" class="btn btn-primary" value="Add Showtime">
 		</form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
-
-	<script>
-		$(document).ready(function(){
-			$(".dropdown-menu a").click(function(){
-				  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-				  $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-			});
-		});
-	</script>
-
 </body>
 </html>

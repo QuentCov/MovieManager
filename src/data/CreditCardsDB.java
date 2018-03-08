@@ -41,6 +41,7 @@ public class CreditCardsDB {
 	public static CreditCard createCard(ResultSet rs) {
 		CreditCard card = new CreditCard();
 		try {
+			card.setOwner(UserDB.getUserById(rs.getInt("OwnerId")));
 			card.setCardType(rs.getString("CardType"));
 			card.setCardNumber(rs.getString("CardNumber"));
 			card.setCcv(rs.getInt("CCV"));
@@ -109,8 +110,6 @@ public class CreditCardsDB {
 		query = "INSERT INTO CreditCard (CardHolderName, CardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
 				     + "VALUES (?, ?, 0.00, ?, " + ownerId + ", " + card.getCcv() + ", " + card.getExpirationYear() + "," + card.getExpirationMonth() + ");";
 		ArrayList<String> params = new ArrayList<String>();
-		params.add(card.getOwner().getFullName());
-		params.add(card.getCardNumber());
 		params.add(card.getCardType());
 		int i = Database.runUpdate(query, params);
 		if(i == 1) {

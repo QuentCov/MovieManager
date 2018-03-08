@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.MovieDB;
-import data.TheatresDB;
+import data.TheatreDB;
 import models.Movie;
 import models.Theatre;
 
@@ -51,7 +51,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 				}
 			}
 			
-			ArrayList<Theatre> theatres = TheatresDB.searchTheatreByName(name);
+			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
 			if(theatres != null) {
 				session.setAttribute("movies", theatres);
 			} else {

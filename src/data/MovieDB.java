@@ -29,6 +29,27 @@ public class MovieDB {
 		return movie;
 	}
 	
+	public static int getMovieIdByName(String name) {
+		String query = "SELECT ID FROM Movie WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
+		int id = -1;
+		try {
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				id = rs.getInt("ID");
+		    }
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 	public static ArrayList<Movie> getAllMovies() {
 		String query = "SELECT * FROM Movie;";
 		Connection c = Database.getConnection();
@@ -71,17 +92,18 @@ public class MovieDB {
 	
 	public static Movie getMovieByName(String name) {
 		String query = "SELECT * FROM Movie WHERE Name=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(name);
 		Connection c = Database.getConnection();
-		PreparedStatement statement = Database.prepareStatement(c, query);
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		Movie movie = null;
 		try {
-			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				movie = createMovie(rs);
 			}
 			rs.close();
-			c.close();
+			statement.getConnection().close();
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,12 +112,13 @@ public class MovieDB {
 	}
 	
 	public static ArrayList<Movie> searchMoviesByName(String name) {
-		String query = "SELECT * FROM Movie WHERE Name LIKE '% ? %';";
+		String query = "SELECT * FROM Movie WHERE Name LIKE ?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add("%" + name + "%");
 		Connection c = Database.getConnection();
-		PreparedStatement statement = Database.prepareStatement(c, query);
+		PreparedStatement statement = Database.prepareStatement(c, query, params);
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		try {
-			statement.setString(1, name);
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 		    	Movie movie = MovieDB.createMovie(rs);
@@ -131,10 +154,30 @@ public class MovieDB {
 	
 	//Note: We recognize the inefficiency here in updating all values in the row and have brainstormed solutions, 
 	//	    but these solutions are too extensive for a project of this scope.
+	public static boolean updateMovieById(Movie movie, int id) {
+		String query = "UPDATE Movie SET Name=?, Genre=?, ThumbnailName=?, ThumbnailData=?, Description=?, Runtime=" + movie.getRuntime() + ", Rating=? "
+				     + "WHERE ID=" + id + ";";
+		
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movie.getName());
+		params.add(movie.getGenre());
+		params.add(movie.getThumbnailName());
+		// set temporary string and instead pass on the stream of image data
+		params.add("temp");
+		InputStream stream = new ByteArrayInputStream(movie.getThumbnailData());
+		params.add(movie.getDescription());
+		params.add(movie.getRating());
+		int i = Database.runUpdate(query, params, stream, 4);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}	
+	
 	public static boolean updateMovie(Movie movie) {
 		String query = "UPDATE Movie SET Genre=?, ThumbnailName=?, ThumbnailData=?, Description=?, Runtime=" + movie.getRuntime() + ", Rating=? "
 				     + "WHERE Name=?;";
-		
+
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(movie.getGenre());
 		params.add(movie.getThumbnailName());
@@ -144,7 +187,7 @@ public class MovieDB {
 		params.add(movie.getDescription());
 		params.add(movie.getRating());
 		params.add(movie.getName());
-		int i = Database.runUpdate(query, params, stream, 2);
+		int i = Database.runUpdate(query, params, stream, 3);
 	    if(i == 1) {
 	    	return true;
 	    }

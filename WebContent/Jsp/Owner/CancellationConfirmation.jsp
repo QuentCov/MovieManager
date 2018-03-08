@@ -8,13 +8,14 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="ViewShowrooms.jsp" class="btn btn-primary">View Showrooms</a>
-		   	<a href="ManageShowtimes.jsp" class="btn btn-primary">Manage Showtimes</a>
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showrooms</a>
+		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
-		<h1>Cancellation Confirmed</h1>
+		<h1>${ result ? "Cancellation Confirmed" : "Cancellation Error" }</h1>
 		<p>Please review details below.</p>
 
 		<div class="row">
@@ -25,10 +26,10 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-3">Star Trek</div>
-			<div class="col-sm-3">Theatre 13</div>
-			<div class="col-sm-3">Showroom 1</div>
-			<div class="col-sm-3">$123.45</div>
+			<div class="col-sm-3">${showing.getMovie().getName() }</div>
+			<div class="col-sm-3">${showing.getShowroom().getTheatre().getName() }</div>
+			<div class="col-sm-3">${showing.getShowroom().getName() }</div>
+			<div class="col-sm-3">${refundableAmount }</div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

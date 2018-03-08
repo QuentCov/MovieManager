@@ -8,6 +8,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -30,7 +31,7 @@
 			</div>
 			<div class="form-group">
 				<label for="movieThumbnail">Movie Thumbnail:</label>
-				<input type="file" class="form-control-file" id="movieThumbnail" name="movieThumbnail" placeholder="Movie Thumbnail" required>
+				<input type="file" class="form-control-file" id="movieThumbnail" name="movieThumbnail" required>
 			</div>
 			<div class="form-group">
 				<label for="movieDescription">Movie Description:</label>

@@ -90,7 +90,7 @@ public class User {
 	
 	// checks if the given user is registered in the system
 	public static boolean isValidUser(User user) {
-		User dbUser = UserDB.getUser(user.getEmailAddress());
+		User dbUser = UserDB.getUserByEmailAddress(user.getEmailAddress());
 		if(dbUser == null || user == null) {
 			return false;
 		}
@@ -99,7 +99,7 @@ public class User {
 
 	//Gets the user's type from the database.
 	public static String getUserTypeFromDatabase(User user) {
-		User dbUser = UserDB.getUser(user.getEmailAddress());
+		User dbUser = UserDB.getUserByEmailAddress(user.getEmailAddress());
 		return dbUser.getType();
 	}
 

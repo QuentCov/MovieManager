@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,24 +9,32 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
-			<a href="AddMovie.jsp" class="btn btn-primary">Add Movie</a>
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
+			<a href="Jsp/Owner/AddMovie.jsp" class="btn btn-primary">Add Movie</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
-		<h1>Movie Corp Theatres</h1>
+		<h1>View Theatres</h1>
 
 		<div class="row">
 			<div class="col-sm-4"><h4>Theatre Name</h4></div>
 			<div class="col-sm-5"><h4>Address</h4></div>
 			<div class="col-sm-3"><h4>Actions</h4></div>
 		</div>
-
+		
+		<c:forEach items="${theatres}" var="theatre">
 		<div class="row">
-			<div class="col-sm-4"><p>Theatre 1</p></div>
-			<div class="col-sm-5"><p>42 Wallaby Way Sydney Australia</p></div>
-			<div class="col-sm-3"><a href="ViewShowrooms.jsp" class="btn btn-primary">View</a></div>
+			<div class="col-sm-4"><p>${theatre.getName()}</p></div>
+			<div class="col-sm-5"><p>${theatre.getAddress().toString()}</p></div>
+			<div class="col-sm-3">
+				<form name="item" method="POST" action="${pageContext.request.contextPath}/ViewShowrooms">
+	            	<input type="hidden" name="theatreName" value="${theatre.getName()}"/>
+	            	<input type="submit" class="btn btn-primary" value="View Showrooms">
+	            </form>
+			</div>
 		</div>
+		</c:forEach>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 

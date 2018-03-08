@@ -8,27 +8,28 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="ViewShowrooms.jsp" class="btn btn-primary">View Showroom</a>
-		   	<a href="ViewTheatreDetails.jsp" class="btn btn-primary">View Theatre Details</a>
+			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
+		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showroom</a>
+		   	<a href="${pageContext.request.contextPath}/ViewTheatreDetails" class="btn btn-primary">View Theatre Details</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
-		<h1>Showtime Added</h1>
+		<h1>${result}</h1>
 		<p>Please review details below.</p>
 
 		<div class="row">
-			<div class="col-sm-3"><h4>Movie</h4></div>
-			<div class="col-sm-3"><h4>Theatre</h4></div>
-			<div class="col-sm-3"><h4>Showroom Number</h4></div>
-			<div class="col-sm-3"><h4>Scheduled Runtime</h4></div>
+			<div class="col-sm-2"><h4>Movie</h4></div>
+			<div class="col-sm-2"><h4>Theatre Name</h4></div>
+			<div class="col-sm-2"><h4>Showroom Name</h4></div>
+			<div class="col-sm-6"><h4>Scheduled Runtime</h4></div>
 		</div>
 
 		<div class="row">
-			<div class="col-sm-3">Star Trek</div>
-			<div class="col-sm-3">Theatre 13</div>
-			<div class="col-sm-3">Showroom 1</div>
-			<div class="col-sm-3">3:00pm-5:00pm</div>
+			<div class="col-sm-2">${movieName}</div>
+			<div class="col-sm-2">${theatreName}</div>
+			<div class="col-sm-2">${showroomName}</div>
+			<div class="col-sm-6">${runtime}</div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

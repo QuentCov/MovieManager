@@ -73,4 +73,9 @@ public class Address {
         String pattern= "d{5}";
         return this.zipCode.matches(pattern);
 	}
+	
+	@Override
+	public String toString() {
+		return this.getAddress1() + " " + this.getAddress2() + " " + this.getCity() + ", " + this.getStateAbbreviation() + " " + this.getZipCode();
+	}
 }

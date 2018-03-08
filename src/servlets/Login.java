@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 //import data.Database;
 import data.OrdersDB;
-import data.TheatresDB;
+import data.TheatreDB;
 import data.UserDB;
 import models.Order;
 import models.Theatre;
@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
     	// check if valid user
     	if (User.isValidUser(user)) {
     		// check user type to determine where to redirect
-    		User fullUser = UserDB.getUser(userName);
+    		User fullUser = UserDB.getUserByEmailAddress(userName);
     		String userType = fullUser.getType();
     		
     		// start a new session for use by MovieManager.
@@ -61,7 +61,7 @@ public class Login extends HttpServlet {
     			
     			//get the list of theatre's for use on CustomerHomePage.jsp
     			ArrayList<Theatre> theatres = new ArrayList<Theatre>();
-    			theatres = TheatresDB.getTheatres();
+    			theatres = TheatreDB.getTheatres();
     			session.setAttribute("theatres", theatres);
     			
             	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");

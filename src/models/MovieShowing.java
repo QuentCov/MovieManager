@@ -13,6 +13,15 @@ public class MovieShowing {
 	
 	public MovieShowing() {}
 
+	public MovieShowing(Movie movie, Showroom showroom, Date startTime, Date endTime, int numTicketsSold,
+			double cost) {
+		this.movie = movie;
+		this.showroom = showroom;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.cost = cost;
+	}
+	
 	public Movie getMovie() {
 		return movie;
 	}

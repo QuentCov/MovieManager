@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import models.Movie;
 import models.MovieShowing;
 import models.Showroom;
-import models.Theatre;
 
 public class MovieShowingDB {
 	
@@ -19,59 +20,61 @@ public class MovieShowingDB {
 		MovieShowing showing = new MovieShowing();
 		try {
 			showing.setID(rs.getInt("MovieShowing.ID"));
-			SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
-			Date sDate = null;
-			Date eDate = null;
-			try {
-				sDate = sdfmt1.parse(rs.getString("StartTime"));
-				eDate = sdfmt1.parse(rs.getString("EndTime"));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			
-			showing.setStartTime(sDate);
-			showing.setEndTime(eDate);
-			showing.setCost(rs.getDouble("Cost"));
+			Movie movie = MovieDB.getMovieById(rs.getInt("MovieId")); 
+            Showroom showroom = ShowroomDB.getShowroomById(rs.getInt("ShowroomId")); 
+            showing.setMovie(movie); 
+            showing.setShowroom(showroom); 
+             
+            String startTimeString = rs.getString("StartTime"); 
+            String endTimeString = rs.getString("EndTime"); 
+            DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy"); 
+            Date startTimeDate = format.parse(startTimeString); 
+            Date endTimeDate = format.parse(endTimeString); 
+            showing.setStartTime(startTimeDate); 
+            showing.setEndTime(endTimeDate); 
+            
 			showing.setNumTicketsSold(rs.getInt("NumTicketsSold"));
-			
-			String query = "SELECT * FROM Movie WHERE ID=" + rs.getInt("MovieId") + ";";
-			Connection c = Database.getConnection();
-			PreparedStatement s = Database.prepareStatement(c, query);
-			ResultSet rs2 = s.executeQuery();
-			if(rs2.next()) {
-				showing.setMovie(MovieDB.createMovie(rs2));
+			showing.setCost(rs.getDouble("Cost"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return showing;
+	}
+	
+	public static int getTicketsSoldByMovieId(int movieId) {
+		String query = "SELECT NumTicketsSold FROM MovieShowing WHERE MovieId=" + movieId + ";";
+		int ticketsSold = 0;
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+				ticketsSold += rs.getInt("NumTicketsSold");
 			}
-			query = "SELECT * FROM Showroom WHERE ID=" + rs.getInt("ShowroomId") + ";";
-			s = Database.prepareStatement(c, query);
-			rs2 = s.executeQuery();
-			if(rs2.next()) {
-				Showroom showroom = new Showroom();
-				showroom.setName(rs2.getString("Name"));
-				showroom.setCapacity(rs2.getInt("Capacity"));
-				
-				query = "SELECT * FROM Theatre "
-					  + "INNER JOIN Address on Theatre.AddressId=Address.ID "
-					  + "WHERE Theatre.ID=?;";
-				s = Database.prepareStatement(c, query);
-				s.setInt(1, rs2.getInt("TheatreID"));
-				ResultSet rs3 = s.executeQuery();
-				if(rs3.next()) {
-					
-					Theatre theatre = TheatresDB.createTheatre(rs3);
-					showroom.setTheatre(theatre);
-				}
-				
-				showing.setShowroom(showroom);
-				rs3.close();
-			}
-			rs2.close();
-			s.close();
-			c.close();
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return ticketsSold;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+		return ticketsSold;
+	}
+	
+	public static MovieShowing getMovieShowingById(int id) {
+		String query = "SELECT * FROM MovieShowing WHERE ID=" + id + ";";
+		MovieShowing showing = null;
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				showing = createMovieShowing(rs);
+			}
+			return showing;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return showing;
 	}
 	
@@ -97,20 +100,59 @@ public class MovieShowingDB {
 		return null;
 	}
 	
-	public static ArrayList<MovieShowing> getMovieShowings(int showroomId) {
+	public static ArrayList<MovieShowing> getMovieShowingsByShowroomId(int showroomId) {
 		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=" + showroomId + ";";
-		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 		try {
-			ResultSet rs = s.executeQuery();
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
 			while(rs.next())
 			{
 			    showings.add(createMovieShowing(rs));
 			}
 			rs.close();
-			s.close();
-			c.close();
+			statement.getConnection().close();
+			statement.close();
+			return showings;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static ArrayList<MovieShowing> getMovieShowings(int showroomId) {
+		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=" + showroomId + ";";
+		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next())
+			{
+			    showings.add(createMovieShowing(rs));
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
+			return showings;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static ArrayList<MovieShowing> getMovieShowingsByMovieId(int movieId) {
+		String query = "SELECT * FROM MovieShowing WHERE MovieId=" + movieId + ";";
+		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+		try {
+			PreparedStatement statement = Database.prepareStatement(query);
+			ResultSet rs = statement.executeQuery();
+			while(rs.next())
+			{
+			    showings.add(createMovieShowing(rs));
+			}
+			rs.close();
+			statement.getConnection().close();
+			statement.close();
 			return showings;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,37 +161,45 @@ public class MovieShowingDB {
 	}
 	
 	public static boolean addMovieShowing(MovieShowing movieShowing) {
-		
-		String query = "SELECT ID FROM Movie WHERE Name=" + movieShowing.getMovie().getName() + ";";
-		Connection c = Database.getConnection();
-		PreparedStatement s = Database.prepareStatement(c, query);
-		int movieId = -1;
-		try {
-			ResultSet rs = s.executeQuery();
-			movieId = rs.getInt("ID");
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		query = "SELECT ID FROM Showroom WHERE Name=" + movieShowing.getShowroom().getName() + ";";
-		s = Database.prepareStatement(c, query);
-		int showroomId = -1;
-		try {
-			ResultSet rs = s.executeQuery();
-			showroomId = rs.getInt("ID");
-			rs.close();
-			s.close();
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		query = "INSERT INTO MovieShowing (Price, NumTicketsSold, StartTime, EndTime, MovieId, ShowroomId "
-				     + "VALUES (" + movieShowing.getCost() + ", " + movieShowing.getNumTicketsSold() + ", " + movieShowing.getStartTime()
-				     + ", " + movieShowing.getEndTime() + ", " + movieId + ", " + showroomId + ");";
-		
+		int movieId = MovieDB.getMovieIdByName(movieShowing.getMovie().getName());
+		int showroomId = ShowroomDB.getShowroomIdByName(movieShowing.getShowroom().getName());
+		String query = "INSERT INTO MovieShowing (MovieId, ShowroomId, StartTime, EndTime, NumTicketsSold, Cost) " + 
+						"VALUES (" + movieId + ", " + showroomId + ", ?, ?, " + 
+									movieShowing.getNumTicketsSold() + ", " + movieShowing.getCost() + ");";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movieShowing.getStartTime().toString());
+		params.add(movieShowing.getEndTime().toString());
+		int i = Database.runUpdate(query, params);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	public static boolean deleteMovieShowing(int id) {
+		String query = "DELETE FROM MovieShowing "
+							+ " WHERE ID=" + id + ";";
 		int i = Database.runUpdate(query);
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	//Note: We recognize the inefficiency here and have brainstormed solutions, 
+	//	    but these solutions are too extensive for a project of this scope.
+	public static boolean updateMovieShowingByID(MovieShowing movieShowing, int id) {
+		int movieId = MovieDB.getMovieIdByName(movieShowing.getMovie().getName());
+		int showroomId = ShowroomDB.getShowroomIdByName(movieShowing.getShowroom().getName());
+		
+		String query = "UPDATE MovieShowing SET MovieId=" + movieId + ", ShowroomId=" + showroomId + ", StartTime=?, EndTime=?, "
+							+ "NumTicketsSold=" + movieShowing.getNumTicketsSold() + ", Cost=" + movieShowing.getCost()
+							+ " WHERE ID=" + id + ";";
+		
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(movieShowing.getStartTime().toString());
+		params.add(movieShowing.getEndTime().toString());
+		int i = Database.runUpdate(query, params);
 	    if(i == 1) {
 	    	return true;
 	    }
