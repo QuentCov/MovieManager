@@ -9,46 +9,54 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>View All Orders</h1>
-		<table border="1">
 	        <c:if test="${cartSize == 0}">
-	        	<p> You don't have anything in your shopping cart. </p>
+	        	<div class="row">You don't have anything in your shopping cart.</div>
 	        </c:if>
 	        <c:if test="${cartSize > 0}">
-		        <tr>
-			        <td>Movie Title</td>
-			        <td>Theatre</td>
-			        <td>Start Time</td>
-			        <td>Seats Available</td>
-			        <td>Cost per Ticket</td>
-			        <td>Poster</td>
-					<td>Tickets Bought</td>
-					<td>Actions</td>
-		        </tr>
-		        <c:forEach items="${orders}" var="current">
-		    		<c:forEach items="${current.getMovies()}" var="movie">
-			    		<td>${movie.getMovie().getName()}></td>
-			            <td>${movie.getShowroom().getTheatre().getName()}</td>
-			            <td>${movie.getStartTime()}</td>
-			            <td>${movie.getShowroom().getCapacity()}</td>
-			            <td>${movie.getCost()}</td>
-			            <td>${movie.getMovie().getThumbnailFile()}</td>
-			            <td>${current.getTicketsBoughtByMovie(movie)}</td>
-					</c:forEach>
-			    	<td>Total Cost: ${current.getCost()}</td>
-			    	<form name="item" action="ManageOrder">
-			        	<input type='hidden' name='itemIndex' value='<c:out value="${current.getID()}"/>'>
-			            <input type="submit" name="action" value="View">
-			        </form>
+	        	<div class="row">
+				    <div class="col-sm-1">Movie Title</div>
+				    <div class="col-sm-1">Theatre</div>
+				    <div class="col-sm-1">Start Time</div>
+				    <div class="col-sm-1">Seats Available</div>
+				    <div class="col-sm-1">Cost per Ticket</div>
+				    <div class="col-sm-3">Poster</div>
+					<div class="col-sm-1">Tickets Bought</div>
+					<div class="col-sm-1">Total Cost</div>
+					<div class="col-sm-2">Actions</div>
+				</div>
+		        <c:forEach items="${cart}" var="current">
+		        	<div class="row">
+		        		<div class="col-sm-9">
+				    		<c:forEach items="${current.getShowings()}" var="showing">
+				    			<div class="row">
+					    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
+						            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
+						            <div class="col-sm-1">${showing.getStartTime()}</div>
+						            <div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
+						            <div class="col-sm-1">${showing.getCost()}</div>
+						            <div class="col-sm-3">${showing.getMovie().getThumbnailData()}</div>
+						            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
+				    			</div>
+							</c:forEach>
+						</div>
+				    	<div class="col-sm-1">Total Cost: ${current.getCost()}</div>
+				    	<div class="col-sm-2">
+					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrders" >
+					    		<input type="hidden" name="order" value="${current.getID()}"/>
+					            <input type="submit" class="btn btn-primary" value="View Order">
+					        </form>
+				        </div>
+			        </div>
 				</c:forEach>
-				<div class="offset-md-3 col-sm-3">
-					<a href="ViewAndCheckoutShoppingCart.jsp" class="btn btn-success">Checkout</a>
+				<div class="row">
+					<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-success">Checkout</a>
 				</div>
 			</c:if>
-		</table>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 </body>

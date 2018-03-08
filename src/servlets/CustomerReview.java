@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,10 +53,13 @@ public class CustomerReview extends HttpServlet {
 		review.setDate(new Date());
 		
 		boolean added = ReviewDB.addReview(review);
-		if(added) {
-			response.sendRedirect("CustomerReview.jsp");
+		if(!added) {
+			response.sendError(500, "Failed to add review");
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-		response.sendError(500, "Failed to add review");
+		
 	}
 
 }

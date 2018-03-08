@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,8 @@ public class MovieSearchResults extends HttpServlet {
 		}
 		
 		session.setAttribute("results", "Movie Not Found");
-		response.sendRedirect("MovieDetailsResults.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieDetailsResults.jsp");
+  	    dispatcher.forward(request, response);
 	}
 
 	/**

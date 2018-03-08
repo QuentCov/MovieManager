@@ -9,36 +9,43 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<h1>Do you want to cancel your tickets for this movie??</h1>
-		<table border="1">
-	        <tr>
-		        <td>Movie Title</td>
-		        <td>Theatre</td>
-		        <td>Start Time</td>
-		        <td>Seats Available</td>
-		        <td>Cost per Ticket</td>
-		        <td>Poster</td>
-				<td>Tickets Bought</td>
-	        </tr>
-    		<tr>
-	    		<td>${movie.getMovie().getName()}</td>
-	            <td>${movie.getShowroom().getTheatre().getName()}</td>
-	            <td>${movie.getStartTime()}</td>
-	            <td>${movie.getShowroom().getCapacity()}</td>
-	            <td>${movie.getCost()}</td>
-	            <td>${movie.getMovie().getThumbnailFile()}</td>
-	            <td>${order.getTicketsBoughtByMovie(movie)}</td>
-	         </tr>
-		</table>
-		<div class="offset-md-3 col-sm-3">
-			<a href="CancelOrder" class="btn btn-success">Confirm Cancellation</a>
+		<h1>Do you want to cancel your tickets for this movie?</h1>
+		<div class="row">
+		    <div class="col-sm-1">Movie Title</div>
+		    <div class="col-sm-1">Theatre</div>
+		    <div class="col-sm-1">Start Time</div>
+		    <div class="col-sm-1">Seats Available</div>
+		    <div class="col-sm-1">Cost per Ticket</div>
+		    <div class="col-sm-3">Poster</div>
+			<div class="col-sm-1">Tickets Bought</div>
+			<div class="col-sm-2">Actions</div>
 		</div>
-		<div class="offset-md-3 col-sm-3">
-			<a href="ViewAndCheckoutShoppingCart" class="btn btn-success">Discard Cancellation</a>
-		</div>
+       	<div class="row">
+       		<div class="col-sm-9">
+    			<div class="row">
+	    			<div class="col-sm-1">${cancelShowingItem.getMovie().getName()}</div>
+		            <div class="col-sm-1">${cancelShowingItem.getShowroom().getTheatre().getName()}</div>
+		            <div class="col-sm-1">${cancelShowingItem.getStartTime()}</div>
+		            <div class="col-sm-1">${cancelShowingItem.getShowroom().getCapacity()}</div>
+		            <div class="col-sm-1">${cancelShowingItem.getCost()}</div>
+		            <div class="col-sm-3">${cancelShowingItem.getMovie().getThumbnailData()}</div>
+		            <div class="col-sm-1">${cancelOrder.getTicketsByMovie(cancelShowingItem.getMovie())}</div>
+    			</div>
+			</div>
+        </div>
+        <form name="item" action="${pageContext.request.contextPath}/CancelOrderTransaction">
+        	<input type="hidden" name="movie" value="${cancelShowingItem.getMovie().getName()}"/>
+        	<input type="hidden" name="order" value="${cancelOrder.getID()}"/>
+        	<input type="submit" class="btn btn-primary" value="Cancel Item">
+        </form>
+		<form name="item" action="${pageContext.request.contextPath}/ViewAndCheckoutShoppingcart.jsp">
+        	<input type="submit" class="btn btn-primary" value="Discard Cancellation">
+        </form>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>
 </body>

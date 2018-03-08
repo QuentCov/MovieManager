@@ -10,6 +10,34 @@ import models.CreditCard;
 
 public class CreditCardsDB {
 	
+	public static CreditCard createCard(ResultSet rs, Connection c) {
+		CreditCard card = new CreditCard();
+		try {
+			card.setCardType(rs.getString("CardType"));
+			card.setCardNumber(rs.getString("CardNumber"));
+			card.setCcv(rs.getInt("CCV"));
+			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
+			card.setExpirationYear(rs.getInt("ExpirationYear"));
+			
+			String query = "SELECT * FROM User "
+						 + "INNER JOIN Address on Address.ID=User.AddressId "
+						 + "WHERE User.ID=?;";
+			
+			PreparedStatement s = Database.prepareStatement(c, query);
+			s.setInt(1, rs.getInt("OwnerId"));
+			ResultSet rs2 = s.executeQuery();
+			if(rs2.next()) {
+				card.setOwner(UserDB.createUser(rs2));
+			}
+			rs2.close();
+			s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return card;
+	}
+	
 	public static CreditCard createCard(ResultSet rs) {
 		CreditCard card = new CreditCard();
 		try {
@@ -61,11 +89,12 @@ public class CreditCardsDB {
 	}
 
 	public static boolean addCreditCard(CreditCard card) {
-		String query = "SELECT ID FROM User WHERE FullName=" + card.getOwner().getFullName() + ";";
+		String query = "SELECT ID FROM User WHERE FullName=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int ownerId = -1;
 		try {
+			s.setString(1, card.getOwner().getFullName());
 			ResultSet rs = s.executeQuery();
 			if(rs.next()) {
 				ownerId = rs.getInt("ID");
@@ -89,13 +118,23 @@ public class CreditCardsDB {
 		}
 		return false;
 	}
-
-	public static boolean updateBalance(CreditCard card) {
-		String query = "UPDATE CreditCard SET Balance = " + card.getBalance() + " WHERE CardHolderName=?;";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(card.getOwner().getFullName());
-		int i = Database.runUpdate(query, params);
-		if(i == 1) {
+	
+	public static boolean updateBalance(CreditCard card, int ownerId) {
+		String query = "UPDATE CreditCard SET Balance = ? WHERE OwnerId=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setDouble(1, card.getBalance());
+			s.setInt(2, ownerId);
+			i = s.executeUpdate();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(i != -1) {
 			return true;
 		}
 		return false;

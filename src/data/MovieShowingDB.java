@@ -18,7 +18,7 @@ public class MovieShowingDB {
 	public static MovieShowing createMovieShowing(ResultSet rs) {
 		MovieShowing showing = new MovieShowing();
 		try {
-			
+			showing.setID(rs.getInt("MovieShowing.ID"));
 			SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
 			Date sDate = null;
 			Date eDate = null;
@@ -49,10 +49,14 @@ public class MovieShowingDB {
 				showroom.setName(rs2.getString("Name"));
 				showroom.setCapacity(rs2.getInt("Capacity"));
 				
-				query = "SELECT * FROM Theatre WHERE ID=" + rs2.getInt("TheatreID") + ";";
+				query = "SELECT * FROM Theatre "
+					  + "INNER JOIN Address on Theatre.AddressId=Address.ID "
+					  + "WHERE Theatre.ID=?;";
 				s = Database.prepareStatement(c, query);
+				s.setInt(1, rs2.getInt("TheatreID"));
 				ResultSet rs3 = s.executeQuery();
 				if(rs3.next()) {
+					
 					Theatre theatre = TheatresDB.createTheatre(rs3);
 					showroom.setTheatre(theatre);
 				}
@@ -71,8 +75,30 @@ public class MovieShowingDB {
 		return showing;
 	}
 	
+	public static MovieShowing getMovieShowing(int id) {
+		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		MovieShowing showing = new MovieShowing();
+		try {
+			s.setInt(1, id);
+			ResultSet rs = s.executeQuery();
+			while(rs.next())
+			{
+			    showing = createMovieShowing(rs);
+			}
+			rs.close();
+			s.close();
+			c.close();
+			return showing;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static ArrayList<MovieShowing> getMovieShowings(int showroomId) {
-		String query = "SELECT * FROM MovieShowings WHERE ShowroomId=" + showroomId + ";";
+		String query = "SELECT * FROM MovieShowing WHERE ShowroomId=" + showroomId + ";";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();

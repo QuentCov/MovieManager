@@ -1,5 +1,7 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -8,7 +10,7 @@ public class Order {
 	private UUID ID;
 	private Date date;
 	private User customer;
-	private ArrayList<MovieShowing> movies;
+	private ArrayList<MovieShowing> showings;
 	private ArrayList<Integer> tickets;
 	private double cost;
 	private CreditCard creditCard;
@@ -19,8 +21,13 @@ public class Order {
 		return date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDate(String string) {
+		SimpleDateFormat sdfmt1 = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+		try {
+			this.date = sdfmt1.parse(string);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public User getCustomer() {
@@ -85,9 +92,9 @@ public class Order {
 
 	// checks if the order makes the showroom(s) over capacity
 	public boolean isNotOverCapacity() {
-		for(int i = 0; i < movies.size(); i++) {
-			Showroom room = movies.get(i).getShowroom();
-			if(room.getCapacity() < (movies.get(i).getNumTicketsSold() + tickets.get(i))) {
+		for(int i = 0; i < showings.size(); i++) {
+			Showroom room = showings.get(i).getShowroom();
+			if(room.getCapacity() < (showings.get(i).getNumTicketsSold() + tickets.get(i))) {
 				return false;
 			}
 		}
@@ -103,21 +110,34 @@ public class Order {
 	}
 	
 	public int getTicketsByMovie(Movie movie) {
-		for(int i = 0; i < movies.size(); i++) {
-			if(movies.get(i).getMovie() == movie) {
+		for(int i = 0; i < showings.size(); i++) {
+			if(showings.get(i).getMovie().equals(movie)) {
 				return tickets.get(i);
 			}
 		}
 		
 		return 0;
 	}
-
-	public ArrayList<MovieShowing> getMovies() {
-		return movies;
+	
+	public MovieShowing getShowingByMovie(Movie movie) {
+		for(int i = 0; i < showings.size(); i++) {
+			if(showings.get(i).getMovie() != null && movie.getName() != null && showings.get(i).getMovie().getName().equals(movie.getName())) {
+				return showings.get(i);
+			}
+		}
+		return null;
 	}
 
-	public void setMovies(ArrayList<MovieShowing> movies) {
-		this.movies = movies;
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public ArrayList<MovieShowing> getShowings() {
+		return showings;
+	}
+
+	public void setShowings(ArrayList<MovieShowing> showings) {
+		this.showings = showings;
 	}
 
 	public UUID getID() {

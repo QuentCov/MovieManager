@@ -47,11 +47,15 @@ public class UserDB {
 		    user.setFullName(rs.getString("FullName"));
 		    user.setPhoneNumber(rs.getString("PhoneNumber"));
 		    
-		    address.setAddress1(rs.getString("Address1"));
-		    address.setAddress2(rs.getString("Address2"));
-		    address.setCity(rs.getString("City"));
-		    address.setStateAbbreviation(rs.getString("StateAbbreviation"));
-		    address.setZipCode(rs.getString("ZipCode"));
+		    address.setAddress1(rs.getString("Address.Address1"));
+		    String address2 = rs.getString("Address.Address2");
+		    if (address2 == null) {
+		    	address2 = "";
+		    }
+		    address.setAddress2(address2);
+		    address.setCity(rs.getString("Address.City"));
+		    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
+		    address.setZipCode(rs.getString("Address.ZipCode"));
 		    
 		    user.setStreetAddress(address);
 		    return user;
@@ -63,7 +67,10 @@ public class UserDB {
 	}
 	
 	public static User getUser(int id) {
-		String query = "SELECT * FROM User WHERE Id=" + id + ";";
+		String query = "SELECT * FROM User "
+				     + "INNER JOIN Address ON Address.ID=User.AddressId "
+				     + "WHERE User.ID=" + id + ";";
+		
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
@@ -225,5 +232,26 @@ public class UserDB {
 			e.printStackTrace();
 		}
         return false;
+	}
+
+	public static int getID(User user) {
+		String query = "SELECT ID FROM User WHERE EmailAddress=?";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int ownerId = -1;
+		try {
+			s.setString(1, user.getEmailAddress());
+			ResultSet rs = s.executeQuery();
+			if(rs.next())
+			{
+				ownerId = rs.getInt("ID");
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ownerId;
 	}
 }

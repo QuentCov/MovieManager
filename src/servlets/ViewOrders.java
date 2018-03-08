@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +37,9 @@ public class ViewOrders extends HttpServlet {
 		String email = user.getEmailAddress();
 		ArrayList<Order> orders = OrdersDB.getOrders(email);
 		
-		for(int i = 0; i < orders.size(); i++) {
-			System.out.println(orders.get(i));
-		}
-		
 		session.setAttribute("orders", orders);
-		
-		response.sendRedirect("ViewOrders.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewOrders.jsp");
+  	    dispatcher.forward(request, response);
 	}
 
 	/**

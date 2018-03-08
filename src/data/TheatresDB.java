@@ -17,49 +17,42 @@ public class TheatresDB {
 	public static Theatre createTheatre(ResultSet rs) {
 		Theatre theatre = new Theatre();
 		try {
-			if(rs.next())
-			{
-			    Address address = new Address();
-			    User owner = UserDB.getUser(rs.getInt("Theatre.OwnerId"));
-			    address.setAddress1(rs.getString("Address.Address1"));
-			    address.setAddress2(rs.getString("Address.Address2"));
-			    address.setCity(rs.getString("Address.City"));
-			    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
-			    address.setZipCode(rs.getString("Address.ZipCode"));
-			    theatre.setName(rs.getString("Theatre.Name"));
-			    theatre.setAddress(address);
-			    theatre.setOwner(owner);
-			    
-			    ArrayList<Showroom> showrooms = new ArrayList<Showroom>();
-				Showroom showroom = new Showroom();
-				showroom.setName(rs.getString("Showroom.Name"));
-				showroom.setCapacity(rs.getInt("Showroom.Capacity"));
-				showroom.setTheatre(theatre);
-				
-				ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
-				showroom.setShowings(showings);
-				showrooms.add(showroom);
-				
-				
-				while(rs.next()) {
-					showroom = new Showroom();
+		    Address address = new Address();
+		    User owner = UserDB.getUser(rs.getInt("Theatre.OwnerId"));
+		    address.setAddress1(rs.getString("Address.Address1"));
+		    address.setAddress2(rs.getString("Address.Address2"));
+		    address.setCity(rs.getString("Address.City"));
+		    address.setStateAbbreviation(rs.getString("Address.StateAbbreviation"));
+		    address.setZipCode(rs.getString("Address.ZipCode"));
+		    theatre.setName(rs.getString("Theatre.Name"));
+		    theatre.setAddress(address);
+		    theatre.setOwner(owner);
+		    
+		    ArrayList<Showroom> showrooms = new ArrayList<Showroom>();
+			Showroom showroom = new Showroom();
+			
+			try {
+				if(!rs.getString("Showroom.Name").equals(null)) {
 					showroom.setName(rs.getString("Showroom.Name"));
+					
 					showroom.setCapacity(rs.getInt("Showroom.Capacity"));
 					showroom.setTheatre(theatre);
 					
-					showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
+					ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowings(rs.getInt("Showroom.ID"));
 					showroom.setShowings(showings);
 					showrooms.add(showroom);
+	
+					theatre.setShowrooms(showrooms);
 				}
-
-				theatre.setShowrooms(showrooms);
-				return theatre;
+			} catch (SQLException e) {
+				
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
+		}catch (SQLException e) {
+			
 		}
-		return null;
+		
+		return theatre;
 	}
 	
 	public static Theatre getTheatre(String name) {
@@ -120,5 +113,47 @@ public class TheatresDB {
 	    	return true;
 	    }
 	    return false;
+	}
+
+	public static ArrayList<Theatre> getTheatres() {
+		String query = "SELECT * FROM Theatre "
+					 + "INNER JOIN User ON Theatre.OwnerId=User.ID "
+					 + "INNER JOIN Address ON Address.ID=User.AddressId "
+					 + "INNER JOIN Showroom ON Showroom.TheatreId=Theatre.ID;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+		
+		try {
+			ResultSet rs = s.executeQuery();
+			while(rs.next()) {
+				theatres.add(createTheatre(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return theatres;
+	}
+
+	public static ArrayList<Theatre> searchTheatreByName(String name) {
+		String query = "SELECT * FROM Theatre WHERE Name LIKE '%" + name + "%';";
+		Connection c = Database.getConnection();
+		PreparedStatement statement = Database.prepareStatement(c, query);
+		ArrayList<Theatre> theatres = new ArrayList<Theatre>();
+		try {
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()) {
+		    	Theatre theatre = TheatresDB.createTheatre(rs);
+		    	theatres.add(theatre);
+		    }
+			rs.close();
+			c.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return theatres;
 	}
 }
