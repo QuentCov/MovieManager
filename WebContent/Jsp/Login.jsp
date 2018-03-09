@@ -9,7 +9,7 @@
 	<div class="container">
 	<h1>Login to Movie Manager</h1>
 
-	<form name="userForm" action=${pageContext.request.contextPath}/Login method="post">
+	<form name="userForm" action="${pageContext.request.contextPath}/Login" method="post">
 		<div class="form-group">
 			<label for="userName">UserName:</label>
 			<input type="text" class="form-control" id="userName" name="userName" placeholder="UserName">

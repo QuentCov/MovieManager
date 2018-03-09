@@ -34,40 +34,33 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String name = (String) session.getAttribute("searchString");
-		session.setAttribute("searchString", null);
-		
-		if(name == null) {
-			name = request.getParameter("theatre");
+		String name = null;
+		name = request.getParameter("theatre");
 			
-			if(name == null) {
-				name = request.getParameter("movieSearchString");
-				ArrayList<Movie> movies = MovieDB.getAllMovies();
-				if(movies != null) {
-					session.setAttribute("movies", movies);
-				} else {
-					session.setAttribute("results", "No Movies Found");
-					session.setAttribute("movies", null);
-				}
-			}
-			else {
-				ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
-				if(theatres != null) {
-					session.setAttribute("movies", theatres);
-				} else {
-					session.setAttribute("results", "No Movies Found");
-					session.setAttribute("movies", null);
-				}
-			}			
-		} else {
-			ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
+		if(name == null) {
+			name = request.getParameter("movieSearchString");
+			ArrayList<Movie> movies = MovieDB.getAllMovies();
 			if(movies != null) {
 				session.setAttribute("movies", movies);
+				session.setAttribute("type", "movie");
 			} else {
 				session.setAttribute("results", "No Movies Found");
+				session.setAttribute("type", "movie");
 				session.setAttribute("movies", null);
 			}
 		}
+		else {
+			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
+			if(theatres != null) {
+				session.setAttribute("theatres", theatres);
+				session.setAttribute("type", "theatre");
+			} else {
+				session.setAttribute("results", "No theatres Found");
+				session.setAttribute("type", "theatre");
+				session.setAttribute("theatres", null);
+			}
+		}
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieSearchResults.jsp");
   	    dispatcher.forward(request, response);
 	}
