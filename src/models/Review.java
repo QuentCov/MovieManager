@@ -50,6 +50,10 @@ public class Review {
 	
 	// checks if the review is longer than the maximum review length
 	public boolean isReviewTooLong(String review) {
+		if(this.review == null) {
+			//A zero character review is short enough.
+			return false;
+		}
 		return this.review.length() >= this.getMAX_REVIEW_LENGTH();
 	}
 

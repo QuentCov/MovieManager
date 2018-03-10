@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -23,15 +23,17 @@
 				<div class="col-sm-2">Total Price</div>
 	        </div>
 	        <div class="row">
-    			<c:forEach items="${order.getShowings()}" var="movie">
-	    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
-	        	</c:forEach>
-	            <div class="col-sm-2">${order.getTicketCount()}</div>
-	            <div class="col-sm-2">${order.getTotalCost}</div>
+		        <c:forEach items="${cart}" var="order">
+	    			<c:forEach items="${order.getShowings()}" var="movie">
+		    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
+		        	</c:forEach>
+		            <div class="col-sm-2">${order.getTicketCount()}</div>
+		            <div class="col-sm-2">${order.getCost()}</div>
+		        </c:forEach>
 	    	</div>
 		</div>
 		<br>
-		<form method="POST" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
+		<form name="creditForm" onsubmit="return validateForm()" method="POST" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
 			<div class="form-group">
 				<label for="fName">First Name: </label>
     			<input type="text" class="form-control" id="fName" name="fName" placeholder="First Name">
@@ -43,6 +45,7 @@
    			<div class="form-group">
 				<label for="cardType">Card Type: </label>
 				<select class="form-control" id="cardType" name="cardType">
+					<option value="none">Select Your Card Type:</option>
 					<option>Visa</option>
 					<option>Master</option>
 					<option>Discover</option>
@@ -60,6 +63,7 @@
    			<div class="form-group">
 				<label for="month">Expiration Month: </label>
 				<select class="form-control" id="month" name="month">
+					<option value="none">Select the card's expiration month:</option>
 					<option>01</option>
 					<option>02</option>
 					<option>03</option>
@@ -75,6 +79,7 @@
 				</select>
 				<label for="year">Expiration Year: </label>
 				<select class="form-control" id="year" name="year">
+					<option value="none">Select the card's expiration year:</option>
 					<option>18</option>
 					<option>19</option>
 					<option>20</option>
@@ -100,13 +105,73 @@
 			</div>
 		</form>
 		<div class="row">
-			<form method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+			<form method="GET" action="${pageContext.request.contextPath}/UpdateShoppingCart">
 				<div class="offset-md-8 col-md-2">
 					<input type="submit" class="btn btn-primary" value="Cancel Payment">
 				</div>
 			</form>
 		</div>
 	</div>
+	<script>
+		function validateForm() {
+			var fName = document.forms["creditForm"]["fname"].value;
+			var lName = document.forms["creditForm"]["lname"].value;
+			var cardNumber = document.forms["creditForm"]["cardNumber"].value;
+			var cardType = document.forms["creditForm"]["cardType"].value;
+			var cvv = document.forms["creditForm"]["cvv"].value;
+			var month = document.forms["creditForm"]["month"].value;
+			var year = document.forms["creditForm"]["year"].value;
+			var bAddress = document.forms["creditForm"]["bAddress"].value;
+			var sAddress = document.forms["creditForm"]["sAddress"].value;
+			
+			if(fName === "") {
+				alert("First Name must be filled out.");
+				return false;
+			}
+
+			if(lName === "") {
+				alert("Last Name must be filled out.");
+				return false;
+			}
+			
+			if(cardNumber === "") {
+				alert("Your card number must be filled out.");
+				return false;
+			}
+
+			if(cardType === "none") {
+				alert("Please select the card type.");
+				return false;
+			}
+
+			if(cvv === "") {
+				alert("Your cvv must be filled out. Your cvv is the 3-digit number on the back of your card.");
+				return false;
+			}
+
+			if(month === "none") {
+				alert("Please select the card's expiry month.");
+				return false;
+			}
+			
+			if(year === "none") {
+				alert("Please select the card's expiry year.");
+				return false;
+			}
+			
+			if(bAddress === "") {
+				alert("Billing Address must be filled out.");
+				return false;
+			}
+			
+			if(sAddress === "") {
+				alert("Shipping Address must be filled out.");
+				return false;
+			}
+			
+			return true;
+		}
+	</script>
 	<%@ include file="/_partials/scripts.html" %>
 </body>
 </html>

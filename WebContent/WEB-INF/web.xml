@@ -247,4 +247,24 @@
     <servlet-name>Logout</servlet-name>
     <url-pattern>/Logout</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CustomerReviewSetup</display-name>
+    <servlet-name>CustomerReviewSetup</servlet-name>
+    <servlet-class>servlets.CustomerReviewSetup</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerReviewSetup</servlet-name>
+    <url-pattern>/CustomerReviewSetup</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CustomerTransaction</display-name>
+    <servlet-name>CustomerTransaction</servlet-name>
+    <servlet-class>servlets.CustomerTransaction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerTransaction</servlet-name>
+    <url-pattern>/CustomerTransaction</url-pattern>
+  </servlet-mapping>
 </web-app>

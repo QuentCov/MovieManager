@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -62,7 +62,7 @@
 				<br>
 				<div class="row">
 					<div class="offset-sm-11 col-sm-1">
-						<form name="item" method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+						<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
 				        	<input type="submit" class="btn btn-primary" value="Checkout">
 				        </form>
 					</div>

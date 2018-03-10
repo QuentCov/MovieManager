@@ -10,10 +10,10 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
-			<a href="${pageContext.request.contextPath}/MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
+			<a href="Jsp/Customer/MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Details:</h1>
@@ -30,49 +30,68 @@
 			<div class="col-sm-2">Actions</div>
 		</div>
        	<div class="row">
-       		<div class="col-sm-9">
-	    		<c:forEach items="${current.getShowings()}" var="showing">
-	    			<div class="row">
-		    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
-			            <div class="col-sm-1">${showing.getMovie().getDescription()}</div>
-			            <div class="col-sm-1">${showing.getMovie().getRating}</div>
-			            <div class="col-sm-3">${showing.getMovie().getThumbnailFile()}</div>
-			            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-			            <div class="col-sm-1">${showing.getStartTime()}</div>
-			            <div class="col-sm-1">${movie.getCost()}</div>
-			            <div class="col-sm-1">${movie.getShowroom().getCapacity()}</div>
-	    			</div>
-				</c:forEach>
-			</div>
+   			<div class="col-sm-1">${movie.getName()}</div>
+            <div class="col-sm-1">${movie.getDescription()}</div>
+            <div class="col-sm-1">${movie.getRating()}</div>
+            <div class="col-sm-3">
+            	<c:set var="data" value="${movie.getThumbnailData()}"/>
+				<c:choose>
+					<c:when test="${empty data}">
+						<td>Sorry! No thumbnail available</td>
+					</c:when>
+					<c:otherwise>
+						<td><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}" alt="${movie.getName()} Poster"/></td>
+					</c:otherwise>
+				</c:choose>
+            </div>
+            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
+            <div class="col-sm-1">${showing.getStartTime()}</div>
+            <div class="col-sm-1">${showing.getCost()}</div>
+            <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
 	    	<div class="col-sm-2">
-		    	<form name="item" action="${pageContext.request.contextPath}/CustomerReview">
+	    		<form name="addItem" action=${pageContext.request.contextPath}/UpdateShoppingCart onsubmit="return moreThanZero()" onkeypress="return isNumberKey(event)" method="POST" >
+		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
+		        	<input type='hidden' name='type' value='add'>
+		        	<input type='text' name='ticketCount' placeholder="Ticket Count">
+		        	<input type="submit" class="btn btn-primary" value="Add to Cart">
+		        </form>
+		    	<form name="addReview" action="${pageContext.request.contextPath}/CustomerReviewSetup">
 		        	<input type='hidden' name='reviewMovie' value="${movie.getName()}">
 		        	<input type="submit" class="btn btn-primary" value="Add Review">
-		        </form>
-		        <form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
-		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
-		        	<input type='text' name='ticketCount' value="Ticket Count">
-		        	<input type="submit" class="btn btn-primary" value="Add to Cart">
 		        </form>
 	        </div>
         </div>
 		<h2>Viewer Reviews:</h2>
-		<div class="row">Total Rating: ${movieShowing.getMovie().getAverageRating()}</div>
+		<div class="row">Total Rating: ${movie.getAverageRating()}</div>
 		<div class="row">
-			<div class="col-sm-1">Reviewer</div>
-			<div class="col-sm-1">Date</div>
+			<div class="col-sm-3">Reviewer</div>
 			<div class="col-sm-1">Rating</div>
-			<div class="col-sm-1">Review</div>
+			<div class="col-sm-6">Review</div>
 		</div>
    		<c:forEach items="${reviews}" var="review">
    		<div class="row">
-   			<div class="col-sm-1">${review.getUser().getFullName()}</div>
-		    <div class="col-sm-1">${review.getDate()}</div>
+   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
 		    <div class="col-sm-1">${review.getRating()}</div>
 		    <div class="col-sm-6">${review.getReview()}</div>
    		</div>
         </c:forEach>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
+    <script>
+	    function isNumberKey(evt){
+	        var charCode = (evt.which) ? evt.which : event.keyCode
+	        if (charCode > 31 && (charCode < 48 || charCode > 57))
+	            return false;
+	        return true;
+	    }
+	    
+	    function moreThanZero() {
+	    	var tickets =  document.forms["addItem"]["ticketCount"].value;
+	    	if(tickets == null || tickets == 0) {
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	</script>
 </body>
 </html>

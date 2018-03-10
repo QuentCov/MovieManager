@@ -15,9 +15,23 @@
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<form name="item" method="POST" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
-			<label for="movieGenre">Search For Movies</label>
+		<form name="item" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
+			<label for="theatre">Search For Theatres Near You!: </label>
+			<select name="theatre" id="theatre" onchange="this.form.submit()">
+				<option value="none">Select a Theatre:</option>
+				<c:forEach items="${theatres}" var="theatre">
+				    <option value="${theatre.getName()}">${theatre.getName()}</option>
+				</c:forEach>
+			</select>
+      	</form>
+		<form name="item" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
+			<label for="movieSearchString">Search For Movies:</label>
 			<input type="text" class="form-control" id="movieSearchString" name="movieSearchString" placeholder="Search Movies">
+        	<input type="submit" class="btn btn-light" type="button" value="Go!"/>
+      	</form>
+      	<form name="item" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
+			<label for="date">Search For Movies by Date:</label>
+			<input id="date" name="date" type="date" value="--/--/--"/>
         	<input type="submit" class="btn btn-light" type="button" value="Go!"/>
       	</form>
 	</div>

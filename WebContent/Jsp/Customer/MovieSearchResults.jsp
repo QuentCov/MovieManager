@@ -10,9 +10,9 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName()}</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart" class="btn btn-primary">Checkout</a>
+			<a href="Jsp/Customer/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 	    <div class="row">
@@ -29,7 +29,7 @@
 				<div class="col-sm-2">${showing.getMovie().getName()}</div>
 				<div class="col-sm-1">${showing.getShowroom().getName()}</div>
 				<div class="col-sm-2">${showing.getStartTime()}</div>
-				<div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
+				<div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
 				<div class="col-sm-1">${showing.getCost()}</div>
 				<div class="col-sm-3">
 					<c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
@@ -43,10 +43,9 @@
 					</c:choose>
 				</div>
 				<div class="col-sm-2">
-					<form name="item" method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
-		            	<input type='hidden' name='itemIndex' value='<c:out value="${showing}"/>'>
-		            	<input type='hidden' name='type' value='add'>
-		            	<input type="submit" class="btn btn-primary" name="action" value="Add to Cart">
+					<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieSearchResults">
+		            	<input type='hidden' name='itemIndex' value='<c:out value="${showing.getID()}"/>'>
+		            	<input type="submit" class="btn btn-primary" name="action" value="View More Details">
 		            </form>
 				</div>
 			</div>

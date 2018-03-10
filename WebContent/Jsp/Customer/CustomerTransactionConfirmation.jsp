@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
@@ -23,11 +23,13 @@
 				<div class="col-sm-2">Total Price</div>
 	        </div>
 	        <div class="row">
-    			<c:forEach items="${order.getMovies()}" var="movie">
-	    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
-	        	</c:forEach>
-	            <div class="col-sm-2">${order.getTicketCount()}</div>
-	            <div class="col-sm-2">${order.getTotalCost}</div>
+		        <c:forEach items="${completedOrder}" var="order">
+	    			<c:forEach items="${order.getShowings()}" varStatus="loop" var="showing">
+		    			<div class="col-sm-2">${showing.getMovie().getName()}</div>
+		    			<div class="col-sm-2">${order.getTickets()[loop.index]}</div>
+		        	</c:forEach>
+		            <div class="col-sm-2">${order.getCost()}</div>
+	            </c:forEach>
 	    	</div>
 		</div>
 		<a href="#" class="btn btn-primary">Print your order details (COMING SOON!)</a>
