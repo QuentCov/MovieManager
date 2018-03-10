@@ -56,6 +56,7 @@ public class CustomerReview extends HttpServlet {
 		if(!added) {
 			response.sendError(500, "Failed to add review");
 		} else {
+			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
 	  	    dispatcher.forward(request, response);
 		}

@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.MovieDB;
+import data.MovieShowingDB;
 import data.TheatreDB;
 import models.Movie;
+import models.MovieShowing;
 import models.Theatre;
 
 /**
@@ -38,15 +40,27 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 		name = request.getParameter("theatre");
 			
 		if(name == null) {
+			name = request.getParameter("date");
+			if(name == null) {
+				//TODO: add date searching.
+			}
 			name = request.getParameter("movieSearchString");
-			ArrayList<Movie> movies = MovieDB.getAllMovies();
-			if(movies != null) {
-				session.setAttribute("movies", movies);
+			ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
+			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+			int movieId = 0;
+			
+			//Get all showings of each movie, if we have any.
+			if(movies == null) {
 				session.setAttribute("type", "movie");
+				session.setAttribute("showings", null);
 			} else {
-				session.setAttribute("results", "No Movies Found");
+				for(int i = 0; i < movies.size(); i++) {
+					movieId = movies.get(i).getID();
+					showings.addAll(MovieShowingDB.getMovieShowingsByMovieId(movieId));
+				}
+				
+				session.setAttribute("showings", showings);
 				session.setAttribute("type", "movie");
-				session.setAttribute("movies", null);
 			}
 		}
 		else {
@@ -55,7 +69,6 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 				session.setAttribute("theatres", theatres);
 				session.setAttribute("type", "theatre");
 			} else {
-				session.setAttribute("results", "No theatres Found");
 				session.setAttribute("type", "theatre");
 				session.setAttribute("theatres", null);
 			}

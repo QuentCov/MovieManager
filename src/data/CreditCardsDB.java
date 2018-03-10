@@ -13,6 +13,7 @@ public class CreditCardsDB {
 	public static CreditCard createCard(ResultSet rs, Connection c) {
 		CreditCard card = new CreditCard();
 		try {
+			card.setID(rs.getInt("ID"));
 			card.setCardType(rs.getString("CardType"));
 			card.setCardNumber(rs.getString("CardNumber"));
 			card.setCcv(rs.getInt("CCV"));

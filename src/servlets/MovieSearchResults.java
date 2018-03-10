@@ -35,6 +35,7 @@ public class MovieSearchResults extends HttpServlet {
 		Movie movie = MovieDB.getMovieByName(name);
 		if(movie != null) {
 			session.setAttribute("movie", movie);
+			
 		}
 		
 		session.setAttribute("results", "Movie Not Found");

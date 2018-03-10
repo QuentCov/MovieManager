@@ -52,6 +52,7 @@ public class Login extends HttpServlet {
 			request.getSession().invalidate();
 			HttpSession session = request.getSession();
 			session.setAttribute("user", fullUser);
+			
     		if (userType.equals("Customer")) {
     			//get the user's cart (or make a new one, if there isn't one)
     			ArrayList<Order> cart = new ArrayList<Order>();

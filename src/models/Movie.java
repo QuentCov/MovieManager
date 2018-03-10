@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 public class Movie {
+	
+	private int ID;
 	private String name;
 	private String genre;
 	private String thumbnailName;
@@ -88,5 +90,13 @@ public class Movie {
 	public String renderImage() throws UnsupportedEncodingException {
         byte[] encodeBase64 = Base64.encodeBase64(this.thumbnailData);
         return new String(encodeBase64, "UTF-8");
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import data.MovieShowingDB;
 import models.MovieShowing;
 import models.Order;
+import models.User;
 
 /**
  * Servlet implementation class UpdateShoppingCart
@@ -32,7 +33,8 @@ public class UpdateShoppingCart extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart");
+  	    dispatcher.forward(request, response);
 	}
 
 	/**
@@ -47,17 +49,37 @@ public class UpdateShoppingCart extends HttpServlet {
 			cart = new ArrayList<Order>();
 		}
 		
-		Order newOrder = (Order) session.getAttribute("order");
-		String t = (String) session.getAttribute("type");
+		Order order = (Order) session.getAttribute("order");
+		MovieShowing showing = (MovieShowing) session.getAttribute("showing");
+		int ticket = (Integer) session.getAttribute("tickets");
+		String t = request.getParameter("type");
+		
+		UUID id = UUID.randomUUID();
+		if(order == null) {
+			//Make a new order.
+			order = new Order();
+			User owner = (User) session.getAttribute("user");
+			order.setCustomer(owner);
+			order.setID(id);
+			
+			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+			showings.add(showing);
+			order.setShowings(showings);
+			
+			ArrayList<Integer> tickets = new ArrayList<Integer>();
+			tickets.add(ticket);
+			order.setTickets(tickets);
+		}
+		
 		
 		if(t != null && t.equals("add")) {
 			//Check to ensure that the order is possible.
-			if(newOrder != null) {
+			if(order != null) {
 				//Check the capacity of the showrooms of the movie's in the order.
-				ArrayList<MovieShowing> movies = newOrder.getShowings();
-				ArrayList<Integer> tickets = newOrder.getTickets();
+				ArrayList<MovieShowing> movies = order.getShowings();
+				ArrayList<Integer> tickets = order.getTickets();
 				
-				boolean cap = newOrder.isNotOverCapacity();
+				boolean cap = order.isNotOverCapacity();
 				if(!cap) {
 					//We can't sell that many tickets.
 					response.sendError(400, "That's too many tickets.");
@@ -73,19 +95,19 @@ public class UpdateShoppingCart extends HttpServlet {
 				}
 				
 				//Give this item an identifier for use by the cart.
-				UUID id = UUID.randomUUID();
-				newOrder.setID(id);
-				cart.add(newOrder);
+				id = UUID.randomUUID();
+				order.setID(id);
+				cart.add(order);
 			}
-		} else {
+		} else if(t.equals("delete")) {
 			//Remove the order
-			if(newOrder != null) {
-				cart.remove(newOrder);
+			if(order != null) {
+				cart.remove(order);
 			}
 		}
 		
 		session.setAttribute("cart", cart);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart");
   	    dispatcher.forward(request, response);
 	}
 

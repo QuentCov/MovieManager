@@ -12,10 +12,10 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<form name="item" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
+		<form name="item" method="POST" action="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" >
 			<label for="movieGenre">Search For Movies</label>
 			<input type="text" class="form-control" id="movieSearchString" name="movieSearchString" placeholder="Search Movies">
         	<input type="submit" class="btn btn-light" type="button" value="Go!"/>

@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -31,7 +31,7 @@
 	    	</div>
 		</div>
 		<br>
-		<form>
+		<form method="POST" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
 			<div class="form-group">
 				<label for="fName">First Name: </label>
     			<input type="text" class="form-control" id="fName" name="fName" placeholder="First Name">
@@ -95,14 +95,16 @@
    				<label for="sAddress">Shipping Address: </label>
     			<input type="text" class="form-control" id="sAddress" name="sAddress" placeholder="">
    			</div>
+   			<div class="col-md-2">
+				<input type="submit" class="btn btn-primary" value="Confirm Payment">
+			</div>
 		</form>
 		<div class="row">
-			<div class="offset-md-7 col-md-2">
-				<a href="${pageContext.request.contextPath}/CustomerTransactionConfirmation" class="btn btn-primary">Confirm Payment</a>
-			</div>
-			<div class="offset-md-1 col-md-2">
-			    <a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Cancel Payment</a>
-			</div>
+			<form method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<div class="offset-md-8 col-md-2">
+					<input type="submit" class="btn btn-primary" value="Cancel Payment">
+				</div>
+			</form>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

@@ -15,6 +15,7 @@ public class MovieDB {
 	public static Movie createMovie(ResultSet rs) {
 		Movie movie = new Movie();
 		try {
+			movie.setID(rs.getInt("ID"));
 			movie.setName(rs.getString("Name"));
 			movie.setGenre(rs.getString("Genre"));
 			movie.setThumbnailName(rs.getString("ThumbnailName"));

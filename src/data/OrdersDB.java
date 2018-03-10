@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -34,6 +36,7 @@ public class OrdersDB {
 			    CreditCard card = CreditCardsDB.createCard(rs);
 			    
 			    order.setID(id);
+			    order.setDataId(rs.getInt("o.ID"));
 			    order.setCustomer(customer);
 			    order.setDate(rs.getString("o.Date"));
 			    order.setCreditCard(card);
@@ -136,6 +139,11 @@ public class OrdersDB {
 	
 	public static boolean addOrder(Order order) {
 		
+		//Calculate the cost.
+		double cost = 0;
+		for(int i = 0; i < order.getShowings().size(); i++) {
+			cost = cost + (order.getShowings().get(i).getCost() * order.getTickets().get(i));
+		}
 		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
 		
 		Connection c = Database.getConnection();
@@ -146,8 +154,6 @@ public class OrdersDB {
 			ResultSet rs = s.executeQuery();
 			custId = rs.getInt("ID");
 			rs.close();
-			s.close();
-			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -156,14 +162,32 @@ public class OrdersDB {
 			return false;
 		}
 		
+		CreditCard card = CreditCardsDB.getCreditCard(order.getCreditCard().getCardNumber());
+		
+		int cardId = card.getID();
 		int addressId = AddressDB.getAddressIdByAddress1(order.getBillingAddress().getAddress1());
+		int shippingId = AddressDB.getAddressIdByAddress1(order.getShippingAddress().getAddress1());
+		DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy"); 
+		String strDate = format.format(new Date()); 
 		
-		query = "INSERT INTO Orders (OurId, OrderDate, CustomerId, Cost, BillingAddress, CreditCardNumber)"
-				 + " VALUES (" + order.getID() + ", " + new Date() + ", " + custId + ", " + order.getCost() + ", " + addressId + ", ?);";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(order.getCreditCard().getCardNumber());
+		query = "INSERT INTO Orders (OurId, OrderDate, CustomerId, Cost, CreditCardId, BillingAddressId, ShippingAddressId)"
+				 + " VALUES (?, ?, ?, ?, ?, ?, ?);";
 		
-		int i = Database.runUpdate(query, params);
+		s = Database.prepareStatement(c, query);
+		
+		int i = -1;
+		try {
+			s.setString(1, order.getID().toString());
+			s.setString(2, strDate);
+			s.setInt(3, custId);
+			s.setDouble(4, cost);
+			s.setInt(5, cardId);
+			s.setInt(6, addressId);
+			s.setInt(7, shippingId);
+			i = s.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(i == 1) {
 		    return true;
 		}
@@ -171,6 +195,51 @@ public class OrdersDB {
 	}
 	
 	public static boolean deleteOrder(Order order) {
+		if(OrdersDB.isEmpty(order)) {
+			return deleteEmptyOrder(order);
+		}
+		
+		Order fullOrder = OrdersDB.getOrder(order.getID());
+		
+		//Delete MovieShowings.
+		String query = "DELETE FROM MovieShowing WHERE OrdersId=?";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setInt(1, fullOrder.getDataId());
+			i = s.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(i == -1 || i == 0) {
+			return false;
+		}
+		
+		//Delete the Order.
+		i = -1;
+		query = "DELETE FROM Orders WHERE ID=?;";
+		s = Database.prepareStatement(c, query);
+		try {
+			s.setInt(1, fullOrder.getDataId());
+			i = s.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(i == -1 || i == 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	//For this method, we ensure that the order is empty. That is, no OrdersMovies entries relate to it.
+	public static boolean deleteEmptyOrder(Order order) {
+		if(!OrdersDB.isEmpty(order)) {
+			return false;
+		}
 		User owner = order.getCustomer();
 		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
 		Connection c = Database.getConnection();
@@ -191,9 +260,10 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "SELECT ID FROM Orders WHERE CustomerId=" + id + ";";
+		query = "SELECT ID FROM Orders WHERE CustomerId=?;";
 		
 		try {
+			s.setInt(1, id);
 			rs = s.executeQuery();
 			if(rs.next()) {
 				id = rs.getInt("ID");
@@ -214,23 +284,23 @@ public class OrdersDB {
 			return false;
 		}
 		
-		query = "DELETE FROM OrdersMovies WHERE OrderId=" + id +";";
-		int i = Database.runUpdate(query);
+		
+		query = "DELETE FROM Orders WHERE OurId=?;";
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(order.getID().toString());
+		int i = Database.runUpdate(query, params);
+		
 		if(i != 0 || i != -1) {
-			query = "DELETE FROM Orders WHERE OurId=" + order.getID().toString() + ";";
-			i = Database.runUpdate(query);
-			
-			if(i != 0 || i != -1) {
-				try {
-					rs.close();
-					c.close();
-					s.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				return true;
+			try {
+				rs.close();
+				c.close();
+				s.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
+			return true;
 		}
+		
 		try {
 			rs.close();
 			c.close();
@@ -250,48 +320,13 @@ public class OrdersDB {
 			order.setCost(order.getCost() - cost);
 			
 			int i = order.getShowings().indexOf(showing);
-			int tickets = order.getTickets().get(i);
 			order.getShowings().remove(i);
 			order.getTickets().remove(i);
-			
 			updated = updateOrder(order);
 			
 			if(updated) {
-				String query = "SELECT ID FROM Movie WHERE Name=?;";
-				Connection c = Database.getConnection();
-				 
-				
-				query = "SELECT ID FROM Orders WHERE OurId=?;";
-				PreparedStatement s = Database.prepareStatement(c, query);
-				int orderId = -1;
-				try {
-					s.setString(1, order.getID().toString());
-					ResultSet rs = s.executeQuery();
-					if(rs.next()) {
-						orderId = rs.getInt("ID");
-					}
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-				query = "DELETE FROM OrdersMovies " + 
-						"WHERE OrdersId=? AND NumTickets=?;";
-				s = Database.prepareStatement(c, query);
-				int j = -1;
-				try {
-					s.setInt(1, orderId);
-					s.setDouble(2, tickets);
-					j = s.executeUpdate();
-					s.close();
-					c.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-				if(j != -1) {
-					return true;
-				}
+				Movie movie = MovieDB.getMovieByName(showing.getMovie().getName());
+				return deleteOrderItem(order, showing, movie);
 			}
 		}
 		return false;
@@ -346,5 +381,10 @@ public class OrdersDB {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static boolean isEmpty(Order order) {
+		Order dbOrder = getOrder(order.getID());
+		return dbOrder.getShowings().isEmpty();
 	}
 }

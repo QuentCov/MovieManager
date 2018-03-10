@@ -47,47 +47,59 @@ public class CancelOrderTransaction extends HttpServlet {
 		@SuppressWarnings("unchecked")
 		ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");
 		User owner = (User) session.getAttribute("user");
-		
-		int ownerId = owner.getId(owner);
+			
 		String movieName = request.getParameter("movie");
 		String orderID = request.getParameter("order");
 		
 		Movie movie = MovieDB.getMovieByName(movieName);
 		Order order = OrdersDB.getOrder(UUID.fromString(orderID));
 		
-		MovieShowing showing = order.getShowingByMovie(movie);
-		int ticketCount = order.getTicketsByMovie(movie);
-		double cost = showing.getCost() * ticketCount;
-		
-		//Remove the item from the session's cart.
-		for(int i = 0; i < cart.size(); i++) {
-			if(cart.get(i).getID().toString().equals(orderID)) {
-				double curCost = cart.get(i).getCost();
-				MovieShowing show = cart.get(i).getShowingByMovie(movie);
-				cart.get(i).getShowings().remove(show);
-				cart.get(i).setCost(curCost - cost);
-			}
-		}
-		
-		session.setAttribute("cart", cart);
-		int size = (int) session.getAttribute("cartSize");
-		size--;
-		session.setAttribute("cartSize", size);
-		
-		//Remove the item from the database.
-		boolean deleted = OrdersDB.refundOrder(order, ownerId, cost, showing);
-		if(!deleted) {
-			response.sendError(500, "Error in order cancellation");
+		if(owner == null || movie == null || order == null)  {
+			//The user refreshed the page.
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancellationConfirmation.jsp");
+	  	    dispatcher.forward(request, response);
 		} else {
-			deleted = OrdersDB.deleteOrderItem(order, showing, movie);
+			int ownerId = owner.getId(owner);
+			
+			MovieShowing showing = order.getShowingByMovie(movie);
+			int ticketCount = order.getTicketsByMovie(movie);
+			double cost = showing.getCost() * ticketCount;
+			
+			//Remove the item from the session's cart.
+			for(int i = 0; i < cart.size(); i++) {
+				if(cart.get(i).getID().toString().equals(orderID)) {
+					double curCost = cart.get(i).getCost();
+					MovieShowing show = cart.get(i).getShowingByMovie(movie);
+					cart.get(i).getShowings().remove(show);
+					cart.get(i).setCost(curCost - cost);
+				}
+			}
+			
+			session.setAttribute("cart", cart);
+			
+			
+			//Remove the item from the database.
+			boolean deleted = OrdersDB.refundOrder(order, ownerId, cost, showing);
+			
 			if(!deleted) {
 				response.sendError(500, "Error in order cancellation");
 			} else {
+				//Check if the order is now empty.
+				if(OrdersDB.isEmpty(order)) {
+					OrdersDB.deleteEmptyOrder(order);
+					cart.remove(order);
+					session.setAttribute("cart", cart);
+					int size = (int) session.getAttribute("cartSize");
+					size--;
+					session.setAttribute("cartSize", size);
+				}
+				
+				session.setAttribute("deletedOrder", order);
+				session.setAttribute("deletedItem", showing);
+				
 				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancellationConfirmation.jsp");
 		  	    dispatcher.forward(request, response);
 			}
 		}
-		
 	}
-
 }

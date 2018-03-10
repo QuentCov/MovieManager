@@ -10,9 +10,9 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 			<a href="${pageContext.request.contextPath}/MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -45,11 +45,11 @@
 				</c:forEach>
 			</div>
 	    	<div class="col-sm-2">
-		    	<form name="item" action="CustomerReview">
+		    	<form name="item" action="${pageContext.request.contextPath}/CustomerReview">
 		        	<input type='hidden' name='reviewMovie' value="${movie.getName()}">
 		        	<input type="submit" class="btn btn-primary" value="Add Review">
 		        </form>
-		        <form name="item" action="UpdateShoppingCart">
+		        <form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
 		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
 		        	<input type='text' name='ticketCount' value="Ticket Count">
 		        	<input type="submit" class="btn btn-primary" value="Add to Cart">

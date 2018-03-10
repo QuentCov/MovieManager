@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="${pageContext.request.contextPath}/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>
@@ -53,7 +53,9 @@
 				Total: ${totalCost.cost}
 			</div>
 			<div class="offset-md-3 col-sm-3">
-				<a href="${pageContext.request.contextPath}/CustomerTransaction.jsp" class="btn btn-success">Checkout</a>
+				<form name="item" method="POST" action="${pageContext.request.contextPath}/CustomerTransaction">
+			        <input type="submit" class="btn btn-primary" value="Checkout">
+			    </form>
 			</div>
 		</div>
 	</div>
