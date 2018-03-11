@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.AddressDB;
 import data.UserDB;
 import models.Address;
 import models.User;
@@ -73,7 +74,8 @@ public class Registration extends HttpServlet {
     	user.setFullName(fullName);
     	user.setPhoneNumber(phoneNumber);
     	user.setStreetAddress(address);
-
+    	
+    	AddressDB.addAddress(address);
     	UserDB.addUser(user);
     	response.sendRedirect("Jsp/Login.jsp");
 	}

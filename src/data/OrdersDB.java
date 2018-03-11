@@ -21,7 +21,6 @@ public class OrdersDB {
 	public static Order getOrder(UUID id) {
 		String query = "SELECT * FROM Orders o "
 			     + "INNER JOIN User u ON u.ID=o.CustomerId "
-			     + "INNER JOIN CreditCard cc ON u.ID=cc.OwnerId "
 			     + "INNER JOIN Address ON o.BillingAddressId=Address.ID "
 			     + "WHERE OurId=?;";
 		Connection c = Database.getConnection();
@@ -33,7 +32,6 @@ public class OrdersDB {
 			if(rs.next())
 			{
 			    User customer = UserDB.createUser(rs);
-			    CreditCard card = CreditCardsDB.createCard(rs);
 			    
 			    order.setID(id);
 			    order.setDataId(rs.getInt("o.ID"));
@@ -44,7 +42,7 @@ public class OrdersDB {
 			    	DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 			    	order.setDate(format.format(new Date()));
 			    }
-			    order.setCreditCard(card);
+			    
 			    order.setCost(rs.getInt("o.Cost"));
 			    order.setShippingAddress(customer.getStreetAddress());
 			    
@@ -145,6 +143,7 @@ public class OrdersDB {
 	@SuppressWarnings("resource")
 	public static int addOrder(Order order) {
 		
+		Order newOrder = null;
 		String query = "SELECT ID FROM User WHERE EmailAddress=?;";
 		
 		Connection c = Database.getConnection();
@@ -197,8 +196,9 @@ public class OrdersDB {
 				e.printStackTrace();
 			}
 			if(i == 1) {
-				Order newOrder = getOrder(order.getID());
-			    return newOrder.getDataId();
+				newOrder = getOrder(order.getID());
+			} else {
+				return -1;
 			}
 		} else if(order.getShippingAddress() != null) {
 			
@@ -225,8 +225,9 @@ public class OrdersDB {
 				e.printStackTrace();
 			}
 			if(i == 1) {
-				Order newOrder = getOrder(order.getID());
-			    return newOrder.getDataId();
+				newOrder = getOrder(order.getID());
+			} else {
+				return -1;
 			}
 		} else {
 			int billingId = AddressDB.getAddressIdByAddress1(order.getBillingAddress().getAddress1());
@@ -250,11 +251,34 @@ public class OrdersDB {
 				e.printStackTrace();
 			}
 			if(i == 1) {
-				Order newOrder = getOrder(order.getID());
-			    return newOrder.getDataId();
+				newOrder = getOrder(order.getID());
+			    
+			} else {
+				return -1;
 			}
 		}
-		return -1;
+		
+		//Add each item to OrdersMovies.
+		for(int i = 0; i < order.getShowings().size(); i++) {
+			query = "INSERT INTO OrdersMovies (OrdersId, MovieShowingsId, NumTickets) "
+				  + "VALUES (?, ?, ?);";
+			
+			c = Database.getConnection();
+			s = Database.prepareStatement(c, query);
+			try {
+				s.setInt(1, newOrder.getDataId());
+				s.setInt(2, order.getShowings().get(i).getID());
+				s.setInt(3, order.getTickets().get(i));
+				int j = s.executeUpdate();
+				if(j != 1) {
+					return -1;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return newOrder.getDataId();
 	}
 	
 	public static boolean deleteOrder(Order order) {
