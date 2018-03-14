@@ -9,10 +9,10 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="${pageContext.request.contextPath}/CustomerHomePage" class="btn btn-primary">Home</a>
+			<div class="btn btn-secondary">Hello, ${user.getFullName()}</div>
+			<a href="Jsp/Customer/CustomerHomePage" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart" class="btn btn-primary">Checkout</a>
+			<a href="Jsp/Customer/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 	    <div class="row">
@@ -24,28 +24,28 @@
 			<div class="col-sm-3"><h4>Thumbnail</h4></div>
 			<div class="col-sm-2"><h4>Actions</h4></div>
 		</div>
-        <c:forEach items="${movies}" var="movie">
+        <c:forEach items="${showings}" var="showing">
     		<div class="row">
-				<div class="col-sm-2">${movie.getName()}</div>
-				<div class="col-sm-1"></div>
-				<div class="col-sm-2"></div>
-				<div class="col-sm-1"></div>
-				<div class="col-sm-1"></div>
+				<div class="col-sm-2">${showing.getMovie().getName()}</div>
+				<div class="col-sm-1">${showing.getShowroom().getName()}</div>
+				<div class="col-sm-2">${showing.getStartTime()}</div>
+				<div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
+				<div class="col-sm-1">${showing.getCost()}</div>
 				<div class="col-sm-3">
-					<c:set var="data" value="${movie.getThumbnailData()}"/>
+					<c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
 					<c:choose>
 						<c:when test="${empty data}">
 							<td>Sorry! No thumbnail available</td>
 						</c:when>
 						<c:otherwise>
-							<td><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}" alt="${movie.getName()} Poster"/></td>
+							<td><img class="img-fluid" src="data:image/jpeg;base64,${showing.getMovie.renderImage()}" alt="${showing.getMovie().getName()} Poster"/></td>
 						</c:otherwise>
 					</c:choose>
 				</div>
 				<div class="col-sm-2">
-					<form name="item" method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
-		            	<input type='hidden' name='itemIndex' value='<c:out value="${movie.getName()}"/>'>
-		            	<input type="submit" class="btn btn-primary" name="action" value="Add to Cart">
+					<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieSearchResults">
+		            	<input type='hidden' name='itemIndex' value='<c:out value="${showing.getID()}"/>'>
+		            	<input type="submit" class="btn btn-primary" name="action" value="View More Details">
 		            </form>
 				</div>
 			</div>

@@ -46,14 +46,14 @@ INSERT INTO CreditCard VALUES (400, 300, 'Visa', 8017801780178017, 128, 09, 2021
  */
 INSERT INTO Review VALUES (100, 100, 'This movie is simply divine; I watch it while I murder people.', 5, 200);
 INSERT INTO Review VALUES (200, 100, '10/10, an indisputible masterpiece.', 1, 100);
-INSERT INTO Review VALUES (3, 200, '1/10, I recommend this movie only to masochists.', 4, 100);
+INSERT INTO Review VALUES (300, 200, '1/10, I recommend this movie only to masochists.', 4, 100);
 
 /*
  * Insert Orders
  */
-INSERT INTO Orders VALUES (1, 'a3ccf74f-bfc4-4875-b176-ab6ff0e669b5', 'Thu Jan 06 10:52:56 IST 2018', 2, 1477.24, 1, 4, 5);
-INSERT INTO Orders VALUES (2, '50274b68-0a98-4e84-ac24-935881d23f9c', 'Thu Jan 06 11:52:56 IST 2018', 2, 6611.49, 2, 1, 1);
-INSERT INTO Orders VALUES (3, '0ee4e1ce-681f-45f9-9352-90a159228385', 'Thu Jan 07 10:52:56 IST 2018', 3, 765, 4, 2, 3);
+INSERT INTO Orders VALUES (100, 'Thu Jan 06 10:52:56 IST 2018', 'a3ccf74f-bfc4-4875-b176-ab6ff0e669b5', 200, 1477.24, 100, 400, 500, FALSE);
+INSERT INTO Orders VALUES (200, 'Thu Jan 06 11:52:56 IST 2018', '50274b68-0a98-4e84-ac24-935881d23f9c', 200, 6611.49, 200, 100, 100, FALSE);
+INSERT INTO Orders VALUES (300, 'Thu Jan 07 10:52:56 IST 2018', '0ee4e1ce-681f-45f9-9352-90a159228385', 300, 765, 400, 200, 300, FALSE);
 
 /*
  * Insert Showrooms

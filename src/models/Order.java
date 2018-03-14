@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Order {
+	
+	private int dataId;
 	private UUID ID;
 	private Date date;
 	private User customer;
@@ -104,7 +106,7 @@ public class Order {
 	public int getTicketCount() {
 		int j = 0;
 		for(Integer i : tickets) {
-			i = i + j;
+			j = i + j;
 		}
 		return j;
 	}
@@ -146,5 +148,13 @@ public class Order {
 
 	public void setID(UUID iD) {
 		ID = iD;
+	}
+
+	public int getDataId() {
+		return dataId;
+	}
+
+	public void setDataId(int dataId) {
+		this.dataId = dataId;
 	}
 }

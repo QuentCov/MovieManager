@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS Orders
     CreditCardId INT,
     BillingAddressId INT,
     ShippingAddressId INT,
+    Fulfilled BOOLEAN NULL DEFAULT FALSE,
     PRIMARY KEY ( ID ),
     CONSTRAINT FK_CustomerId FOREIGN KEY (CustomerId) REFERENCES User(ID),
     CONSTRAINT FK_BillingAddressId FOREIGN KEY (BillingAddressId) REFERENCES Address(ID),
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS OrdersMovies
     NumTickets INT(3) NULL DEFAULT NULL,
     PRIMARY KEY ( ID ),
     CONSTRAINT FK_OrdersId FOREIGN KEY (OrdersId) REFERENCES Orders(ID),
-    CONSTRAINT FK_MovieShowingsId FOREIGN KEY (MovieShowingsId) REFERENCES MovieShowing(ID);
+    CONSTRAINT FK_MovieShowingsId FOREIGN KEY (MovieShowingsId) REFERENCES MovieShowing(ID));
 
 CREATE TABLE IF NOT EXISTS Theatre
     (ID INT NOT NULL AUTO_INCREMENT,

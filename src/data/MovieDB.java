@@ -15,6 +15,7 @@ public class MovieDB {
 	public static Movie createMovie(ResultSet rs) {
 		Movie movie = new Movie();
 		try {
+			movie.setID(rs.getInt("ID"));
 			movie.setName(rs.getString("Name"));
 			movie.setGenre(rs.getString("Genre"));
 			movie.setThumbnailName(rs.getString("ThumbnailName"));
@@ -195,9 +196,9 @@ public class MovieDB {
 	}
 
 	public static double getAverageScore(Movie movie) {
-		String query = "SELECT r.Rating FROM Movies m "
+		String query = "SELECT r.Rating FROM Movie m "
 					 + "INNER JOIN Review r ON m.ID=r.MovieId "
-					 + "WHERE Name=?;";
+					 + "WHERE m.Name=?;";
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(movie.getName());
 		Connection c = Database.getConnection();
@@ -206,6 +207,7 @@ public class MovieDB {
 		double i = 0;
 		int count = 0;
 		try {
+			statement.setString(1, movie.getName());
 			ResultSet rs = statement.executeQuery();
 			while(rs.next()) {
 				i = i + rs.getInt("Rating");

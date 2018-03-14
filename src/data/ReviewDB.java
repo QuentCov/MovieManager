@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import models.Movie;
 import models.Review;
@@ -58,25 +57,21 @@ public class ReviewDB {
 	}
 	
 	public static ArrayList<Review> getReviewByMovie(Movie movie) {
-		String query = "SELECT * FROM User WHERE Name=?;";
+		String query = "SELECT * FROM Review r "
+		    	     + "INNER JOIN Movie m on r.MovieId=m.ID "
+		    	     + "INNER JOIN User u on r.ReviewerId=u.ID "
+		    	     + "WHERE MovieId=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		try {
-			s.setString(1, movie.getName());
+			s.setInt(1, movie.getID());
 			ResultSet rs = s.executeQuery();
 			ArrayList<Review> reviews = new ArrayList<Review>();
-			if(rs.next())
+			while(rs.next())
 			{
-			    query = "SELECT * FROM Review r "
-			    	  + "INNER JOIN User u on r.ReviewerId=m.Id "
-			    	  + "WHERE MovieId=" + rs.getInt("ID") + ";";
-			    s = Database.prepareStatement(c, query);
-				rs = s.executeQuery();
-			    while(rs.next()) {
-			    	User user = UserDB.createUser(rs);
-			    	Review review = createReview(rs, user, movie);
-			    	reviews.add(review);
-			    }
+		    	User user = UserDB.createUser(rs);
+		    	Review review = createReview(rs, user, movie);
+		    	reviews.add(review);
 			}
 			rs.close();
 			s.close();
@@ -111,18 +106,24 @@ public class ReviewDB {
 				
 			}
 			rs.close();
-			s.close();
-			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		Date date = new Date();
-	    query = "INSERT INTO Review (Review, ReviewerId, MovieId, Rating, ReviewDate) "
-	    	  + "VALUES (?, " + ownerId + ", " + movieId + ", " + review.getRating() + ", "+ date + ");";
-	    ArrayList<String> params = new ArrayList<String>();
-	    params.add(review.getReview());
-		int i = Database.runUpdate(query);
+	    query = "INSERT INTO Review (Review, ReviewerId, MovieId, Rating) "
+	    	  + "VALUES (?, ?, ?, ?);";
+	    s = Database.prepareStatement(c, query);
+	    int i = -1;
+		try {
+			s.setString(1, review.getReview());
+			s.setInt(2, ownerId);
+			s.setInt(3, movieId);
+			s.setInt(4, review.getRating());
+			i = s.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		if(i == 1) {
 		    return true;
 		}

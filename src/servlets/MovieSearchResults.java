@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.MovieDB;
+import data.MovieShowingDB;
+import data.ReviewDB;
 import models.Movie;
+import models.MovieShowing;
+import models.Review;
 
 /**
  * Servlet implementation class MovieSearchResults
@@ -31,14 +36,37 @@ public class MovieSearchResults extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String name = (String) session.getAttribute("searchString");
-		Movie movie = MovieDB.getMovieByName(name);
-		if(movie != null) {
-			session.setAttribute("movie", movie);
+		int showingId = Integer.parseInt(request.getParameter("itemIndex"));
+		MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+		
+		if(showing != null) {
+			Movie movie = MovieDB.getMovieByName(showing.getMovie().getName());
+			if(movie != null) {
+				ArrayList<Review> reviews = ReviewDB.getReviewByMovie(movie);
+				if(reviews == null) {
+					session.setAttribute("reviews", null);
+				} else {
+					session.setAttribute("reviews", reviews);
+				}
+				session.setAttribute("results", null);
+				session.setAttribute("movie", movie);
+				session.setAttribute("showing", showing);
+			} else {
+				session.setAttribute("results", "Movie Not Found");
+				session.setAttribute("movie", null);
+				session.setAttribute("showing", null);
+				session.setAttribute("reviews", null);
+			}
+			
+		} else {
+			session.setAttribute("results", "Movie Not Found");
+			session.setAttribute("movie", null);
+			session.setAttribute("showing", null);
+			session.setAttribute("reviews", null);
 		}
 		
-		session.setAttribute("results", "Movie Not Found");
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieDetailsResults.jsp");
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieDetailsSelection.jsp");
   	    dispatcher.forward(request, response);
 	}
 

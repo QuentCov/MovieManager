@@ -49,8 +49,7 @@ public class TheatreDB {
 	public static ArrayList<Theatre> getTheatres() {
 		String query = "SELECT * FROM Theatre "
 					 + "INNER JOIN User ON Theatre.OwnerId=User.ID "
-					 + "INNER JOIN Address ON Address.ID=User.AddressId "
-					 + "INNER JOIN Showroom ON Showroom.TheatreId=Theatre.ID;";
+					 + "INNER JOIN Address ON Address.ID=User.AddressId;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Theatre> theatres = new ArrayList<Theatre>();

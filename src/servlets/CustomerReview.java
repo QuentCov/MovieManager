@@ -48,6 +48,13 @@ public class CustomerReview extends HttpServlet {
 		Review review = new Review();
 		review.setReviewer(reviewer);
 		review.setReview(reviewString);
+		
+		if(review.getReview() == null) {
+			//The review was too long.
+			session.setAttribute("Review_too_long", true);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 		review.setRating(rating);
 		review.setMovie(movie);
 		review.setDate(new Date());
@@ -56,7 +63,8 @@ public class CustomerReview extends HttpServlet {
 		if(!added) {
 			response.sendError(500, "Failed to add review");
 		} else {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
+			session.setAttribute("Review_too_long", null);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReviewConfirmation.jsp");
 	  	    dispatcher.forward(request, response);
 		}
 		

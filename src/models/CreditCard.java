@@ -2,6 +2,7 @@ package models;
 
 public class CreditCard {
 	
+	private int ID;
 	private User owner;
 	private String cardType;
 	private String cardNumber;
@@ -52,5 +53,11 @@ public class CreditCard {
 	}
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+	public int getID() {
+		return ID;
+	}
+	public void setID(int iD) {
+		ID = iD;
 	}
 }

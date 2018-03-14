@@ -13,6 +13,7 @@ import java.util.Date;
 import models.Movie;
 import models.MovieShowing;
 import models.Showroom;
+import models.Theatre;
 
 public class MovieShowingDB {
 	
@@ -27,6 +28,7 @@ public class MovieShowingDB {
              
             String startTimeString = rs.getString("StartTime"); 
             String endTimeString = rs.getString("EndTime"); 
+            
             DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy"); 
             Date startTimeDate = format.parse(startTimeString); 
             Date endTimeDate = format.parse(endTimeString); 
@@ -186,20 +188,10 @@ public class MovieShowingDB {
 	    return false;
 	}
 	
-	//Note: We recognize the inefficiency here and have brainstormed solutions, 
-	//	    but these solutions are too extensive for a project of this scope.
 	public static boolean updateMovieShowingByID(MovieShowing movieShowing, int id) {
-		int movieId = MovieDB.getMovieIdByName(movieShowing.getMovie().getName());
-		int showroomId = ShowroomDB.getShowroomIdByName(movieShowing.getShowroom().getName());
+		String query = "UPDATE MovieShowing SET NumTicketsSold=" + movieShowing.getNumTicketsSold() + " WHERE ID=" + id + ";";
 		
-		String query = "UPDATE MovieShowing SET MovieId=" + movieId + ", ShowroomId=" + showroomId + ", StartTime=?, EndTime=?, "
-							+ "NumTicketsSold=" + movieShowing.getNumTicketsSold() + ", Cost=" + movieShowing.getCost()
-							+ " WHERE ID=" + id + ";";
-		
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(movieShowing.getStartTime().toString());
-		params.add(movieShowing.getEndTime().toString());
-		int i = Database.runUpdate(query, params);
+		int i = Database.runUpdate(query);
 	    if(i == 1) {
 	    	return true;
 	    }
@@ -207,38 +199,96 @@ public class MovieShowingDB {
 	}
 	
 	public static boolean updateMovieShowing(MovieShowing movieShowing) {
-		
-		String query = "SELECT ID FROM Movie WHERE Name=" + movieShowing.getMovie().getName() + ";";
+		String query = "SELECT ID FROM Movie WHERE Name=?;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		int movieId = -1;
 		try {
+			s.setString(1, movieShowing.getMovie().getName());
 			ResultSet rs = s.executeQuery();
-			movieId = rs.getInt("ID");
+			if(rs.next()) {
+				movieId = rs.getInt("ID");
+			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		query = "SELECT ID FROM Showroom WHERE Name=" + movieShowing.getShowroom().getName() + ";";
+		if(movieId == -1) {
+			return false;
+		}
+		
+		query = "SELECT ID FROM Showroom WHERE Name=?;";
 		s = Database.prepareStatement(c, query);
 		int showroomId = -1;
 		try {
+			s.setString(1, movieShowing.getShowroom().getName());
 			ResultSet rs = s.executeQuery();
-			showroomId = rs.getInt("ID");
+			if(rs.next()) {
+				showroomId = rs.getInt("ID");
+			}
 			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "UPDATE MovieShowing SET NumTicketsSold=? WHERE MovieId=? AND ShowroomId=?;";
+		s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setInt(1, movieShowing.getNumTicketsSold());
+			s.setInt(2, movieId);
+			s.setInt(3, showroomId);
+			i = s.executeUpdate();
 			s.close();
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		query = "INSERT INTO MovieShowing (NumTicketsSold) VALUES (" + movieShowing.getNumTicketsSold() + ") "
-			  + "WHERE MovieId=" + movieId + " AND ShowroomId=" + showroomId + ";";
-		int i = Database.runUpdate(query);
-	    if(i == 1) {
+	    if(i != -1) {
 	    	return true;
 	    }
 	    return false;
+	}
+
+	public static ArrayList<MovieShowing> getAllShowings() {
+		String query = "SELECT * FROM MovieShowing;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+		try {
+			ResultSet rs = s.executeQuery();
+			while(rs.next()) {
+				showings.add(createMovieShowing(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return showings;
+	}
+
+	public static ArrayList<MovieShowing> getMovieShowingsByTheatre(Theatre theatre) {
+		String query = "SELECT * FROM Theatre t "
+				     + "INNER JOIN Showroom s ON s.TheatreId=t.ID "
+				     + "INNER JOIN MovieShowing ON MovieShowing.ShowroomId=s.ID "
+				     + "WHERE t.Name=?;";
+		
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+		
+		try {
+			s.setString(1, theatre.getName());
+			ResultSet rs = s.executeQuery();
+			while(rs.next()) {
+				showings.add(createMovieShowing(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return showings;
 	}
 }

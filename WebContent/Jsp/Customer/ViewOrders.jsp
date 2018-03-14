@@ -11,7 +11,7 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
 			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>View All Orders</h1>
@@ -28,24 +28,29 @@
 				    <div class="col-sm-3">Poster</div>
 					<div class="col-sm-1">Tickets Bought</div>
 					<div class="col-sm-1">Total Cost</div>
-					<div class="col-sm-2">Actions</div>
 				</div>
 		        <c:forEach items="${cart}" var="current">
-		        	<div class="row">
-		        		<div class="col-sm-9">
-				    		<c:forEach items="${current.getShowings()}" var="showing">
-				    			<div class="row">
-					    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
-						            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-						            <div class="col-sm-1">${showing.getStartTime()}</div>
-						            <div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
-						            <div class="col-sm-1">${showing.getCost()}</div>
-						            <div class="col-sm-3">${showing.getMovie().getThumbnailData()}</div>
-						            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
-				    			</div>
-							</c:forEach>
-						</div>
-				    	<div class="col-sm-1">Total Cost: ${current.getCost()}</div>
+		    		<c:forEach items="${current.getShowings()}" var="showing">
+		    			<div class="row">
+			    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
+				            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
+				            <div class="col-sm-1">${showing.getStartTime()}</div>
+				            <div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
+				            <div class="col-sm-1">${showing.getCost()}</div>
+				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
+							<c:choose>
+								<c:when test="${empty data}">
+									<div class="col-sm-3">Sorry! No thumbnail available.</div>
+								</c:when>
+								<c:otherwise>
+									<div class="col-sm-3"><img class="img-fluid" src="data:image/jpeg;base64,${showing.getMovie().renderImage()}" alt="${showing.getMovie().getName()} Poster"/></div>
+								</c:otherwise>
+							</c:choose>
+				            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
+		    			</div>
+					</c:forEach>
+					<div class="row">
+				    	<div class="offset-sm-9 col-sm-1">Total Cost: ${current.getCost()}</div>
 				    	<div class="col-sm-2">
 					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrders" >
 					    		<input type="hidden" name="order" value="${current.getID()}"/>
@@ -54,8 +59,13 @@
 				        </div>
 			        </div>
 				</c:forEach>
+				<br>
 				<div class="row">
-					<a href="${pageContext.request.contextPath}/ViewAndCheckoutShoppingCart.jsp" class="btn btn-success">Checkout</a>
+					<div class="offset-sm-11 col-sm-1">
+						<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				        	<input type="submit" class="btn btn-primary" value="Checkout">
+				        </form>
+					</div>
 				</div>
 			</c:if>
 	</div>

@@ -13,9 +13,11 @@ public class CreditCardsDB {
 	public static CreditCard createCard(ResultSet rs, Connection c) {
 		CreditCard card = new CreditCard();
 		try {
+			card.setID(rs.getInt("ID"));
 			card.setCardType(rs.getString("CardType"));
 			card.setCardNumber(rs.getString("CardNumber"));
 			card.setCcv(rs.getInt("CCV"));
+			card.setBalance(rs.getDouble("Balance"));
 			card.setExpirationMonth(rs.getInt("ExpirationMonth"));
 			card.setExpirationYear(rs.getInt("ExpirationYear"));
 			
@@ -101,18 +103,30 @@ public class CreditCardsDB {
 				ownerId = rs.getInt("ID");
 			}
 			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "INSERT INTO CreditCard (OwnerId, CardType, CardNumber, CCV, ExpirationMonth, ExpirationYear, Balance)"
+				     + "VALUES (?, ?, ?, ?, ?, ?, ?);";
+		
+		s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setInt(1, ownerId);
+			s.setString(2, card.getCardType());
+			s.setString(3, card.getCardNumber());
+			s.setInt(4, card.getCcv());
+			s.setInt(5, card.getExpirationMonth());
+			s.setInt(6, card.getExpirationYear());
+			s.setDouble(7, card.getBalance());
+			i = s.executeUpdate();
 			s.close();
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		query = "INSERT INTO CreditCard (CardHolderName, CardNumber, Balance, CardType, UserId, CVV, ExpirationYear, ExpirationMonth)"
-				     + "VALUES (?, ?, 0.00, ?, " + ownerId + ", " + card.getCcv() + ", " + card.getExpirationYear() + "," + card.getExpirationMonth() + ");";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(card.getCardType());
-		int i = Database.runUpdate(query, params);
-		if(i == 1) {
+		if(i != -1) {
 		    return true;
 		}
 		return false;
@@ -145,5 +159,29 @@ public class CreditCardsDB {
 			return true;
 		}
 		return false;
+	}
+
+	public static ArrayList<CreditCard> getCreditCardsByUser(int userId) {
+		String query = "SELECT * FROM CreditCard WHERE OwnerId=?;";
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		ArrayList<CreditCard> cards = new ArrayList<CreditCard>();
+		CreditCard card = null;
+		try {
+			s.setDouble(1, userId);
+			ResultSet rs = s.executeQuery();
+			while(rs.next()) {
+				card = createCard(rs);
+				cards.add(card);
+			}
+			rs.close();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return cards;
+		
 	}
 }
