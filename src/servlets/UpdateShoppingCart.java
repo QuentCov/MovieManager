@@ -34,6 +34,12 @@ public class UpdateShoppingCart extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Get the shopping cart again, in case it was modified since the last time.
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+		session.setAttribute("cart", cart);
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
   	    dispatcher.forward(request, response);
 	}
@@ -104,8 +110,6 @@ public class UpdateShoppingCart extends HttpServlet {
 					int cartSize = (Integer) session.getAttribute("cartSize");
 					session.setAttribute("cartSize", cartSize+1);
 					session.setAttribute("cart", cart);
-					RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-			  	    dispatcher.forward(request, response);
 				}
 			}
 		} else if(t.equals("delete")) {
@@ -113,10 +117,8 @@ public class UpdateShoppingCart extends HttpServlet {
 			if(order != null) {
 				cart.remove(order);
 			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-	  	    dispatcher.forward(request, response);
 		}
 		
-		
+		return;
 	}
 }

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <head>
 	<%@ include file="/_partials/headTags.html" %>
 	<title>Movies Details Selection</title>
@@ -49,7 +50,7 @@
             <div class="col-sm-1">${showing.getCost()}</div>
             <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
 	    	<div class="col-sm-2">
-	    		<form name="addItem" action=${pageContext.request.contextPath}/UpdateShoppingCart onsubmit="return moreThanZero()" onkeypress="return isNumberKey(event)" method="POST" >
+	    		<form id="addItem" name="addItem" onsubmit="return moreThanZero(); return addToCart();" onkeypress="return isNumberKey(event)">
 		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
 		        	<input type='hidden' name='type' value='add'>
 		        	<input type='text' name='ticketCount' placeholder="Ticket Count">
@@ -80,7 +81,7 @@
     <script>
 	    function isNumberKey(evt){
 	        var charCode = (evt.which) ? evt.which : event.keyCode
-	        if (charCode > 31 && (charCode < 48 || charCode > 57))
+	        if (charCode > 31 && ((charCode < 48) || (charCode > 57)))
 	            return false;
 	        return true;
 	    }
@@ -91,6 +92,24 @@
 	    		return false;
 	    	}
 	    	return true;
+	    }
+	    
+	    function addToCart(){
+	    	var xmlhttp;
+	    	if (window.XMLHttpRequest) {
+	    		// code for IE7+, Firefox, Chrome, Opera, Safari
+	    		xmlhttp=new XMLHttpRequest();
+	    	} else {
+	    		// code for IE6, IE5
+	    		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+	    	}            
+	    	xmlhttp.onreadystatechange=function() {            
+	    		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	    			evt.target.append("<p>Added to Cart</p>");
+	    		} 
+	    	}       
+    		xmlhttp.open("POST","ajax_info.txt",true);            
+    		xmlhttp.send($("#addItem"));
 	    }
 	</script>
 </body>
