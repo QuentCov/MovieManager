@@ -87,8 +87,7 @@ public class UpdateShoppingCart extends HttpServlet {
 				boolean cap = order.isNotOverCapacity();
 				if(!cap) {
 					//We can't sell that many tickets.
-					RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-			  	    dispatcher.forward(request, response);
+					response.sendError(400, "That's too many tickets.");
 				} else {
 					//All purchases are valid.
 					for(int i = 0; i < movies.size(); i++) {

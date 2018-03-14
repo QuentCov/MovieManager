@@ -93,7 +93,7 @@ public class OrdersDB {
 	public static ArrayList<Order> getOrders(String email) {
 		String query = "SELECT o.OurId FROM User u "
 				     + "INNER JOIN Orders o ON o.CustomerId=u.ID "
-				     + "WHERE EmailAddress=?;";
+				     + "WHERE EmailAddress=? AND o.Fulfilled=0;";
 		Connection c = Database.getConnection();
 		PreparedStatement s = Database.prepareStatement(c, query);
 		ArrayList<Order> orders = new ArrayList<Order>();
@@ -504,6 +504,24 @@ public class OrdersDB {
 			cost = cost + orders.get(i).getCost();
 		}
 		return cost;
+	}
+
+	public static int fulfillOrder(Order order) {
+		String query = "UPDATE Orders SET Fulfilled=TRUE WHERE OurId=?";
+		String id = order.getID().toString();
+		Connection c = Database.getConnection();
+		PreparedStatement s = Database.prepareStatement(c, query);
+		int i = -1;
+		try {
+			s.setString(1, id);
+			i = s.executeUpdate();
+			s.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return i;
 	}
 	
 }

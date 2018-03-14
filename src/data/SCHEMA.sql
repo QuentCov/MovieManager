@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS Orders
     CreditCardId INT,
     BillingAddressId INT,
     ShippingAddressId INT,
+    Fulfilled BOOLEAN NULL DEFAULT FALSE,
     PRIMARY KEY ( ID ),
     CONSTRAINT FK_CustomerId FOREIGN KEY (CustomerId) REFERENCES User(ID),
     CONSTRAINT FK_BillingAddressId FOREIGN KEY (BillingAddressId) REFERENCES Address(ID),

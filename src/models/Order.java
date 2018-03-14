@@ -106,7 +106,7 @@ public class Order {
 	public int getTicketCount() {
 		int j = 0;
 		for(Integer i : tickets) {
-			i = i + j;
+			j = i + j;
 		}
 		return j;
 	}

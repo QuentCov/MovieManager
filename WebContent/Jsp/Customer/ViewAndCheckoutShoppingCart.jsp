@@ -29,18 +29,18 @@
 				<div class="col-sm-1">Total Cost</div>
 			</div>
 	        <c:forEach items="${cart}" var="current">
-	        <div class="row">
 	    		<c:forEach items="${current.getShowings()}" var="showing">
-	    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
-		            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-		            <div class="col-sm-1">${showing.getStartTime()}</div>
-		            <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
-		            <div class="col-sm-1">${showing.getCost()}</div>
-		            <div class="col-sm-3">${showing.getMovie().getThumbnailData()}</div>
-		            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
+	    			<div class="row">
+		    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
+			            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
+			            <div class="col-sm-1">${showing.getStartTime()}</div>
+			            <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
+			            <div class="col-sm-1">${showing.getCost()}</div>
+			            <div class="col-sm-3">${showing.getMovie().getThumbnailData()}</div>
+			            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
+			            <div class="col-sm-1">Total Cost: ${showing.getCost() * current.getTicketsByMovie(showing.getMovie())}</div>
+					</div>
 				</c:forEach>
-		    	<div class="col-sm-1">Total Cost: ${current.getCost()}</div>
-		    </div>
 			</c:forEach>
 			<div class="row">
 				<div class="offset-md-8 col-sm-3">

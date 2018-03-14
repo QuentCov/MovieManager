@@ -58,25 +58,13 @@ public class CustomerTransactionConfirmation extends HttpServlet {
 		card.setOwner(owner);
 		
 		//See if this is a card the user has used before.
-		boolean exists = false;
 		for(int i = 0; i < cards.size(); i++) {
-			if(card.getCardNumber().equals(cards.get(i).getCardNumber())) {
-				if(card.getCardType().equals(cards.get(i).getCardType())) {
-					if(card.getCcv() == cards.get(i).getCcv()) {
-						if(card.getExpirationMonth() == cards.get(i).getExpirationMonth()) {
-							if(card.getExpirationYear() == cards.get(i).getExpirationYear()) {
-								//Update the balance on this card, instead of making a new one.
-								card.setBalance(cards.get(i).getBalance());
-								i = cards.size();
-							}
-						}
-					}
-				}
+			if(card.getCardNumber().equals(cards.get(i).getCardNumber()) && card.getCardType().equals(cards.get(i).getCardType())
+				&& card.getCcv() == cards.get(i).getCcv() && card.getExpirationMonth() == cards.get(i).getExpirationMonth() && card.getExpirationYear() == cards.get(i).getExpirationYear()) {
+				//Update the balance on this card, instead of making a new one.
+				card.setBalance(cards.get(i).getBalance());
+				i = cards.size();
 			}
-		}
-		
-		if(!exists) {
-			CreditCardsDB.addCreditCard(card);
 		}
 		
 		//Update the cards balance.
@@ -84,11 +72,13 @@ public class CustomerTransactionConfirmation extends HttpServlet {
 		ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");
 		card.setBalance(card.getBalance() + OrdersDB.getTotalCost(cart));
 		
-		//Remove the order's from the database.
+		//Remove the orders from the database.
 		cart = OrdersDB.getOrders(owner.getEmailAddress());
 		for(int i = 0; i < cart.size(); i++) {
-			//TODO: Discuss with David. Do we want to do this, or add another column to show completion?
-			OrdersDB.deleteOrder(cart.get(i));
+			int j = OrdersDB.fulfillOrder(cart.get(i));
+			if(j == -1) {
+				response.sendError(500, "Internal Server Error");
+			}
 		}
 		
 		session.setAttribute("cart", new ArrayList<Order>());

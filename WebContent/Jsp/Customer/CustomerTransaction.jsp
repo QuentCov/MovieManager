@@ -18,31 +18,33 @@
 		<h3>Purchases</h3>
 		<div class="container">
 	        <div class="row">
-		        <div class="col-sm-2">Movies</div>
+		        <div class="col-sm-6">Movies</div>
 				<div class="col-sm-2">Tickets Bought</div>
 				<div class="col-sm-2">Total Price</div>
 	        </div>
-	        <div class="row">
-		        <c:forEach items="${cart}" var="order">
-	    			<c:forEach items="${order.getShowings()}" var="movie">
-		    			<div class="col-sm-2">${movie.getMovie().getName()}</div>
+	        <c:forEach items="${cart}" var="order">
+	        	<div class="row">
+	        	<div class="col-sm-6">
+	    			<c:forEach items="${order.getShowings()}" var="movie"  varStatus="loop">
+		    			<p>${movie.getMovie().getName()}</p>
 		        	</c:forEach>
-		            <div class="col-sm-2">${order.getTicketCount()}</div>
-		            <div class="col-sm-2">${order.getCost()}</div>
-		        </c:forEach>
-	    	</div>
+	        	</div>
+	            <div class="col-sm-2">${order.getTicketCount()}</div>
+	            <div class="col-sm-2">${order.getCost()}</div>
+	            </div>
+	        </c:forEach>
 		</div>
 		<br>
-		<form name="creditForm" onsubmit="return validateForm()" method="POST" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
+		<form name="creditForm" method="POST" onsubmit="return validateForm();" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
 			<div class="form-group">
 				<label for="fName">First Name: </label>
-    			<input type="text" class="form-control" id="fName" name="fName" placeholder="First Name">
-   			</div>
-   			<div class="form-group">
+   				<input type="text" class="form-control" id="fName" name="fName" placeholder="First Name">
+  			</div>
+  			<div class="form-group">
 				<label for="lName">Last Name: </label>
-    			<input type="text" class="form-control" id="lName" name="lName" placeholder="Last Name">
-   			</div>
-   			<div class="form-group">
+   				<input type="text" class="form-control" id="lName" name="lName" placeholder="Last Name">
+  			</div>
+  			<div class="form-group">
 				<label for="cardType">Card Type: </label>
 				<select class="form-control" id="cardType" name="cardType">
 					<option value="none">Select Your Card Type:</option>
@@ -53,14 +55,14 @@
 			</div>
 			<div class="form-group">
 				<label for="cardNumber">Credit Card Number: </label>
-    			<input type="number" class="form-control" id="cardNumber" name="cardNumber" placeholder="Valid Card Number">
-   			</div>
-   			<div class="form-group">
+   				<input type="number" class="form-control" id="cardNumber" name="cardNumber" placeholder="Valid Card Number">
+  			</div>
+  			<div class="form-group">
 				<label for="cvv">CVV: </label>
-    			<input type="number" class="form-control" id="cvv" name="cvv" placeholder="***">
-   			</div>
-   			<br>
-   			<div class="form-group">
+   				<input type="number" class="form-control" id="cvv" name="cvv" placeholder="***">
+  			</div>
+  			<br>
+  			<div class="form-group">
 				<label for="month">Expiration Month: </label>
 				<select class="form-control" id="month" name="month">
 					<option value="none">Select the card's expiration month:</option>
@@ -77,29 +79,29 @@
 					<option>11</option>
 					<option>12</option>
 				</select>
-				<label for="year">Expiration Year: </label>
-				<select class="form-control" id="year" name="year">
-					<option value="none">Select the card's expiration year:</option>
-					<option>18</option>
-					<option>19</option>
-					<option>20</option>
-					<option>21</option>
-					<option>22</option>
-					<option>23</option>
-					<option>24</option>
-					<option>25</option>
-				</select>
-   			</div>
-   			<br>
-   			<div class="form-group">
-   				<label for="bAddress">Billing Address: </label>
-    			<input type="text" class="form-control" id="bAddress" name="bAddress" placeholder="">
-   			</div>
-   			<br>
-   			<div class="form-group">
-   				<label for="sAddress">Shipping Address: </label>
-    			<input type="text" class="form-control" id="sAddress" name="sAddress" placeholder="">
-   			</div>
+			<label for="year">Expiration Year: </label>
+			<select class="form-control" id="year" name="year">
+				<option value="none">Select the card's expiration year:</option>
+				<option>18</option>
+				<option>19</option>
+				<option>20</option>
+				<option>21</option>
+				<option>22</option>
+				<option>23</option>
+				<option>24</option>
+				<option>25</option>
+			</select>
+  			</div>
+  			<br>
+  			<div class="form-group">
+  				<label for="bAddress">Billing Address: </label>
+   			<input type="text" class="form-control" id="bAddress" name="bAddress" placeholder="">
+  			</div>
+  			<br>
+  			<div class="form-group">
+  				<label for="sAddress">Shipping Address: </label>
+   			<input type="text" class="form-control" id="sAddress" name="sAddress" placeholder="">
+  			</div>
    			<div class="col-md-2">
 				<input type="submit" class="btn btn-primary" value="Confirm Payment">
 			</div>
@@ -114,8 +116,8 @@
 	</div>
 	<script>
 		function validateForm() {
-			var fName = document.forms["creditForm"]["fname"].value;
-			var lName = document.forms["creditForm"]["lname"].value;
+			var fName = document.forms["creditForm"]["fName"].value;
+			var lName = document.forms["creditForm"]["lName"].value;
 			var cardNumber = document.forms["creditForm"]["cardNumber"].value;
 			var cardType = document.forms["creditForm"]["cardType"].value;
 			var cvv = document.forms["creditForm"]["cvv"].value;
@@ -123,7 +125,7 @@
 			var year = document.forms["creditForm"]["year"].value;
 			var bAddress = document.forms["creditForm"]["bAddress"].value;
 			var sAddress = document.forms["creditForm"]["sAddress"].value;
-			
+
 			if(fName === "") {
 				alert("First Name must be filled out.");
 				return false;

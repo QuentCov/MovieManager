@@ -87,7 +87,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
 			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 			for(int i = 0; i < theatres.size(); i++) {
-				showings = MovieShowingDB.getMovieShowingsByTheatre(theatres.get(i));
+				showings.addAll(MovieShowingDB.getMovieShowingsByTheatre(theatres.get(i)));
 			}
 			
 			session.setAttribute("showings", showings);
