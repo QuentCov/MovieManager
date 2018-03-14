@@ -58,13 +58,15 @@ public class UpdateShoppingCart extends HttpServlet {
 		
 		Order order = (Order) session.getAttribute("order");
 		MovieShowing showing = (MovieShowing) session.getAttribute("showing");
-		int ticket = Integer.parseInt(request.getParameter("ticketCount"));
+		String temp = request.getParameter("ticketCount");
+		int ticket = Integer.parseInt(temp);
 		
 		String t = request.getParameter("type");
-		int orderId = -1;
 		UUID id = UUID.randomUUID();
+		boolean update = true;
 		if(order == null) {
 			//Make a new order.
+			update = false;
 			order = new Order();
 			User owner = (User) session.getAttribute("user");
 			order.setCustomer(owner);
@@ -78,13 +80,12 @@ public class UpdateShoppingCart extends HttpServlet {
 			ArrayList<Integer> tickets = new ArrayList<Integer>();
 			tickets.add(ticket);
 			order.setTickets(tickets);
-			orderId = OrdersDB.addOrder(order);
-			order.setDataId(orderId);
 		}
 		
 		
 		if(t != null && t.equals("add")) {
 			//Check to ensure that the order is possible.
+			
 			if(order != null) {
 				//Check the capacity of the showrooms of the movie's in the order.
 				ArrayList<MovieShowing> movies = order.getShowings();
@@ -103,7 +104,15 @@ public class UpdateShoppingCart extends HttpServlet {
 						movies.get(i).setNumTicketsSold(orderCapacity + ticketsSold);
 						order.setCost(ticketsSold * movies.get(i).getCost());
 						MovieShowingDB.updateMovieShowing(movies.get(i));
-						OrdersDB.addItem(order, movies.get(i), tickets.get(i));
+					}
+					
+					if(update) {
+						//The order existed already. Update it by removing and adding it.
+						OrdersDB.deleteOrder(order);
+						OrdersDB.addOrder(order);
+					} else {
+						//The order is completely new.
+						OrdersDB.addOrder(order);
 					}
 					
 					cart.add(order);
