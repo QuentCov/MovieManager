@@ -20,6 +20,7 @@
 				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
             	<input type="submit" class="btn btn-primary" value="Checkout">
 			</form>
+
 			<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -56,13 +57,18 @@
             <div class="col-sm-1"><c:out value="${showing.getCost()}"/></div>
             <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}"/></div>
 	    	<div class="col-sm-2">
-	        	<input type='hidden' id='updateItem' value="${movie.getName()}">
-	        	<input type='hidden' id='type' value='add'>
-	        	<form>
-	        		<input type='text' onkeypress="return isNumberKey(event)" id='ticketCount' placeholder="Ticket Count">
-	        	</form>
-	        	<button id="addItem" class="btn btn-primary" value="Add to Cart">Add to Cart</button>
-	        	<div id="message" style="display: none;"><h6>Added to Cart</h6></div>
+	    		<form name="addItem" action=${pageContext.request.contextPath}/UpdateShoppingCart onsubmit="return moreThanZero()" onkeypress="return isNumberKey(event)" method="POST" >
+		        	<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
+		        	<input type='hidden' name='type' value='add'>
+		        	<input type='text' name='ticketCount' placeholder="Ticket Count">
+		        	<input type="submit" class="btn btn-primary" value="Add to Cart">
+		        </form>
+		    	<form name="addReview" action="${pageContext.request.contextPath}/CustomerReviewSetup">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+					<input type='hidden' name='reviewMovie' value="${movie.getName()}">
+		        	<input type="submit" class="btn btn-primary" value="Add Review">
+		        </form>
 	        </div>
         </div>
 		<h2>Viewer Reviews:</h2>

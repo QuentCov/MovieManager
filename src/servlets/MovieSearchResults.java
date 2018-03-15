@@ -43,18 +43,21 @@ public class MovieSearchResults extends HttpServlet {
 		if(!sessionToken.equals(requestToken)) {
 			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
-		
 			//Get the showing's id, either from the search bar, or the most recent search.
-    		String showingIdtemp = request.getParameter("itemIndex");
-    		int showingId = -1;
-    		if(showingIdtemp == null) {
-    			showingId = (int) session.getAttribute("itemIndex");
-    		} else {
-    			showingId = Integer.parseInt(showingIdtemp);
-    			session.setAttribute("itemIndex", showingId);
-    		}
-    		
-    		MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+			String showingIdtemp = request.getParameter("itemIndex");
+			int showingId = -1;
+			if(showingIdtemp == null) {
+				showingId = (int) session.getAttribute("itemIndex");
+			} else {
+				showingId = Integer.parseInt(showingIdtemp);
+				session.setAttribute("itemIndex", showingId);
+			}
+			
+			MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+
+			
+			showingId = Integer.parseInt(request.getParameter("itemIndex"));
+			showing = MovieShowingDB.getMovieShowingById(showingId);
 			
 			if(showing != null) {
 				Movie movie = MovieDB.getMovieByName(showing.getMovie().getName());
