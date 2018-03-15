@@ -8,9 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.MovieDB;
 import models.Movie;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class OwnerMovieSearchResults
@@ -36,16 +38,27 @@ public class OwnerMovieSearchResults extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String movieToSearch = request.getParameter("movieToSearch");		
-		ArrayList<Movie> movies = new ArrayList<Movie>();
+		HttpSession session = request.getSession();
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		if (movieToSearch.equals("")) {
-			movies = MovieDB.getAllMovies();
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
-			movies = MovieDB.searchMoviesByName(movieToSearch);
+			String movieToSearch = request.getParameter("movieToSearch");
+			movieToSearch = SecurityUtilities.filterString(movieToSearch);
+			
+			ArrayList<Movie> movies = new ArrayList<Movie>();
+			
+			if (movieToSearch.equals("")) {
+				movies = MovieDB.getAllMovies();
+			} else {
+				movies = MovieDB.searchMoviesByName(movieToSearch);
+			}
+		    request.setAttribute("movies", movies);
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/MovieSearchResults.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-	    request.setAttribute("movies", movies);
-	    RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/MovieSearchResults.jsp");
-  	    dispatcher.forward(request, response);
 	}
 }

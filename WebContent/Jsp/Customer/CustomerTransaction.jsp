@@ -9,9 +9,12 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Transaction Page</h1>
@@ -26,16 +29,17 @@
 	        	<div class="row">
 	        	<div class="col-sm-6">
 	    			<c:forEach items="${order.getShowings()}" var="movie"  varStatus="loop">
-		    			<p>${movie.getMovie().getName()}</p>
+		    			<p><c:out value="${movie.getMovie().getName()}"/></p>
 		        	</c:forEach>
 	        	</div>
-	            <div class="col-sm-2">${order.getTicketCount()}</div>
-	            <div class="col-sm-2">${order.getCost()}</div>
+	            <div class="col-sm-2"><c:out value="${order.getTicketCount()}"/></div>
+	            <div class="col-sm-2"><c:out value="${order.getCost()}"/></div>
 	            </div>
 	        </c:forEach>
 		</div>
 		<br>
 		<form name="creditForm" method="POST" onsubmit="return validateForm();" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
+			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 			<div class="form-group">
 				<label for="fName">First Name: </label>
    				<input type="text" class="form-control" id="fName" name="fName" placeholder="First Name">

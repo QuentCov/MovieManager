@@ -9,9 +9,12 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>View All Orders</h1>
@@ -32,11 +35,11 @@
 		        <c:forEach items="${cart}" var="current">
 		    		<c:forEach items="${current.getShowings()}" var="showing">
 		    			<div class="row">
-			    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
-				            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-				            <div class="col-sm-1">${showing.getStartTime()}</div>
-				            <div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
-				            <div class="col-sm-1">${showing.getCost()}</div>
+			    			<div class="col-sm-1"><c:out value="${showing.getMovie().getName()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getShowroom().getTheatre().getName()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getStartTime()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getCost()}"/></div>
 				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
 							<c:choose>
 								<c:when test="${empty data}">
@@ -50,9 +53,10 @@
 		    			</div>
 					</c:forEach>
 					<div class="row">
-				    	<div class="offset-sm-9 col-sm-1">Total Cost: ${current.getCost()}</div>
+				    	<div class="offset-sm-9 col-sm-1">Total Cost: <c:out value="${current.getCost()}"/></div>
 				    	<div class="col-sm-2">
 					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrders" >
+					    		<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 					    		<input type="hidden" name="order" value="${current.getID()}"/>
 					            <input type="submit" class="btn btn-primary" value="View Order">
 					        </form>
@@ -63,6 +67,7 @@
 				<div class="row">
 					<div class="offset-sm-11 col-sm-1">
 						<form name="item" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+							<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 				        	<input type="submit" class="btn btn-primary" value="Checkout">
 				        </form>
 					</div>

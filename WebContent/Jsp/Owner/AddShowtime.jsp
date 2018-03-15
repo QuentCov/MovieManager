@@ -9,19 +9,23 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
+		   	<form action="${pageContext.request.contextPath}/MangeShowtimes">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Mange Showtimes">
+			</form>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
 		<h1>Add Showtime</h1>
 		<form name="showtimeForm" method="POST" action="${pageContext.request.contextPath}/AddShowtimeConfirmation">
+			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 			<div class="form-group">
 				<label for="movie">Select Movie:</label>
 				<select name="movie">
 				<c:forEach items="${movies}" var="movie">
-					<option>${movie.getName() }</option>
+					<option><c:out value="${movie.getName() }"/></option>
 				</c:forEach>
 				</select>
 			</div>

@@ -32,12 +32,21 @@ public class CustomerTransaction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
 		
-		session.setAttribute("cart", cart);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransaction.jsp");
-  	    dispatcher.forward(request, response);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+			User user = (User) session.getAttribute("user");
+			ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+			
+			session.setAttribute("cart", cart);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransaction.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 	}
 
 	/**

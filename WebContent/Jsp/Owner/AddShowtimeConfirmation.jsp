@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +9,16 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showroom</a>
-		   	<a href="${pageContext.request.contextPath}/ViewTheatreDetails" class="btn btn-primary">View Theatre Details</a>
+		   	<form action="${pageContext.request.contextPath}/ViewShowrooms">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Showroom">
+			</form>
+		   	<form action="${pageContext.request.contextPath}/ViewTheatreDetails">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Theatre Details">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
@@ -26,10 +33,10 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-2">${movieName}</div>
-			<div class="col-sm-2">${theatreName}</div>
-			<div class="col-sm-2">${showroomName}</div>
-			<div class="col-sm-6">${runtime}</div>
+			<div class="col-sm-2"><c:out value="${movieName}"/></div>
+			<div class="col-sm-2"><c:out value="${theatreName}"/></div>
+			<div class="col-sm-2"><c:out value="${showroomName}"/></div>
+			<div class="col-sm-6"><c:out value="${runtime}"/></div>
 		</div>
 	</div>
 	<%@ include file="/_partials/scripts.html" %>

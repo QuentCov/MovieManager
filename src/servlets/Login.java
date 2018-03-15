@@ -16,6 +16,7 @@ import data.UserDB;
 import models.Order;
 import models.Theatre;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class Login
@@ -40,23 +41,37 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("userName"); 
     	String password = request.getParameter("password");
-    	User user = new User(userName, password);
+    	
+    	//Filter the strings.
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(userName); //0
+    	parameters.add(password); //1
+    	
+    	parameters = SecurityUtilities.filterStrings(parameters);
+    	
+    	User user = new User(parameters.get(0), parameters.get(1));
     	
     	// check if valid user
     	if (User.isValidUser(user)) {
+    		
     		// check user type to determine where to redirect
-    		User fullUser = UserDB.getUserByEmailAddress(userName);
+    		User fullUser = UserDB.getUserByEmailAddress(parameters.get(0));
     		String userType = fullUser.getType();
     		
     		// start a new session for use by MovieManager.
 			request.getSession().invalidate();
 			HttpSession session = request.getSession();
+			
 			session.setAttribute("user", fullUser);
+			
+			// generate a secure-random string to use for authentication
+    		String secureToken = SecurityUtilities.generateToken();
+    		session.setAttribute("CSRFToken", secureToken);
 			
     		if (userType.equals("Customer")) {
     			//get the user's cart (or make a new one, if there isn't one)
     			ArrayList<Order> cart = new ArrayList<Order>();
-    			cart = OrdersDB.getOrders(userName);
+    			cart = OrdersDB.getOrders(parameters.get(0));
     			session.setAttribute("cartSize", cart.size());
     			session.setAttribute("cart", cart);
     			

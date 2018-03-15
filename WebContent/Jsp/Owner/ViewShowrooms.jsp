@@ -9,9 +9,12 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/AddMovie.jsp" class="btn btn-primary">Add Movie</a>
-			<a href="${pageContext.request.contextPath}/ViewTheatreDetails" class="btn btn-primary">View Theatre Details</a>
+			<form action="${pageContext.request.contextPath}/ViewTheatreDetails">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Theatre Details">
+			</form>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Home Page</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -26,11 +29,12 @@
 		
 		<c:forEach items="${showrooms}" var="showroom">
 		<div class="row">
-			<div class="col-sm-3"><p>${showroom.getName()}</p></div>
-			<div class="col-sm-3"><p>${showroom.getTheatre().getName()}</p></div>
-			<div class="col-sm-3"><p>${showroom.getCapacity()}</p></div>
+			<div class="col-sm-3"><p><c:out value="${showroom.getName()}"/></p></div>
+			<div class="col-sm-3"><p><c:out value="${showroom.getTheatre().getName()}"/></p></div>
+			<div class="col-sm-3"><p><c:out value="${showroom.getCapacity()}"/></p></div>
 			<div class="col-sm-3">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/ManageShowtimes">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	            	<input type="hidden" name="showroomName" value="${showroom.getName()}"/>
 	            	<input type="hidden" name="theatreId" value="${theatreId}"/>
 	            	<input type="submit" class="btn btn-primary" value="Manage Showtimes">

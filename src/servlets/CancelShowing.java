@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.MovieShowingDB;
 
@@ -34,9 +35,19 @@ public class CancelShowing extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int showtimeId = Integer.parseInt(request.getParameter("showingId"));		
-		request.setAttribute("showing", MovieShowingDB.getMovieShowingById(showtimeId));
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancelShowing.jsp");
-  	    dispatcher.forward(request, response);
+		HttpSession session = request.getSession();
+		
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+			int showtimeId = Integer.parseInt(request.getParameter("showingId"));		
+			request.setAttribute("showing", MovieShowingDB.getMovieShowingById(showtimeId));
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancelShowing.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 	}
 }

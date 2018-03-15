@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 			<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -23,8 +23,8 @@
 		
 		<c:forEach items="${movies}" var="movie">
 		<div class="row">
-			<div class="col-sm-2"><p>${movie.getName()}</p></div>
-			<div class="col-sm-4"><p>${movie.getDescription()}</p></div>
+			<div class="col-sm-2"><p><c:out value="${movie.getName()}"/></p></div>
+			<div class="col-sm-4"><p><c:out value="${movie.getDescription()}"/></p></div>
 			<c:set var="data" value="${movie.getThumbnailData()}"/>
 			<c:choose>
 				<c:when test="${empty data}">
@@ -36,6 +36,7 @@
 			</c:choose>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieDetails">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	            	<input type="hidden" name="movieName" value="${movie.getName()}"/>
 	            	<input type="submit" class="btn btn-primary" value="View Movie Details">
 	            </form>
