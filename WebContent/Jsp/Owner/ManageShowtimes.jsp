@@ -12,6 +12,7 @@
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<form name="item" method="POST" action="${pageContext.request.contextPath}/AddShowtime">
+		   		<input type="hidden" name="CSRFToken" value="${CSRFToken}">
             	<input type="hidden" name="showroomId" value="${showroomId}"/>
             	<input type="hidden" name="theatreId" value="${theatreId}"/>
             	<input type="submit" class="btn btn-primary" value="Add Showtime">
@@ -39,6 +40,7 @@
 			<div class="col-sm-2"><c:out value="${showing.getCost()}"/></div>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowing">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	            	<input type="hidden" name="showingId" value="${showing.getID()}"/>
 	            	<input type="submit" class="btn btn-danger" value="Cancel Showtime">
 	            </form>	            

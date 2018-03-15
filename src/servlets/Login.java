@@ -53,6 +53,7 @@ public class Login extends HttpServlet {
     	
     	// check if valid user
     	if (User.isValidUser(user)) {
+    		
     		// check user type to determine where to redirect
     		User fullUser = UserDB.getUserByEmailAddress(parameters.get(0));
     		String userType = fullUser.getType();
@@ -60,7 +61,12 @@ public class Login extends HttpServlet {
     		// start a new session for use by MovieManager.
 			request.getSession().invalidate();
 			HttpSession session = request.getSession();
+			
 			session.setAttribute("user", fullUser);
+			
+			// generate a secure-random string to use for authentication
+    		String secureToken = SecurityUtilities.generateToken();
+    		session.setAttribute("CSRFToken", secureToken);
 			
     		if (userType.equals("Customer")) {
     			//get the user's cart (or make a new one, if there isn't one)

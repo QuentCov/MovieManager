@@ -39,18 +39,27 @@ public class ManageShowtimes extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		int theatreId = (int) session.getAttribute("theatreId");
-		String showroomName = request.getParameter("showroomName");
-		int showroomId = ShowroomDB.getShowroomIdByName(showroomName);
-		if (showroomId == -1) {
-			showroomId = (int) session.getAttribute("showroomId");
+		
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+			int theatreId = (int) session.getAttribute("theatreId");
+			String showroomName = request.getParameter("showroomName");
+			int showroomId = ShowroomDB.getShowroomIdByName(showroomName);
+			if (showroomId == -1) {
+				showroomId = (int) session.getAttribute("showroomId");
+			}
+			ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowingsByShowroomId(showroomId);
+			session.setAttribute("showroomId", showroomId);
+			request.setAttribute("showings", showings);
+			request.setAttribute("theatreId", theatreId);
+			request.setAttribute("showroomId", showroomId);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ManageShowtimes.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-		ArrayList<MovieShowing> showings = MovieShowingDB.getMovieShowingsByShowroomId(showroomId);
-		session.setAttribute("showroomId", showroomId);
-		request.setAttribute("showings", showings);
-		request.setAttribute("theatreId", theatreId);
-		request.setAttribute("showroomId", showroomId);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ManageShowtimes.jsp");
-  	    dispatcher.forward(request, response);
 	}
 }

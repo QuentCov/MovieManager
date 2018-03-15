@@ -15,6 +15,7 @@
 		</div>
 		<h2>Add Movie</h2>
 		<form action="${pageContext.request.contextPath}/AddMovie" name="addMovieForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 			<div class="form-group">
 				<label for="movieName">Movie Name:</label>
 				<input type="text" class="form-control" id="movieName" name="movieName" placeholder="Movie Name" required>

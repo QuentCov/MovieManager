@@ -26,6 +26,7 @@
 			<div class="col-sm-1"><h4>Actions</h4></div>
 		</div>
 		<form action="${pageContext.request.contextPath}/MovieDetailsUpdate" name="updateMovieForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 			<div class="row">
 				<div class="col-sm-2">
 					<input type="text" class="form-control" id="movieName" name="movieName" value="${movie.getName()}">
@@ -37,7 +38,7 @@
 						<option ${movie.getGenre() == "Comedy" ? 'selected="selected"' : ''}>Comedy</option>
 						<option ${movie.getGenre() == "Adventure" ? 'selected="selected"' : ''}>Adventure</option>
 						<option ${movie.getGenre() == "Romance" ? 'selected="selected"' : ''}>Romance</option>
-						<option ${movie.getGenre() == "Sci-Fi" ? 'selected="selected"' : ''}">Sci-Fi</option>
+						<option ${movie.getGenre() == "Sci-Fi" ? 'selected="selected"' : ''}>Sci-Fi</option>
 					</select>
 				</div>
 				<div class="col-sm-2">

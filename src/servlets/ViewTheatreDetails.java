@@ -33,12 +33,21 @@ public class ViewTheatreDetails extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		User owner = (User) session.getAttribute("user");
-		int ownerId = UserDB.getUserIdByEmailAddress(owner.getEmailAddress());
-		ArrayList<Theatre> theatres = TheatreDB.getTheatresByOwnerId(ownerId);
-		request.setAttribute("theatres", theatres);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ViewTheatreDetails.jsp");
-  	    dispatcher.forward(request, response);
+		
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+			User owner = (User) session.getAttribute("user");
+			int ownerId = UserDB.getUserIdByEmailAddress(owner.getEmailAddress());
+			ArrayList<Theatre> theatres = TheatreDB.getTheatresByOwnerId(ownerId);
+			request.setAttribute("theatres", theatres);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ViewTheatreDetails.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 	}
 
 	/**

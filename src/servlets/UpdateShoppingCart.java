@@ -35,8 +35,18 @@ public class UpdateShoppingCart extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-  	    dispatcher.forward(request, response);
+		HttpSession session = request.getSession();
+		
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 	/**
@@ -45,86 +55,94 @@ public class UpdateShoppingCart extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		@SuppressWarnings("unchecked")
-		ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");
-		if(cart == null) {
-			cart = new ArrayList<Order>();
-		}
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		Order order = (Order) session.getAttribute("order");
-		MovieShowing showing = (MovieShowing) session.getAttribute("showing");
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
 		
-		//Filter the strings.
-    	ArrayList<String> parameters = new ArrayList<String>();
-    	parameters.add(request.getParameter("ticketCount")); //0
-    	parameters.add(request.getParameter("type")); //1
-    	
-    	parameters = SecurityUtilities.filterStrings(parameters);
-		
-    	int ticket = Integer.parseInt(parameters.get(0));
-    	
-		int orderId = -1;
-		UUID id = UUID.randomUUID();
-		if(order == null) {
-			//Make a new order.
-			order = new Order();
-			User owner = (User) session.getAttribute("user");
-			order.setCustomer(owner);
-			order.setBillingAddress(owner.getStreetAddress());
-			order.setID(id);
+			@SuppressWarnings("unchecked")
+			ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");
+			if(cart == null) {
+				cart = new ArrayList<Order>();
+			}
 			
-			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
-			showings.add(showing);
-			order.setShowings(showings);
+			Order order = (Order) session.getAttribute("order");
+			MovieShowing showing = (MovieShowing) session.getAttribute("showing");
 			
-			ArrayList<Integer> tickets = new ArrayList<Integer>();
-			tickets.add(ticket);
-			order.setTickets(tickets);
-			orderId = OrdersDB.addOrder(order);
-			order.setDataId(orderId);
-		}
-		
-		
-		if(parameters.get(1) != null && parameters.get(1).equals("add")) {
-			//Check to ensure that the order is possible.
-			if(order != null) {
-				//Check the capacity of the showrooms of the movie's in the order.
-				ArrayList<MovieShowing> movies = order.getShowings();
-				ArrayList<Integer> tickets = order.getTickets();
+			//Filter the strings.
+	    	ArrayList<String> parameters = new ArrayList<String>();
+	    	parameters.add(request.getParameter("ticketCount")); //0
+	    	parameters.add(request.getParameter("type")); //1
+	    	
+	    	parameters = SecurityUtilities.filterStrings(parameters);
+			
+	    	int ticket = Integer.parseInt(parameters.get(0));
+	    	
+			int orderId = -1;
+			UUID id = UUID.randomUUID();
+			if(order == null) {
+				//Make a new order.
+				order = new Order();
+				User owner = (User) session.getAttribute("user");
+				order.setCustomer(owner);
+				order.setBillingAddress(owner.getStreetAddress());
+				order.setID(id);
 				
-				boolean cap = order.isNotOverCapacity();
-				if(!cap) {
-					//We can't sell that many tickets.
-					response.sendError(400, "That's too many tickets.");
-				} else {
-					//All purchases are valid.
-					for(int i = 0; i < movies.size(); i++) {
-						int ticketsSold = movies.get(i).getNumTicketsSold();
-						int orderCapacity = tickets.get(i);
-						
-						movies.get(i).setNumTicketsSold(orderCapacity + ticketsSold);
-						order.setCost(ticketsSold * movies.get(i).getCost());
-						MovieShowingDB.updateMovieShowing(movies.get(i));
-						OrdersDB.addItem(order, movies.get(i), tickets.get(i));
-					}
+				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+				showings.add(showing);
+				order.setShowings(showings);
+				
+				ArrayList<Integer> tickets = new ArrayList<Integer>();
+				tickets.add(ticket);
+				order.setTickets(tickets);
+				orderId = OrdersDB.addOrder(order);
+				order.setDataId(orderId);
+			}
+			
+			
+			if(parameters.get(1) != null && parameters.get(1).equals("add")) {
+				//Check to ensure that the order is possible.
+				if(order != null) {
+					//Check the capacity of the showrooms of the movie's in the order.
+					ArrayList<MovieShowing> movies = order.getShowings();
+					ArrayList<Integer> tickets = order.getTickets();
 					
-					cart.add(order);
-					int cartSize = (Integer) session.getAttribute("cartSize");
-					session.setAttribute("cartSize", cartSize+1);
-					session.setAttribute("cart", cart);
-					RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-			  	    dispatcher.forward(request, response);
+					boolean cap = order.isNotOverCapacity();
+					if(!cap) {
+						//We can't sell that many tickets.
+						response.sendError(400, "That's too many tickets.");
+					} else {
+						//All purchases are valid.
+						for(int i = 0; i < movies.size(); i++) {
+							int ticketsSold = movies.get(i).getNumTicketsSold();
+							int orderCapacity = tickets.get(i);
+							
+							movies.get(i).setNumTicketsSold(orderCapacity + ticketsSold);
+							order.setCost(ticketsSold * movies.get(i).getCost());
+							MovieShowingDB.updateMovieShowing(movies.get(i));
+							OrdersDB.addItem(order, movies.get(i), tickets.get(i));
+						}
+						
+						cart.add(order);
+						int cartSize = (Integer) session.getAttribute("cartSize");
+						session.setAttribute("cartSize", cartSize+1);
+						session.setAttribute("cart", cart);
+						RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+				  	    dispatcher.forward(request, response);
+					}
 				}
+			} else if(parameters.get(1).equals("delete")) {
+				//Remove the order
+				if(order != null) {
+					cart.remove(order);
+				}
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+		  	    dispatcher.forward(request, response);
 			}
-		} else if(parameters.get(1).equals("delete")) {
-			//Remove the order
-			if(order != null) {
-				cart.remove(order);
-			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-	  	    dispatcher.forward(request, response);
 		}
-		
 		
 	}
 }

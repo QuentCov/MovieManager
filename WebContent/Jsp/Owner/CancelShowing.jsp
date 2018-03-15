@@ -11,7 +11,10 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary"><button type="button" class="btn btn-primary">Manage Showtime</button></a>
+		   	<form action="${pageContext.request.contextPath}/ManageShowtimes">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Manage Showtime">
+			</form>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 
@@ -35,6 +38,7 @@
 			<div class="col-sm-2">
 				<div class="row">
 					<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowingConfirmation">
+						<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 		            	<input type="hidden" name="showingId" value="${showing.getID()}"/>
 		            	<input type="submit" class="btn btn-danger" value="Confirm Cancellation">
 		            </form>

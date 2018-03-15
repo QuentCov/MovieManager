@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 			<a href="Jsp/Customer/MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -50,13 +56,15 @@
             <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}"/></div>
 	    	<div class="col-sm-2">
 	    		<form name="addItem" action=${pageContext.request.contextPath}/UpdateShoppingCart onsubmit="return moreThanZero()" onkeypress="return isNumberKey(event)" method="POST" >
+		        	<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 		        	<input type='hidden' name='updateItem' value="${movie.getName()}">
 		        	<input type='hidden' name='type' value='add'>
 		        	<input type='text' name='ticketCount' placeholder="Ticket Count">
 		        	<input type="submit" class="btn btn-primary" value="Add to Cart">
 		        </form>
 		    	<form name="addReview" action="${pageContext.request.contextPath}/CustomerReviewSetup">
-		        	<input type='hidden' name='reviewMovie' value="${movie.getName()}">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+					<input type='hidden' name='reviewMovie' value="${movie.getName()}">
 		        	<input type="submit" class="btn btn-primary" value="Add Review">
 		        </form>
 	        </div>

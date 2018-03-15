@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName()}"/></div>
 			<a href="Jsp/Customer/CustomerHomePage" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="Jsp/Customer/ViewAndCheckoutShoppingCart.jsp" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 	    <div class="row">
@@ -44,6 +50,7 @@
 				</div>
 				<div class="col-sm-2">
 					<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieSearchResults">
+						<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 		            	<input type='hidden' name='itemIndex' value='<c:out value="${showing.getID()}"/>'>
 		            	<input type="submit" class="btn btn-primary" name="action" value="View More Details">
 		            </form>

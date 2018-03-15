@@ -36,21 +36,36 @@ public class MovieSearchResults extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		int showingId = Integer.parseInt(request.getParameter("itemIndex"));
-		MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		if(showing != null) {
-			Movie movie = MovieDB.getMovieByName(showing.getMovie().getName());
-			if(movie != null) {
-				ArrayList<Review> reviews = ReviewDB.getReviewByMovie(movie);
-				if(reviews == null) {
-					session.setAttribute("reviews", null);
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+		
+			int showingId = Integer.parseInt(request.getParameter("itemIndex"));
+			MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+			
+			if(showing != null) {
+				Movie movie = MovieDB.getMovieByName(showing.getMovie().getName());
+				if(movie != null) {
+					ArrayList<Review> reviews = ReviewDB.getReviewByMovie(movie);
+					if(reviews == null) {
+						session.setAttribute("reviews", null);
+					} else {
+						session.setAttribute("reviews", reviews);
+					}
+					session.setAttribute("results", null);
+					session.setAttribute("movie", movie);
+					session.setAttribute("showing", showing);
 				} else {
-					session.setAttribute("reviews", reviews);
+					session.setAttribute("results", "Movie Not Found");
+					session.setAttribute("movie", null);
+					session.setAttribute("showing", null);
+					session.setAttribute("reviews", null);
 				}
-				session.setAttribute("results", null);
-				session.setAttribute("movie", movie);
-				session.setAttribute("showing", showing);
+				
 			} else {
 				session.setAttribute("results", "Movie Not Found");
 				session.setAttribute("movie", null);
@@ -58,16 +73,10 @@ public class MovieSearchResults extends HttpServlet {
 				session.setAttribute("reviews", null);
 			}
 			
-		} else {
-			session.setAttribute("results", "Movie Not Found");
-			session.setAttribute("movie", null);
-			session.setAttribute("showing", null);
-			session.setAttribute("reviews", null);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieDetailsSelection.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-		
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieDetailsSelection.jsp");
-  	    dispatcher.forward(request, response);
 	}
 
 	/**

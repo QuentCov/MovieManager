@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<div class="row"><h1>Review for: <c:out value="${movie.getName()}"/></h1></div>
@@ -20,6 +26,7 @@
 		<c:choose>
 			<c:when test="${empty data}">
 				<form method="POST" action="${pageContext.request.contextPath}/CustomerReview">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 					<div class="form-group">
 					  <label for="review">Tell us what you thought:</label>
 					  <textarea class="form-control" rows="5" id="reivew" name="review"></textarea>
@@ -47,6 +54,7 @@
 			</c:when>
 			<c:otherwise>
 				<form method="POST" action="${pageContext.request.contextPath}/CustomerReview">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 					<div class="form-group">
 					  <label for="review">Please keep reviews under 1000 characters:</label>
 					  <textarea class="form-control" rows="5" id="reivew"></textarea>
