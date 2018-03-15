@@ -15,15 +15,15 @@ import models.Order;
 import models.User;
 
 /**
- * Servlet implementation class CustomerTransaction
+ * Servlet implementation class PlaceOrder
  */
-public class CustomerTransaction extends HttpServlet {
+public class PlaceOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CustomerTransaction() {
+    public PlaceOrder() {
         super();
     }
 
@@ -31,6 +31,13 @@ public class CustomerTransaction extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
 		//Verify the session.
@@ -40,23 +47,22 @@ public class CustomerTransaction extends HttpServlet {
 		if(!sessionToken.equals(requestToken)) {
 			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
-			User user = (User) session.getAttribute("user");
-			ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
-			
-			session.setAttribute("cart", cart);
-			session.setAttribute("totalCost", OrdersDB.getTotalCost(cart));
-			String temp = getServletContext().getInitParameter("BankingUrl");
-			session.setAttribute("bankingUrl", temp);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ConfirmOrder.jsp");
+			@SuppressWarnings("unchecked")
+			ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");	
+			User owner = (User) session.getAttribute("user");
+			//Remove the orders from the database.
+			cart = OrdersDB.getOrders(owner.getEmailAddress());
+			for(int i = 0; i < cart.size(); i++) {
+				int j = OrdersDB.fulfillOrder(cart.get(i));
+				if(j == -1) {
+					response.sendError(500, "Internal Server Error");
+				}
+			}
+			session.setAttribute("cart", new ArrayList<Order>());
+			session.setAttribute("cartSize", 0);
+			session.setAttribute("completedOrder", cart);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransactionConfirmation.jsp");
 	  	    dispatcher.forward(request, response);
 		}
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
 }
