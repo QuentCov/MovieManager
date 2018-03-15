@@ -1,10 +1,12 @@
 package models;
 
+import java.util.Arrays;
+
 import data.UserDB;
 
 public class User {
 	private String emailAddress;
-	private String password;
+	private byte[] password;
 	private String type;
 	private String fullName;
 	private Address streetAddress;
@@ -14,25 +16,25 @@ public class User {
 		super();
 	}
 
-	public User(String emailAddress, String password) {
+	public User(String emailAddress, byte[] password) {
 		super();
 		this.emailAddress = emailAddress;
 		this.password = password;
 		this.type = "Customer";
 	}
 
-	public User(String emailAddress, String password, String type) {
+	public User(String emailAddress, byte[] password, String type) {
 		super();
 		this.emailAddress = emailAddress;
 		this.password = password;
 		this.type = type;
 	}
 
-	public String getPassword() {
+	public byte[] getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(byte[] password) {
 		this.password = password;
 	}
 
@@ -94,7 +96,7 @@ public class User {
 		if(dbUser == null || user == null) {
 			return false;
 		}
-		return (user.getEmailAddress().equals(dbUser.getEmailAddress()) && user.getPassword().equals(dbUser.getPassword()));
+		return (user.getEmailAddress().equals(dbUser.getEmailAddress()) && Arrays.equals(user.getPassword(), dbUser.getPassword()));
 	}
 
 	//Gets the user's type from the database.

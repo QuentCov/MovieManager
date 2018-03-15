@@ -20,6 +20,7 @@
 		</div>
 		<div class="row">
 			<input type="submit" class="btn btn-primary col-sm-2" value=Login><br>
+			<a href="Update.jsp" class="btn btn-link col-sm-4">Update Password</a>
 			<a href="Registration.jsp" class="btn btn-link col-sm-4">Not a user yet? Register here</a>
 		</div>
 	</form>

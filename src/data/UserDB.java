@@ -40,7 +40,7 @@ public class UserDB {
 		try {
 		    User user = new User();		    
 		    user.setEmailAddress(rs.getString("EmailAddress"));
-		    user.setPassword(rs.getString("Password"));
+		    user.setPassword(rs.getBytes("Password"));
 		    user.setType(rs.getString("Type"));
 		    user.setFullName(rs.getString("FullName"));
 		    user.setStreetAddress(AddressDB.getAddressById(rs.getInt("AddressId")));
@@ -155,13 +155,20 @@ public class UserDB {
 		
 		String query = "INSERT INTO User (EmailAddress, Password, Type, FullName, PhoneNumber, AddressId)"
 					 + "VALUES (?, ?, ?, ?, ?, " + addressId + ")";
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(user.getEmailAddress());
-		params.add(user.getPassword());
-		params.add(user.getType());
-		params.add(user.getFullName());
-		params.add(user.getPhoneNumber());
-		int i = Database.runUpdate(query, params);
+		Connection conn = Database.getConnection();
+		PreparedStatement statement;
+		int i = 0;
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setString(1, user.getEmailAddress());
+			statement.setBytes(2, user.getPassword());
+			statement.setString(3, user.getType());
+			statement.setString(4, user.getFullName());
+			statement.setString(5, user.getPhoneNumber());
+			i = statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(i == 1) {
 		    return true;
 		}
@@ -175,13 +182,43 @@ public class UserDB {
 		String query = "UPDATE User SET Password=?, Type=?, FullName=?, AddressId=" + addressId + ", PhoneNumber=? "
 				     + "WHERE EmailAddress=?;";
 		
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(user.getPassword());
-		params.add(user.getType());
-		params.add(user.getFullName());
-		params.add(user.getPhoneNumber());
-		params.add(user.getEmailAddress());
-		int i = Database.runUpdate(query, params);
+		Connection conn = Database.getConnection();
+		PreparedStatement statement;
+		int i = 0;
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setBytes(1, user.getPassword());
+			statement.setString(2, user.getType());
+			statement.setString(3, user.getFullName());
+			statement.setString(4, user.getPhoneNumber());
+			statement.setString(5, user.getEmailAddress());
+			i = statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	    if(i == 1) {
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	//Note: We recognize the inefficiency here and have brainstormed solutions, 
+	//	    but these solutions are too extensive for a project of this scope.
+	public static boolean updateUserPassword(User user) {
+		String query = "UPDATE User SET Password=? "
+				     + "WHERE EmailAddress=?;";
+		
+		Connection conn = Database.getConnection();
+		PreparedStatement statement;
+		int i = 0;
+		try {
+			statement = conn.prepareStatement(query);
+			statement.setBytes(1, user.getPassword());
+			statement.setString(2, user.getEmailAddress());
+			i = statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	    if(i == 1) {
 	    	return true;
 	    }

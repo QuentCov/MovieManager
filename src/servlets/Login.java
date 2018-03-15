@@ -48,8 +48,7 @@ public class Login extends HttpServlet {
     	parameters.add(password); //1
     	
     	parameters = SecurityUtilities.filterStrings(parameters);
-    	
-    	User user = new User(parameters.get(0), parameters.get(1));
+    	User user = new User(parameters.get(0), SecurityUtilities.hashString(parameters.get(1)));
     	
     	// check if valid user
     	if (User.isValidUser(user)) {
