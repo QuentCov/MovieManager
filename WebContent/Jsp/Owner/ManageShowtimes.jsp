@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<form name="item" method="POST" action="${pageContext.request.contextPath}/AddShowtime">
             	<input type="hidden" name="showroomId" value="${showroomId}"/>
@@ -32,11 +32,11 @@
 
 		<c:forEach items="${showings}" var="showing">
 		<div class="row">
-			<div class="col-sm-2">${showing.getMovie().getName()}</div>
-			<div class="col-sm-2">${showing.getStartTime().toString()}</div>
-			<div class="col-sm-2">${showing.getEndTime().toString()}</div>
-			<div class="col-sm-2">${showing.getNumTicketsSold()}</div>
-			<div class="col-sm-2">${showing.getCost()}</div>
+			<div class="col-sm-2"><c:out value="${showing.getMovie().getName()}"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getStartTime().toString()}"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getEndTime().toString()}"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getNumTicketsSold()}"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getCost()}"/></div>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowing">
 	            	<input type="hidden" name="showingId" value="${showing.getID()}"/>

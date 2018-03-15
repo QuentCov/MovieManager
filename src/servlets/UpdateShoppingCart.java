@@ -16,6 +16,7 @@ import data.OrdersDB;
 import models.MovieShowing;
 import models.Order;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class UpdateShoppingCart
@@ -58,10 +59,17 @@ public class UpdateShoppingCart extends HttpServlet {
 		
 		Order order = (Order) session.getAttribute("order");
 		MovieShowing showing = (MovieShowing) session.getAttribute("showing");
-		String temp = request.getParameter("ticketCount");
-		int ticket = Integer.parseInt(temp);
 		
-		String t = request.getParameter("type");
+		//Filter the strings.
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(request.getParameter("ticketCount")); //0
+    	parameters.add(request.getParameter("type")); //1
+    	
+    	parameters = SecurityUtilities.filterStrings(parameters);
+		
+    	int ticket = Integer.parseInt(parameters.get(0));
+    	
+		int orderId = -1;
 		UUID id = UUID.randomUUID();
 		boolean update = true;
 		if(order == null) {
@@ -83,7 +91,7 @@ public class UpdateShoppingCart extends HttpServlet {
 		}
 		
 		
-		if(t != null && t.equals("add")) {
+		if(parameters.get(1) != null && parameters.get(1).equals("add")) {
 			//Check to ensure that the order is possible.
 			
 			if(order != null) {
@@ -121,7 +129,7 @@ public class UpdateShoppingCart extends HttpServlet {
 					session.setAttribute("cart", cart);
 				}
 			}
-		} else if(t.equals("delete")) {
+		} else if(parameters.get(1).equals("delete")) {
 			//Remove the order
 			if(order != null) {
 				cart.remove(order);

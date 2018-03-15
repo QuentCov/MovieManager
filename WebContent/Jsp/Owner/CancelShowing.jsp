@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary"><button type="button" class="btn btn-primary">Manage Showtime</button></a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
@@ -26,11 +27,11 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-2">${showing.getMovie().getName() }</div>
-			<div class="col-sm-2">${showing.getShowroom().getName() }</div>
-			<div class="col-sm-2">${showing.getStartTime().toString() } - ${showing.getEndTime().toString() }</div>
-			<div class="col-sm-2">${showing.getNumTicketsSold() }</div>
-			<div class="col-sm-2">${showing.getCost() }</div>
+			<div class="col-sm-2"><c:out value="${showing.getMovie().getName() }"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getShowroom().getName() }"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getStartTime().toString() } - ${showing.getEndTime().toString() }"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getNumTicketsSold() }"/></div>
+			<div class="col-sm-2"><c:out value="${showing.getCost() }"/></div>
 			<div class="col-sm-2">
 				<div class="row">
 					<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelShowingConfirmation">

@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
@@ -32,12 +32,12 @@
 		        <c:forEach items="${cart}" var="current">
 		    		<c:forEach items="${current.getShowings()}" var="showing">
 		    			<div class="row">
-			    			<div class="col-sm-1">${showing.getMovie().getName()}</div>
-				            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-				            <div class="col-sm-1">${showing.getStartTime()}</div>
-				            <div class="col-sm-1">${showing.getShowroom().getCapacity()}</div>
-				            <div class="col-sm-1">${showing.getCost()}</div>
-				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
+			    			<div class="col-sm-1"><c:out value="${showing.getMovie().getName()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getShowroom().getTheatre().getName()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getStartTime()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity()}"/></div>
+				            <div class="col-sm-1"><c:out value="${showing.getCost()}"/></div>
+				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>"/>
 							<c:choose>
 								<c:when test="${empty data}">
 									<div class="col-sm-3">Sorry! No thumbnail available.</div>
@@ -50,7 +50,7 @@
 		    			</div>
 					</c:forEach>
 					<div class="row">
-				    	<div class="offset-sm-9 col-sm-1">Total Cost: ${current.getCost()}</div>
+				    	<div class="offset-sm-9 col-sm-1">Total Cost: <c:out value="${current.getCost()}"/></div>
 				    	<div class="col-sm-2">
 					    	<form name="item" action="${pageContext.request.contextPath}/ManageOrders" >
 					    		<input type="hidden" name="order" value="${current.getID()}"/>

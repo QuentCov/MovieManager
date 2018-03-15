@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
@@ -31,9 +31,9 @@
 			<div class="col-sm-2">Actions</div>
 		</div>
        	<div class="row">
-   			<div class="col-sm-1">${movie.getName()}</div>
-            <div class="col-sm-1">${movie.getDescription()}</div>
-            <div class="col-sm-1">${movie.getRating()}</div>
+   			<div class="col-sm-1"><c:out value="${movie.getName()}"/></div>
+            <div class="col-sm-1"><c:out value="${movie.getDescription()}"/></div>
+            <div class="col-sm-1"><c:out value="${movie.getRating()}"/></div>
             <div class="col-sm-3">
             	<c:set var="data" value="${movie.getThumbnailData()}"/>
 				<c:choose>
@@ -45,10 +45,10 @@
 					</c:otherwise>
 				</c:choose>
             </div>
-            <div class="col-sm-1">${showing.getShowroom().getTheatre().getName()}</div>
-            <div class="col-sm-1">${showing.getStartTime()}</div>
-            <div class="col-sm-1">${showing.getCost()}</div>
-            <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
+            <div class="col-sm-1"><c:out value="${showing.getShowroom().getTheatre().getName()}"/></div>
+            <div class="col-sm-1"><c:out value="${showing.getStartTime()}"/></div>
+            <div class="col-sm-1"><c:out value="${showing.getCost()}"/></div>
+            <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}"/></div>
 	    	<div class="col-sm-2">
 	        	<input type='hidden' id='updateItem' value="${movie.getName()}">
 	        	<input type='hidden' id='type' value='add'>
@@ -66,7 +66,7 @@
 				<td>Sorry! No reviews available. You could be the first!</td>
 			</c:when>
 			<c:otherwise>
-				<div class="row">Total Rating: ${movie.getAverageRating()}</div>
+				<div class="row">Total Rating: <c:out value="${movie.getAverageRating()}"/></div>
 				<div class="row">
 					<div class="col-sm-3">Reviewer</div>
 					<div class="col-sm-1">Rating</div>
@@ -74,9 +74,9 @@
 				</div>
 		   		<c:forEach items="${reviews}" var="review">
 		   		<div class="row">
-		   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
-				    <div class="col-sm-1">${review.getRating()}</div>
-				    <div class="col-sm-6">${review.getReview()}</div>
+		   			<div class="col-sm-3"><c:out value="${review.getReviewer().getFullName()}"/></div>
+				    <div class="col-sm-1"><c:out value="${review.getRating()}"/></div>
+				    <div class="col-sm-6"><c:out value="${review.getReview()}"/></div>
 		   		</div>
 		        </c:forEach>
 			</c:otherwise>
@@ -134,6 +134,7 @@
 				<button id="submitReview" class="btn btn-primary" value="Submit Review">Submit Review</button>
 			</c:otherwise>
 		</c:choose>
+		   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
     <script>

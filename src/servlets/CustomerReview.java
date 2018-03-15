@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +15,7 @@ import data.ReviewDB;
 import models.Movie;
 import models.Review;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class CustomerReview
@@ -42,8 +44,16 @@ public class CustomerReview extends HttpServlet {
 		HttpSession session = request.getSession();
 		User reviewer = (User) session.getAttribute("user");
 		Movie movie = (Movie) session.getAttribute("movie");
-		String reviewString = request.getParameter("review");
-		int rating = Integer.parseInt(request.getParameter("rating"));
+		
+		//Filter the strings.
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(request.getParameter("review")); //0
+    	parameters.add(request.getParameter("rating")); //1
+    	
+    	parameters = SecurityUtilities.filterStrings(parameters);
+    	
+    	String reviewString = parameters.get(0);
+    	int rating = Integer.parseInt(parameters.get(1));
 		
 		Review review = new Review();
 		review.setReviewer(reviewer);
