@@ -38,7 +38,7 @@
 	        </c:forEach>
 		</div>
 		<h5>Total cost: $
-			<span id="totalCost">${totalCost}</span>
+			<span id="totalCost"><c:out value="${totalCost}"/></span>
 		</h5>
 		<br>
 		<form name="creditForm" method="POST" onsubmit="return validateForm();" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
