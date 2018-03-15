@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
 				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
             	<input type="submit" class="btn btn-primary" value="Checkout">
