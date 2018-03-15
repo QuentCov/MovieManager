@@ -40,7 +40,7 @@
 				            <div class="col-sm-1"><c:out value="${showing.getStartTime()}"/></div>
 				            <div class="col-sm-1"><c:out value="${showing.getShowroom().getCapacity()}"/></div>
 				            <div class="col-sm-1"><c:out value="${showing.getCost()}"/></div>
-				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>"/>
+				            <c:set var="data" value="${showing.getMovie().getThumbnailData()}"/>
 							<c:choose>
 								<c:when test="${empty data}">
 									<div class="col-sm-3">Sorry! No thumbnail available.</div>
