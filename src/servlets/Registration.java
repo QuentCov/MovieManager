@@ -86,7 +86,7 @@ public class Registration extends HttpServlet {
     	
     	User user = new User();
     	user.setEmailAddress(parameters.get(0));
-    	user.setPassword(parameters.get(1));
+    	user.setPassword(SecurityUtilities.hashString(parameters.get(1)));
     	user.setType(parameters.get(2));
     	user.setFullName(parameters.get(3));
     	user.setPhoneNumber(parameters.get(4));

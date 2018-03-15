@@ -1,5 +1,8 @@
 package utilities;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -26,6 +29,9 @@ public class SecurityUtilities {
     //Uses an algorithm for checking for special characters found here:
     //https://stackoverflow.com/questions/5852776/checking-if-a-string-has-special-characters
 	public static String filterString(String stringToFilter) {
+		if(stringToFilter == null) {
+			return null;
+		}
 		Pattern p = Pattern.compile("[a-zA-Z]");
 		Matcher m = p.matcher(stringToFilter);
 		if(m.matches()) {
@@ -57,7 +63,13 @@ public class SecurityUtilities {
 		return filteredStrings;
 	}
 	
-	
-
-    
+	public static byte[] hashString(String password) {
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return digest.digest(password.getBytes(StandardCharsets.UTF_8));
+	}
 }
