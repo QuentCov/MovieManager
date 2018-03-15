@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, ${user.getFullName()}</div>
-			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Shopping Cart</h1>
@@ -36,9 +36,19 @@
 			            <div class="col-sm-1">${showing.getStartTime()}</div>
 			            <div class="col-sm-1">${showing.getShowroom().getCapacity() - showing.getNumTicketsSold()}</div>
 			            <div class="col-sm-1">${showing.getCost()}</div>
-			            <div class="col-sm-3">${showing.getMovie().getThumbnailData()}</div>
+			            <div class="col-sm-3">
+			            	<c:set var="data" value="${movie.getThumbnailData()}"/>
+							<c:choose>
+								<c:when test="${empty data}">
+									<td>Sorry! No thumbnail available</td>
+								</c:when>
+								<c:otherwise>
+									<td><img class="img-fluid" src="data:image/jpeg;base64,${movie.renderImage()}" alt="${movie.getName()} Poster"/></td>
+								</c:otherwise>
+							</c:choose>
+			            </div>
 			            <div class="col-sm-1">${current.getTicketsByMovie(showing.getMovie())}</div>
-			            <div class="col-sm-1">Total Cost: ${showing.getCost() * current.getTicketsByMovie(showing.getMovie())}</div>
+			            <div class="col-sm-1">${showing.getCost() * current.getTicketsByMovie(showing.getMovie())}</div>
 					</div>
 				</c:forEach>
 			</c:forEach>

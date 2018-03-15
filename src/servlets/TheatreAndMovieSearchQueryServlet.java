@@ -39,7 +39,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 		
 		String name = null;
 		name = request.getParameter("theatre");
-			
+
 		if(name == null) {
 			name = request.getParameter("date");
 			if(name != null) {
@@ -63,6 +63,11 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 			} else {
 				//Movie Name Searching.
 				name = request.getParameter("movieSearchString");
+				if(name == null) {
+					name = (String) session.getAttribute("searchString");
+				} else {
+					session.setAttribute("searchString", name);
+				}
 				ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
 				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 				int movieId = 0;
