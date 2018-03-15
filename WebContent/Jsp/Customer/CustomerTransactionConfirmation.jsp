@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
@@ -25,10 +25,10 @@
 	        <div class="row">
 		        <c:forEach items="${completedOrder}" var="order">
 	    			<c:forEach items="${order.getShowings()}" varStatus="loop" var="showing">
-		    			<div class="col-sm-2">${showing.getMovie().getName()}</div>
-		    			<div class="col-sm-2">${order.getTickets()[loop.index]}</div>
+		    			<div class="col-sm-2"><c:out value="${showing.getMovie().getName()}"/></div>
+		    			<div class="col-sm-2"><c:out value="${order.getTickets()[loop.index]}"/></div>
 		        	</c:forEach>
-		            <div class="col-sm-2">${order.getCost()}</div>
+		            <div class="col-sm-2"><c:out value="${order.getCost()}"/></div>
 	            </c:forEach>
 	    	</div>
 		</div>

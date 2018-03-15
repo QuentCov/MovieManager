@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
 		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
@@ -21,7 +21,7 @@
 				<label for="movie">Select Movie:</label>
 				<select name="movie">
 				<c:forEach items="${movies}" var="movie">
-					<option>${movie.getName() }</option>
+					<option><c:out value="${movie.getName() }"/></option>
 				</c:forEach>
 				</select>
 			</div>

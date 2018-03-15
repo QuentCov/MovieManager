@@ -9,13 +9,13 @@
 <body>
 	<div class="container">
 		<div class="row justify-content-around">
-			<div class="btn btn-secondary">Hello, ${user.getFullName() }</div>
+			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
 			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
-		<div class="row"><h1>Review for: ${movie.getName()}</h1></div>
+		<div class="row"><h1>Review for: <c:out value="${movie.getName()}"/></h1></div>
 		<c:set var="data" value="${Review_Too_Long}"/>
 		<c:choose>
 			<c:when test="${empty data}">

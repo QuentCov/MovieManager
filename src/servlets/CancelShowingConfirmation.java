@@ -13,6 +13,7 @@ import data.MovieShowingDB;
 import data.OrdersDB;
 import models.MovieShowing;
 import models.Order;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class CancelShowingConfirmation
@@ -38,7 +39,12 @@ public class CancelShowingConfirmation extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int showingId = Integer.parseInt(request.getParameter("showingId"));
+		
+		String showingIdString = request.getParameter("showingId");
+    	
+    	showingIdString = SecurityUtilities.filterString(showingIdString);
+		
+		int showingId = Integer.parseInt(showingIdString);
 		MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
 		ArrayList<Order> orders = OrdersDB.getOrdersByMovieShowingId(showingId);
 		boolean result1 = false;

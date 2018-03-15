@@ -17,6 +17,7 @@ import data.TheatreDB;
 import models.Movie;
 import models.MovieShowing;
 import models.Theatre;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class TheatreAndMovieSearchQueryServlet
@@ -44,6 +45,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 			name = request.getParameter("date");
 			if(name != null) {
 				//Date searching.
+				name = SecurityUtilities.filterString(name);
 				ArrayList<MovieShowing> showings = MovieShowingDB.getAllShowings();
 				ArrayList<MovieShowing> hits = new ArrayList<MovieShowing>();
 				for(int i = 0; i < showings.size(); i++) {
@@ -63,6 +65,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 			} else {
 				//Movie Name Searching.
 				name = request.getParameter("movieSearchString");
+				name = SecurityUtilities.filterString(name);
 				ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
 				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 				int movieId = 0;
@@ -84,6 +87,7 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 		}
 		else {
 			//Theatre Searching.
+			name = SecurityUtilities.filterString(name);
 			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
 			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 			for(int i = 0; i < theatres.size(); i++) {

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import data.MovieDB;
 import models.Movie;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class OwnerMovieSearchResults
@@ -36,7 +37,9 @@ public class OwnerMovieSearchResults extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String movieToSearch = request.getParameter("movieToSearch");		
+		String movieToSearch = request.getParameter("movieToSearch");
+		movieToSearch = SecurityUtilities.filterString(movieToSearch);
+		
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 		
 		if (movieToSearch.equals("")) {

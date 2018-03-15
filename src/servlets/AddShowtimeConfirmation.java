@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,6 +21,7 @@ import data.TheatreDB;
 import models.Movie;
 import models.MovieShowing;
 import models.Showroom;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class AddShowtimeConfirmation
@@ -48,16 +50,29 @@ public class AddShowtimeConfirmation extends HttpServlet {
 		String movieName = request.getParameter("movie");
 		String showingDate = request.getParameter("showingDate");
 		String showingTime = request.getParameter("showingTime");
-		Double cost = Double.parseDouble(request.getParameter("cost"));
-		int showroomId = Integer.parseInt(request.getParameter("showroomId"));		
+		String costString = request.getParameter("cost");
+		String showroomIdString = request.getParameter("showroomId");
 		
-		Movie movie = MovieDB.getMovieByName(movieName);
+		//Filter the strings.
+    	ArrayList<String> parameters = new ArrayList<String>();
+    	parameters.add(movieName); //0
+    	parameters.add(showingDate); //1
+    	parameters.add(showingTime); //2
+    	parameters.add(costString); //3
+    	parameters.add(showroomIdString); //4
+    	
+    	parameters = SecurityUtilities.filterStrings(parameters);
+    	
+		Double cost = Double.parseDouble(parameters.get(3));
+		int showroomId = Integer.parseInt(parameters.get(4));		
+		
+		Movie movie = MovieDB.getMovieByName(parameters.get(0));
 		Showroom showroom = ShowroomDB.getShowroomById(showroomId);
 		
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm aa");
 		Date startDateTime = new Date();
 		try {
-			startDateTime = format.parse(showingDate + " " + showingTime);
+			startDateTime = format.parse(parameters.get(1) + " " + parameters.get(2));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
