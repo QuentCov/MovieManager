@@ -44,9 +44,16 @@ public class UpdateShoppingCart extends HttpServlet {
 		if(!sessionToken.equals(requestToken)) {
 			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
+		    //Get the shopping cart again, in case it was modified since the last time.
+    		HttpSession session = request.getSession();
+    		User user = (User) session.getAttribute("user");
+    		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+    		session.setAttribute("cart", cart);
+    		
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
 			dispatcher.forward(request, response);
 		}
+		
 	}
 
 	/**

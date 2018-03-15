@@ -419,7 +419,7 @@ public class OrdersDB {
 		return false;
 	}
 
-	private static boolean updateOrder(Order order) {
+	public static boolean updateOrder(Order order) {
 
 		//Due to the combination of a double and a string, the update is run here.
 		String query = "UPDATE Orders SET Cost=?, ShippingAddress=?, CreditCardId=? WHERE OurId=?;";
