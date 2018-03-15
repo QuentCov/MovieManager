@@ -140,7 +140,6 @@
 				<button id="submitReview" class="btn btn-primary" value="Submit Review">Submit Review</button>
 			</c:otherwise>
 		</c:choose>
-		   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
     <script>
