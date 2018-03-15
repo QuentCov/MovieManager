@@ -97,7 +97,6 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 				//Theatre Searching.
 				name = SecurityUtilities.filterString(name);
 				ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
-
 				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
 				for(int i = 0; i < theatres.size(); i++) {
 					showings.addAll(MovieShowingDB.getMovieShowingsByTheatre(theatres.get(i)));

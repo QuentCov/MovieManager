@@ -35,14 +35,24 @@ public class UpdateShoppingCart extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Get the shopping cart again, in case it was modified since the last time.
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
-		session.setAttribute("cart", cart);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-  	    dispatcher.forward(request, response);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+		    //Get the shopping cart again, in case it was modified since the last time.
+    		User user = (User) session.getAttribute("user");
+    		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+    		session.setAttribute("cart", cart);
+    		
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+			dispatcher.forward(request, response);
+		}
+		
 	}
 
 	/**
@@ -50,12 +60,15 @@ public class UpdateShoppingCart extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		
+		//Verify the session.
 		String sessionToken = (String) session.getAttribute("CSRFToken");
 		String requestToken = request.getParameter("CSRFToken");
 		
 		if(!sessionToken.equals(requestToken)) {
 			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
+		
 			@SuppressWarnings("unchecked")
 			ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");
 			if(cart == null) {
@@ -74,11 +87,10 @@ public class UpdateShoppingCart extends HttpServlet {
 			
 	    	int ticket = Integer.parseInt(parameters.get(0));
 	    	
+			int orderId = -1;
 			UUID id = UUID.randomUUID();
-			boolean update = true;
 			if(order == null) {
 				//Make a new order.
-				update = false;
 				order = new Order();
 				User owner = (User) session.getAttribute("user");
 				order.setCustomer(owner);
@@ -92,12 +104,13 @@ public class UpdateShoppingCart extends HttpServlet {
 				ArrayList<Integer> tickets = new ArrayList<Integer>();
 				tickets.add(ticket);
 				order.setTickets(tickets);
+				orderId = OrdersDB.addOrder(order);
+				order.setDataId(orderId);
 			}
 			
 			
 			if(parameters.get(1) != null && parameters.get(1).equals("add")) {
 				//Check to ensure that the order is possible.
-				
 				if(order != null) {
 					//Check the capacity of the showrooms of the movie's in the order.
 					ArrayList<MovieShowing> movies = order.getShowings();
@@ -116,21 +129,15 @@ public class UpdateShoppingCart extends HttpServlet {
 							movies.get(i).setNumTicketsSold(orderCapacity + ticketsSold);
 							order.setCost(ticketsSold * movies.get(i).getCost());
 							MovieShowingDB.updateMovieShowing(movies.get(i));
-						}
-						
-						if(update) {
-							//The order existed already. Update it by removing and adding it.
-							OrdersDB.deleteOrder(order);
-							OrdersDB.addOrder(order);
-						} else {
-							//The order is completely new.
-							OrdersDB.addOrder(order);
+							OrdersDB.addItem(order, movies.get(i), tickets.get(i));
 						}
 						
 						cart.add(order);
 						int cartSize = (Integer) session.getAttribute("cartSize");
 						session.setAttribute("cartSize", cartSize+1);
 						session.setAttribute("cart", cart);
+						RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+				  	    dispatcher.forward(request, response);
 					}
 				}
 			} else if(parameters.get(1).equals("delete")) {
@@ -138,9 +145,10 @@ public class UpdateShoppingCart extends HttpServlet {
 				if(order != null) {
 					cart.remove(order);
 				}
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+		  	    dispatcher.forward(request, response);
 			}
-			
-			return;
 		}
+		
 	}
 }

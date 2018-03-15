@@ -54,6 +54,7 @@ public class MovieSearchResults extends HttpServlet {
 			}
 			
 			MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+
 			
 			showingId = Integer.parseInt(request.getParameter("itemIndex"));
 			showing = MovieShowingDB.getMovieShowingById(showingId);

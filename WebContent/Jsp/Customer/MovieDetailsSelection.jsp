@@ -20,7 +20,8 @@
 				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
             	<input type="submit" class="btn btn-primary" value="Checkout">
 			</form>
-			<a href="Jsp/Customer/MovieSearchResults.jsp" class="btn btn-primary">Back to search</a>
+
+			<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Movie Details:</h1>
@@ -145,7 +146,6 @@
 				<button id="submitReview" class="btn btn-primary" value="Submit Review">Submit Review</button>
 			</c:otherwise>
 		</c:choose>
-		   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
     <script>
