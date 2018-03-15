@@ -10,7 +10,7 @@
 	<div class="container">
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
-			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
+			<a href="Jsp/Customer/CustomerHomePage.jsp" class="btn btn-primary">Home</a>
 			<form action="${pageContext.request.contextPath}/ViewOrders">
 				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
             	<input type="submit" class="btn btn-primary" value="View Orders">
@@ -37,6 +37,9 @@
 	            </div>
 	        </c:forEach>
 		</div>
+		<h5>Total cost: $
+			<span id="totalCost">${totalCost}</span>
+		</h5>
 		<br>
 		<form name="creditForm" method="POST" onsubmit="return validateForm();" action="${pageContext.request.contextPath}/CustomerTransactionConfirmation">
 			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
