@@ -1,5 +1,6 @@
 package utilities;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,8 +8,23 @@ import java.util.regex.Pattern;
 //This class is used to define utility functions used in various web security features.
 public class SecurityUtilities {
 	
+	// generates a secure-random string to use for authentication
+	// uses a modified version of the algorithm provided here:
+	// https://examples.javacodegeeks.com/core-java/security/generate-a-secure-random-number-example/
+	public static String generateToken() {
+		String secureToken = "";
+		
+		SecureRandom random = new SecureRandom();
+		byte[] randomBytes = new byte[256];
+		random.nextBytes(randomBytes);
+		secureToken = randomBytes.toString();
+		return secureToken;
+	}
+	
 	//Filters a string, first by seeing if the string has special characters, 
 	//then by replacing those characters with their escaped versions.
+    //Uses an algorithm for checking for special characters found here:
+    //https://stackoverflow.com/questions/5852776/checking-if-a-string-has-special-characters
 	public static String filterString(String stringToFilter) {
 		Pattern p = Pattern.compile("[a-zA-Z]");
 		Matcher m = p.matcher(stringToFilter);
@@ -40,4 +56,8 @@ public class SecurityUtilities {
 		}
 		return filteredStrings;
 	}
+	
+	
+
+    
 }

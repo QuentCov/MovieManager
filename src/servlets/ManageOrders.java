@@ -32,16 +32,25 @@ public class ManageOrders extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String id = request.getParameter("order");
-		UUID uuid = UUID.fromString(id);
-		Order order = OrdersDB.getOrder(uuid);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		if(order == null) {
-			response.sendError(500, "Unable to retrieve order");
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
 		} else {
-			session.setAttribute("order", order);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ManageOrder.jsp");
-	  	    dispatcher.forward(request, response);
+		
+			String id = request.getParameter("order");
+			UUID uuid = UUID.fromString(id);
+			Order order = OrdersDB.getOrder(uuid);
+			
+			if(order == null) {
+				response.sendError(500, "Unable to retrieve order");
+			} else {
+				session.setAttribute("order", order);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ManageOrder.jsp");
+		  	    dispatcher.forward(request, response);
+			}
 		}
 	}
 

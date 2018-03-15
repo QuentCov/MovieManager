@@ -29,6 +29,7 @@
 			<div class="col-sm-5"><p><c:out value="${theatre.getAddress().toString()}"/></p></div>
 			<div class="col-sm-3">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/ViewShowrooms">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	            	<input type="hidden" name="theatreName" value="${theatre.getName()}"/>
 	            	<input type="submit" class="btn btn-primary" value="View Showrooms">
 	            </form>

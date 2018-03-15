@@ -38,73 +38,77 @@ public class TheatreAndMovieSearchQueryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String name = null;
-		name = request.getParameter("theatre");
-
-		if(name == null) {
-			name = request.getParameter("date");
-			if(name != null) {
-				//Date searching.
-				name = SecurityUtilities.filterString(name);
-				ArrayList<MovieShowing> showings = MovieShowingDB.getAllShowings();
-				ArrayList<MovieShowing> hits = new ArrayList<MovieShowing>();
-				for(int i = 0; i < showings.size(); i++) {
-					String date2 = new SimpleDateFormat("yyyy-MM-dd").format(showings.get(i).getStartTime());
-					if(name.equals(date2)) {
-						hits.add(showings.get(i));
-					}
-				}
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
+		
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+		
+			String name = null;
+			name = request.getParameter("theatre");
 				
-				session.setAttribute("type", "date");
-				if(hits.isEmpty()) {
-					session.setAttribute("showings", null);
-				} else {
-					session.setAttribute("showings", hits);
-				}
-				
-			} else {
-				//Movie Name Searching.
-				name = request.getParameter("movieSearchString");
-				name = SecurityUtilities.filterString(name);
-				if(name == null) {
-					name = (String) session.getAttribute("searchString");
-				} else {
-					session.setAttribute("searchString", name);
-				}
-				ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
-				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
-				int movieId = 0;
-				
-				//Get all showings of each movie, if we have any.
-				if(movies == null) {
-					session.setAttribute("type", "movie");
-					session.setAttribute("showings", null);
-				} else {
-					for(int i = 0; i < movies.size(); i++) {
-						movieId = movies.get(i).getID();
-						showings.addAll(MovieShowingDB.getMovieShowingsByMovieId(movieId));
+			if(name == null) {
+				name = request.getParameter("date");
+				if(name != null) {
+					//Date searching.
+					name = SecurityUtilities.filterString(name);
+					ArrayList<MovieShowing> showings = MovieShowingDB.getAllShowings();
+					ArrayList<MovieShowing> hits = new ArrayList<MovieShowing>();
+					for(int i = 0; i < showings.size(); i++) {
+						String date2 = new SimpleDateFormat("yyyy-MM-dd").format(showings.get(i).getStartTime());
+						if(name.equals(date2)) {
+							hits.add(showings.get(i));
+						}
 					}
 					
-					session.setAttribute("showings", showings);
-					session.setAttribute("type", "movie");
+					session.setAttribute("type", "date");
+					if(hits.isEmpty()) {
+						session.setAttribute("showings", null);
+					} else {
+						session.setAttribute("showings", hits);
+					}
+					
+				} else {
+					//Movie Name Searching.
+					name = request.getParameter("movieSearchString");
+					name = SecurityUtilities.filterString(name);
+					ArrayList<Movie> movies = MovieDB.searchMoviesByName(name);
+					ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+					int movieId = 0;
+					
+					//Get all showings of each movie, if we have any.
+					if(movies == null) {
+						session.setAttribute("type", "movie");
+						session.setAttribute("showings", null);
+					} else {
+						for(int i = 0; i < movies.size(); i++) {
+							movieId = movies.get(i).getID();
+							showings.addAll(MovieShowingDB.getMovieShowingsByMovieId(movieId));
+						}
+						
+						session.setAttribute("showings", showings);
+						session.setAttribute("type", "movie");
+					}
 				}
 			}
-		}
-		else {
-			//Theatre Searching.
-			name = SecurityUtilities.filterString(name);
-			ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
-			ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
-			for(int i = 0; i < theatres.size(); i++) {
-				showings.addAll(MovieShowingDB.getMovieShowingsByTheatre(theatres.get(i)));
+			else {
+				//Theatre Searching.
+				name = SecurityUtilities.filterString(name);
+				ArrayList<Theatre> theatres = TheatreDB.searchTheatreByName(name);
+				ArrayList<MovieShowing> showings = new ArrayList<MovieShowing>();
+				for(int i = 0; i < theatres.size(); i++) {
+					showings.addAll(MovieShowingDB.getMovieShowingsByTheatre(theatres.get(i)));
+				}
+				
+				session.setAttribute("showings", showings);
+				session.setAttribute("type", "theatre");
 			}
 			
-			session.setAttribute("showings", showings);
-			session.setAttribute("type", "theatre");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieSearchResults.jsp");
+	  	    dispatcher.forward(request, response);
 		}
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/MovieSearchResults.jsp");
-  	    dispatcher.forward(request, response);
 	}
 
 	/**

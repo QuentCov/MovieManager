@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="Jsp/Owner/OwnerHomePage.jsp" class="btn btn-primary">Owner Homepage</a>
-		   	<a href="${pageContext.request.contextPath}/ViewShowrooms" class="btn btn-primary">View Showrooms</a>
-		   	<a href="${pageContext.request.contextPath}/ManageShowtimes" class="btn btn-primary">Manage Showtimes</a>
+		   	<form action="${pageContext.request.contextPath}/ViewShowrooms">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Showrooms">
+			</form>
+		   	<form action="${pageContext.request.contextPath}/ManageShowtimes">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Manage Showtimes">
+			</form>
 		   	<a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 

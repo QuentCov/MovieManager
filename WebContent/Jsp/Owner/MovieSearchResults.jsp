@@ -36,6 +36,7 @@
 			</c:choose>
 			<div class="col-sm-2">
 				<form name="item" method="POST" action="${pageContext.request.contextPath}/MovieDetails">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	            	<input type="hidden" name="movieName" value="${movie.getName()}"/>
 	            	<input type="submit" class="btn btn-primary" value="View Movie Details">
 	            </form>

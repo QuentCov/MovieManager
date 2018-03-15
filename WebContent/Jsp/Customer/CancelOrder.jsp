@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Do you want to cancel your tickets for this movie?</h1>
@@ -43,11 +49,13 @@
 			</c:choose>
 	        <div class="col-sm-1"><c:out value="${cancelOrder.getTicketsByMovie(cancelShowingItem.getMovie())}"/></div>
 	        <form name="item" method="POST" action="${pageContext.request.contextPath}/CancelOrderTransaction">
+	        	<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	        	<input type="hidden" name="movie" value="${cancelShowingItem.getMovie().getName()}"/>
 	        	<input type="hidden" name="order" value="${cancelOrder.getID()}"/>
 	        	<input type="submit" class="btn btn-primary" value="Cancel Item">
 		    </form>
 			<form name="item" method="POST" action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 	        	<input type="submit" class="btn btn-primary" value="Discard Cancellation">
 	        </form>
 		</div>

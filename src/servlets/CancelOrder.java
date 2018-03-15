@@ -35,16 +35,25 @@ public class CancelOrder extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		String movieName = request.getParameter("movie");
-		String orderId = request.getParameter("order");
-		Order order = OrdersDB.getOrder(UUID.fromString(orderId));
-		Movie movie = MovieDB.getMovieByName(movieName);
-		MovieShowing showing = order.getShowingByMovie(movie);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		session.setAttribute("cancelOrder", order);
-		session.setAttribute("cancelShowingItem", showing);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancelOrder.jsp");
-  	    dispatcher.forward(request, response);
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+		
+			String movieName = request.getParameter("movie");
+			String orderId = request.getParameter("order");
+			Order order = OrdersDB.getOrder(UUID.fromString(orderId));
+			Movie movie = MovieDB.getMovieByName(movieName);
+			MovieShowing showing = order.getShowingByMovie(movie);
+			
+			session.setAttribute("cancelOrder", order);
+			session.setAttribute("cancelShowingItem", showing);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CancelOrder.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 	}
 
 	/**

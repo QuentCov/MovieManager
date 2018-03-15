@@ -31,11 +31,20 @@ public class CustomerReviewSetup extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		Movie movie = MovieDB.getMovieByName(request.getParameter("reviewMovie"));
-		session.setAttribute("movie", movie);
+		//Verify the session.
+		String sessionToken = (String) session.getAttribute("CSRFToken");
+		String requestToken = request.getParameter("CSRFToken");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
-  	    dispatcher.forward(request, response);
+		if(!sessionToken.equals(requestToken)) {
+			response.sendError(403, "Possible CSRF attack detected.");
+		} else {
+		
+			Movie movie = MovieDB.getMovieByName(request.getParameter("reviewMovie"));
+			session.setAttribute("movie", movie);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
+	  	    dispatcher.forward(request, response);
+		}
 	}
 
 	/**

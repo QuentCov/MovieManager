@@ -55,6 +55,7 @@
 			<div class="row">
 				<div class="offset-md-8 col-sm-3">
 					<form name="item" method="POST" action="${pageContext.request.contextPath}/CustomerTransaction">
+						<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 				        <input type="submit" class="btn btn-primary" value="Checkout">
 				    </form>
 				</div>

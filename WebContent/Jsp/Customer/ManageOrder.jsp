@@ -11,8 +11,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View All Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
 		<h1>Manage Your Order</h1>
@@ -45,6 +51,7 @@
 		            <div class="col-sm-1"><c:out value="${order.getTicketsByMovie(showing.getMovie())}"/></div>
 		            <div class="offset-sm-1 col-sm-1">
 				    	<form name="item" method="POST" action="${pageContext.request.contextPath}/CancelOrder" >
+				    		<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 				    		<input type="hidden" name="showing" value="${showing}"/>
 				    		<input type="hidden" name="movie" value="${showing.getMovie().getName()}"/>
 				    		<input type="hidden" name="order" value="${order.getID()}"/>

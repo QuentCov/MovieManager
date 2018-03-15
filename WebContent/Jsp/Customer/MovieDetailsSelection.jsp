@@ -12,8 +12,14 @@
 		<div class="row justify-content-around">
 			<div class="btn btn-secondary">Hello, <c:out value="${user.getFullName() }"/></div>
 			<a href="CustomerHomePage.jsp" class="btn btn-primary">Home</a>
-			<a href="${pageContext.request.contextPath}/ViewOrders" class="btn btn-primary">View Orders</a>
-			<a href="${pageContext.request.contextPath}/UpdateShoppingCart" class="btn btn-primary">Checkout</a>
+			<form action="${pageContext.request.contextPath}/ViewOrders">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="View Orders">
+			</form>
+			<form action="${pageContext.request.contextPath}/UpdateShoppingCart">
+				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
+            	<input type="submit" class="btn btn-primary" value="Checkout">
+			</form>
 			<a href="${pageContext.request.contextPath}/TheatreAndMovieSearchQueryServlet" class="btn btn-primary">Back to search</a>
 		    <a href="${pageContext.request.contextPath}/Logout" class="btn btn-primary">Log Out</a>
 		</div>
@@ -134,7 +140,6 @@
 				<button id="submitReview" class="btn btn-primary" value="Submit Review">Submit Review</button>
 			</c:otherwise>
 		</c:choose>
-		   			<div class="col-sm-3">${review.getReviewer().getFullName()}</div>
 	</div>
     <%@ include file="/_partials/scripts.html" %>
     <script>
