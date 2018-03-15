@@ -267,22 +267,4 @@
     <servlet-name>CustomerTransaction</servlet-name>
     <url-pattern>/CustomerTransaction</url-pattern>
   </servlet-mapping>
-  <filter>
-    <display-name>LoadSalt</display-name>
-    <filter-name>LoadSalt</filter-name>
-    <filter-class>servlets.LoadSalt</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>LoadSalt</filter-name>
-    <url-pattern>/LoadSalt</url-pattern>
-  </filter-mapping>
-  <filter>
-    <display-name>ValidateSalt</display-name>
-    <filter-name>ValidateSalt</filter-name>
-    <filter-class>servlets.ValidateSalt</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>ValidateSalt</filter-name>
-    <url-pattern>/ValidateSalt</url-pattern>
-  </filter-mapping>
 </web-app>
