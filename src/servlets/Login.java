@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -78,13 +79,15 @@ public class Login extends HttpServlet {
     			ArrayList<Theatre> theatres = new ArrayList<Theatre>();
     			theatres = TheatreDB.getTheatres();
     			session.setAttribute("theatres", theatres);
-    			
-            	response.sendRedirect("Jsp/Customer/CustomerHomePage.jsp");
+    			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerHomePage.jsp");
+    	  	    dispatcher.forward(request, response);
     		} else {
-    			response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+    			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/OwnerHomePage.jsp");
+    	  	    dispatcher.forward(request, response);
     		}
     	} else {
-        	response.sendRedirect("Jsp/Registration.jsp");
+        	RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Registration.jsp");
+	  	    dispatcher.forward(request, response);
     	}
 	}
 

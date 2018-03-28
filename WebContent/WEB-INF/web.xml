@@ -325,16 +325,11 @@
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>login</web-resource-name>
-      <url-pattern>/Jsp/Customer/*</url-pattern>
-      <http-method>GET</http-method>
-      <http-method>POST</http-method>
+        <web-resource-name>securedapp</web-resource-name>
+        <url-pattern>/*</url-pattern>
     </web-resource-collection>
-    <auth-constraint>
-      <role-name>User</role-name>
-    </auth-constraint>
     <user-data-constraint>
-      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
-  </security-constraint>
+</security-constraint>
 </web-app>
