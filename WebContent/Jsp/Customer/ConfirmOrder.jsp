@@ -44,7 +44,7 @@
 			<span id="totalCost">${totalCost}</span>
 		</h5>
 		<br>
-		<form name="creditForm" method="POST" onsubmit="confirm_function()">
+		<form name="creditForm" method="POST" onsubmit="confirm_function(event);">
 			<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 			<div class="form-group">
 				<label for="fName">First Name: </label>
@@ -113,12 +113,14 @@
    			<input type="text" class="form-control" id="sAddress" name="sAddress" placeholder="">
   			</div>
    			<div class="col-md-2">
+ 				<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 				<input type="submit" class="btn btn-primary" value="Confirm Payment">
 			</div>
 		</form>
 		<div class="row">
 			<form method="GET" action="${pageContext.request.contextPath}/UpdateShoppingCart">
 				<div class="offset-md-8 col-md-2">
+					<input type="hidden" name="CSRFToken" value="${CSRFToken}">
 					<input type="submit" class="btn btn-primary" value="Cancel Payment">
 				</div>
 			</form>
@@ -126,7 +128,8 @@
 	</div>
 	<c:set var="bankingUrl" value="${bankingUrl}" />
 	<script>
-		function confirm_function() {
+		function confirm_function(event) {
+			event.preventDefault();
 			var fName = document.forms["creditForm"]["fName"].value;
 			var lName = document.forms["creditForm"]["lName"].value;
 			var cardNumber = document.forms["creditForm"]["cardNumber"].value;
@@ -136,6 +139,7 @@
 			var year = document.forms["creditForm"]["year"].value;
 			var bAddress = document.forms["creditForm"]["bAddress"].value;
 			var sAddress = document.forms["creditForm"]["sAddress"].value;
+			var CSRFToken = document.forms["creditForm"]["CSRFToken"][0].value;
 
 			// check for valid data
 			if(fName === "") {
@@ -191,33 +195,35 @@
 				cvv: cvv,
 				month: month,
 				year: year,
-				totalCost: cost
+				totalCost: cost,
+				CSRFToken: CSRFToken
 			}
 			var bankingUrl = "${bankingUrl}";
-			$.post(bankingUrl + "/BankServlet", payload, function( data ) {
-				  if(data.transactionResult === 1) {
-					  place_order_function();
-					  $("#printButton").show();
-				  }
-				  $("#resultsBox").text(data.transactionMessage);
-			}).done(function(data) {
-                if(data.transactionResult === 1) {
-                    place_order_function();
-                    $("#printButton").show();
-                }
-                $("#resultsBox").text(data.transactionMessage);
-            })
-            .fail(function(data) {
-                if(data.transactionResult === 1) {
-                    place_order_function();
-                    $("#printButton").show();
-                }
-                $("#resultsBox").text(data.transactionMessage);
-            });
+			$.post(bankingUrl + "/BankServlet", payload)
+				.done(function(data) {
+	                if(data.transactionResult === 1) {
+	                    place_order_function(payload);
+	                    $("#printButton").show();
+		                $("#resultsBox").text(data.transactionMessage);
+	                } else {
+	 	               alert(data.transactionMessage);
+	                }
+
+	            })
+	            .fail(function(data) {
+	               alert(data.transactionMessage);
+	            });
 		}
 
-		function place_order_function(){
-			$.post("/MovieManager/PlaceOrder");
+		function place_order_function(payload){
+			$.post("/MovieManager/PlaceOrder", payload)
+				.done(function(data) {
+					if(data.processingResult === 1) {
+		                $("#resultsBox").text(data.processingMessage);
+					} else {
+						alert(data.processingMessage);
+					}
+	            });
 		}
 
 	</script>
