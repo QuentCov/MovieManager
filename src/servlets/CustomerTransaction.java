@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import data.OrdersDB;
 import models.Order;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class CustomerTransaction
@@ -32,23 +33,27 @@ public class CustomerTransaction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
-		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
 		} else {
-			User user = (User) session.getAttribute("user");
-			ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
 			
-			session.setAttribute("cart", cart);
-			session.setAttribute("totalCost", OrdersDB.getTotalCost(cart));
-			String temp = getServletContext().getInitParameter("BankingUrl");
-			session.setAttribute("bankingUrl", temp);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ConfirmOrder.jsp");
-	  	    dispatcher.forward(request, response);
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+				ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+				
+				session.setAttribute("cart", cart);
+				session.setAttribute("totalCost", OrdersDB.getTotalCost(cart));
+				String temp = getServletContext().getInitParameter("BankingUrl");
+				session.setAttribute("bankingUrl", temp);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ConfirmOrder.jsp");
+		  	    dispatcher.forward(request, response);
+			}
 		}
 	}
 

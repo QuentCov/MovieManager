@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import data.OrdersDB;
 import models.Order;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class PlaceOrder
@@ -40,26 +41,37 @@ public class PlaceOrder extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
+		User user = (User) session.getAttribute("user");
 		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
 		} else {
-			@SuppressWarnings("unchecked")
-			ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");	
-			User owner = (User) session.getAttribute("user");
-			//Remove the orders from the database.
-			cart = OrdersDB.getOrders(owner.getEmailAddress());
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
+			
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+				@SuppressWarnings("unchecked")
+				ArrayList<Order> cart = (ArrayList<Order>) session.getAttribute("cart");	
+				User owner = (User) session.getAttribute("user");
+				//Remove the orders from the database.
+				cart = OrdersDB.getOrders(owner.getEmailAddress());
 			int result = 1;
 			String message = "Transaction processed and order fulfilled!";
-			for(int i = 0; i < cart.size(); i++) {
-				int j = OrdersDB.fulfillOrder(cart.get(i));
-				if(j == -1) {
+				for(int i = 0; i < cart.size(); i++) {
+					int j = OrdersDB.fulfillOrder(cart.get(i));
+					if(j == -1) {
 					result = 0;
 					message = "Internal server error processing order";
+					}
 				}
+				session.setAttribute("cart", new ArrayList<Order>());
+				session.setAttribute("cartSize", 0);
+				session.setAttribute("completedOrder", cart);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransactionConfirmation.jsp");
+		  	    dispatcher.forward(request, response);
 			}
 			session.setAttribute("cart", new ArrayList<Order>());
 			session.setAttribute("cartSize", 0);

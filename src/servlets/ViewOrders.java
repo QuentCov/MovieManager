@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import data.OrdersDB;
 import models.Order;
 import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class ViewOrders
@@ -33,21 +34,25 @@ public class ViewOrders extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
+		User user = (User) session.getAttribute("user");
 		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
-		} else {
-		
-			User user = (User) session.getAttribute("user");
-			String email = user.getEmailAddress();
-			ArrayList<Order> orders = OrdersDB.getOrders(email);
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
+		} else {		
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
 			
-			session.setAttribute("orders", orders);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewOrders.jsp");
-	  	    dispatcher.forward(request, response);
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+				String email = user.getEmailAddress();
+				ArrayList<Order> orders = OrdersDB.getOrders(email);
+				
+				session.setAttribute("orders", orders);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewOrders.jsp");
+		  	    dispatcher.forward(request, response);
+			}
 		}
 	}
 

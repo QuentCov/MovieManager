@@ -37,22 +37,26 @@ public class UpdateShoppingCart extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
+		User user = (User) session.getAttribute("user");
 		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
 		} else {
-		    //Get the shopping cart again, in case it was modified since the last time.
-    		User user = (User) session.getAttribute("user");
-    		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
-    		session.setAttribute("cart", cart);
-    		
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
-			dispatcher.forward(request, response);
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
+			
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+			    //Get the shopping cart again, in case it was modified since the last time.
+	    		ArrayList<Order> cart = OrdersDB.getOrders(user.getEmailAddress());
+	    		session.setAttribute("cart", cart);
+	    		
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/ViewAndCheckoutShoppingCart.jsp");
+				dispatcher.forward(request, response);
+			}
 		}
-		
 	}
 
 	/**

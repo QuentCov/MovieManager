@@ -14,6 +14,7 @@ import javax.servlet.http.Part;
 
 import data.MovieDB;
 import models.Movie;
+import models.User;
 import utilities.SecurityUtilities;
 
 /**
@@ -53,45 +54,50 @@ public class AddMovie extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
-		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInOwner(user)) {
+			response.sendError(403);
 		} else {
-			String movieName = request.getParameter("movieName");
-			String movieGenre = request.getParameter("movieGenre");
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
 			
-			//Filter the strings.
-	    	ArrayList<String> parameters = new ArrayList<String>();
-	    	parameters.add(movieName); //0
-	    	parameters.add(movieGenre); //1
-	    	
-	    	parameters = SecurityUtilities.filterStrings(parameters);
-			
-			InputStream stream = null;
-	        Part filePart = request.getPart("movieThumbnail");
-			// obtains the uploaded file name and data
-			String movieThumbnailName = getFileName(filePart);
-			byte[] movieThumbnailData = new byte[Math.toIntExact(filePart.getSize())];
-	        if (filePart != null) {
-	            // get the input stream and read the data into the byte array
-	        	stream = filePart.getInputStream();
-	    		stream.read(movieThumbnailData);
-	    		stream.close();
-	        }
-			String movieDescription = request.getParameter("movieDescription");
-			int movieRuntime = Integer.parseInt(request.getParameter("movieRuntime"));
-			String movieRating = request.getParameter("movieRating");
-			
-			Movie newMovie = new Movie(parameters.get(0), parameters.get(1), movieThumbnailName, movieThumbnailData, movieDescription, movieRuntime, movieRating);
-			boolean result = MovieDB.addMovie(newMovie);
-			if (result) {
-				response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
 			} else {
-				response.sendError(500, "Failed to add movie"); 
+				String movieName = request.getParameter("movieName");
+				String movieGenre = request.getParameter("movieGenre");
+				
+				//Filter the strings.
+		    	ArrayList<String> parameters = new ArrayList<String>();
+		    	parameters.add(movieName); //0
+		    	parameters.add(movieGenre); //1
+		    	
+		    	parameters = SecurityUtilities.filterStrings(parameters);
+				
+				InputStream stream = null;
+		        Part filePart = request.getPart("movieThumbnail");
+				// obtains the uploaded file name and data
+				String movieThumbnailName = getFileName(filePart);
+				byte[] movieThumbnailData = new byte[Math.toIntExact(filePart.getSize())];
+		        if (filePart != null) {
+		            // get the input stream and read the data into the byte array
+		        	stream = filePart.getInputStream();
+		    		stream.read(movieThumbnailData);
+		    		stream.close();
+		        }
+				String movieDescription = request.getParameter("movieDescription");
+				int movieRuntime = Integer.parseInt(request.getParameter("movieRuntime"));
+				String movieRating = request.getParameter("movieRating");
+				
+				Movie newMovie = new Movie(parameters.get(0), parameters.get(1), movieThumbnailName, movieThumbnailData, movieDescription, movieRuntime, movieRating);
+				boolean result = MovieDB.addMovie(newMovie);
+				if (result) {
+					response.sendRedirect("Jsp/Owner/OwnerHomePage.jsp");
+				} else {
+					response.sendError(500, "Failed to add movie"); 
+				}
 			}
 		}
 	}
