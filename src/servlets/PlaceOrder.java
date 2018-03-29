@@ -1,9 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -58,18 +58,23 @@ public class PlaceOrder extends HttpServlet {
 				User owner = (User) session.getAttribute("user");
 				//Remove the orders from the database.
 				cart = OrdersDB.getOrders(owner.getEmailAddress());
+				int result = 1;
+				String message = "Transaction processed and order fulfilled!";
 				for(int i = 0; i < cart.size(); i++) {
 					int j = OrdersDB.fulfillOrder(cart.get(i));
 					if(j == -1) {
-						response.sendError(500, "Internal Server Error");
+						result = 0;
+						message = "Internal server error processing order";
 					}
 				}
 				session.setAttribute("cart", new ArrayList<Order>());
 				session.setAttribute("cartSize", 0);
 				session.setAttribute("completedOrder", cart);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransactionConfirmation.jsp");
-		  	    dispatcher.forward(request, response);
-			}
+				response.setContentType("application/json");
+				PrintWriter out = response.getWriter();
+				String jsonStr = "{\"processingResult\": " + result + ", \"processingMessage\": \"" + message + "\"}";
+				out.write(jsonStr);
+			}	
 		}
 	}
 }
