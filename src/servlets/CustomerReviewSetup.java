@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import data.MovieDB;
 import models.Movie;
+import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class CustomerReviewSetup
@@ -30,20 +32,25 @@ public class CustomerReviewSetup extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
-		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
 		} else {
-		
-			Movie movie = MovieDB.getMovieByName(request.getParameter("reviewMovie"));
-			session.setAttribute("movie", movie);
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
 			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
-	  	    dispatcher.forward(request, response);
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+			
+				Movie movie = MovieDB.getMovieByName(request.getParameter("reviewMovie"));
+				session.setAttribute("movie", movie);
+				
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerReview.jsp");
+		  	    dispatcher.forward(request, response);
+			}
 		}
 	}
 

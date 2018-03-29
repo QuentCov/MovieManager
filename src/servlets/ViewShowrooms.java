@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import data.ShowroomDB;
 import data.TheatreDB;
 import models.Showroom;
+import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class ViewShowrooms
@@ -40,24 +42,30 @@ public class ViewShowrooms extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
+		User user = (User) session.getAttribute("user");
 		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInOwner(user)) {
+			response.sendError(403);
 		} else {
-			String theatreName = request.getParameter("theatreName");
-			int theatreId = TheatreDB.getTheatreIdByName(theatreName);	
-			if (theatreId == -1) {
-				theatreId = (int) session.getAttribute("theatreId");
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
+			
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+				String theatreName = request.getParameter("theatreName");
+				int theatreId = TheatreDB.getTheatreIdByName(theatreName);	
+				if (theatreId == -1) {
+					theatreId = (int) session.getAttribute("theatreId");
+				}
+				session.setAttribute("theatreId", theatreId);
+				ArrayList<Showroom> showrooms = ShowroomDB.getShowroomsByTheatreId(theatreId);
+				request.setAttribute("showrooms", showrooms);
+				request.setAttribute("theatreId", theatreId);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ViewShowrooms.jsp");
+		  	    dispatcher.forward(request, response);
 			}
-			session.setAttribute("theatreId", theatreId);
-			ArrayList<Showroom> showrooms = ShowroomDB.getShowroomsByTheatreId(theatreId);
-			request.setAttribute("showrooms", showrooms);
-			request.setAttribute("theatreId", theatreId);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/ViewShowrooms.jsp");
-	  	    dispatcher.forward(request, response);
 		}
 	}
 

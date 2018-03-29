@@ -14,6 +14,7 @@ import data.MovieShowingDB;
 import data.OrdersDB;
 import models.MovieShowing;
 import models.Order;
+import models.User;
 import utilities.SecurityUtilities;
 
 /**
@@ -42,35 +43,41 @@ public class CancelShowingConfirmation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
-		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInCustomer(user)) {
+			response.sendError(403);
 		} else {
-			String showingIdString = request.getParameter("showingId");
-	    	
-	    	showingIdString = SecurityUtilities.filterString(showingIdString);
+		
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
 			
-			int showingId = Integer.parseInt(showingIdString);
-			MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
-			ArrayList<Order> orders = OrdersDB.getOrdersByMovieShowingId(showingId);
-			boolean result1 = false;
-			for(int i = 0; i < orders.size(); i++) {
-				Order order = orders.get(i);
-				result1 = OrdersDB.deleteOrderItem(order, showing, showing.getMovie());
-			}
-			boolean result2 = MovieShowingDB.deleteMovieShowing(showingId);
-			//TODO refund credit cards
-			if (result1 && result2) {
-				request.setAttribute("result", true);
-				request.setAttribute("showing", showing);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancellationConfirmation.jsp");
-		  	    dispatcher.forward(request, response);
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
 			} else {
-				response.sendError(500, "Failed to cancel showing."); 
+				String showingIdString = request.getParameter("showingId");
+		    	
+		    	showingIdString = SecurityUtilities.filterString(showingIdString);
+				
+				int showingId = Integer.parseInt(showingIdString);
+				MovieShowing showing = MovieShowingDB.getMovieShowingById(showingId);
+				ArrayList<Order> orders = OrdersDB.getOrdersByMovieShowingId(showingId);
+				boolean result1 = false;
+				for(int i = 0; i < orders.size(); i++) {
+					Order order = orders.get(i);
+					result1 = OrdersDB.deleteOrderItem(order, showing, showing.getMovie());
+				}
+				boolean result2 = MovieShowingDB.deleteMovieShowing(showingId);
+				//TODO refund credit cards
+				if (result1 && result2) {
+					request.setAttribute("result", true);
+					request.setAttribute("showing", showing);
+					RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancellationConfirmation.jsp");
+			  	    dispatcher.forward(request, response);
+				} else {
+					response.sendError(500, "Failed to cancel showing."); 
+				}
 			}
 		}
 	}

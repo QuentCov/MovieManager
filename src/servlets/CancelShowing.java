@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.MovieShowingDB;
+import models.User;
+import utilities.SecurityUtilities;
 
 /**
  * Servlet implementation class CancelShowing
@@ -36,18 +38,24 @@ public class CancelShowing extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		
-		//Verify the session.
-		String sessionToken = (String) session.getAttribute("CSRFToken");
-		String requestToken = request.getParameter("CSRFToken");
-		
-		if(!sessionToken.equals(requestToken)) {
-			response.sendError(403, "Possible CSRF attack detected.");
+		if(!SecurityUtilities.loggedInOwner(user)) {
+			response.sendError(403);
 		} else {
-			int showtimeId = Integer.parseInt(request.getParameter("showingId"));		
-			request.setAttribute("showing", MovieShowingDB.getMovieShowingById(showtimeId));
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancelShowing.jsp");
-	  	    dispatcher.forward(request, response);
+		
+			//Verify the session.
+			String sessionToken = (String) session.getAttribute("CSRFToken");
+			String requestToken = request.getParameter("CSRFToken");
+			
+			if(!sessionToken.equals(requestToken)) {
+				response.sendError(403, "Possible CSRF attack detected.");
+			} else {
+				int showtimeId = Integer.parseInt(request.getParameter("showingId"));		
+				request.setAttribute("showing", MovieShowingDB.getMovieShowingById(showtimeId));
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Owner/CancelShowing.jsp");
+		  	    dispatcher.forward(request, response);
+			}
 		}
 	}
 }
