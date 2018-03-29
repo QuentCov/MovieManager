@@ -58,28 +58,23 @@ public class PlaceOrder extends HttpServlet {
 				User owner = (User) session.getAttribute("user");
 				//Remove the orders from the database.
 				cart = OrdersDB.getOrders(owner.getEmailAddress());
-			int result = 1;
-			String message = "Transaction processed and order fulfilled!";
+				int result = 1;
+				String message = "Transaction processed and order fulfilled!";
 				for(int i = 0; i < cart.size(); i++) {
 					int j = OrdersDB.fulfillOrder(cart.get(i));
 					if(j == -1) {
-					result = 0;
-					message = "Internal server error processing order";
+						result = 0;
+						message = "Internal server error processing order";
 					}
 				}
 				session.setAttribute("cart", new ArrayList<Order>());
 				session.setAttribute("cartSize", 0);
 				session.setAttribute("completedOrder", cart);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("Jsp/Customer/CustomerTransactionConfirmation.jsp");
-		  	    dispatcher.forward(request, response);
-			}
-			session.setAttribute("cart", new ArrayList<Order>());
-			session.setAttribute("cartSize", 0);
-			session.setAttribute("completedOrder", cart);
-			response.setContentType("application/json");
-			PrintWriter out = response.getWriter();
-			String jsonStr = "{\"processingResult\": " + result + ", \"processingMessage\": \"" + message + "\"}";
-			out.write(jsonStr);
+				response.setContentType("application/json");
+				PrintWriter out = response.getWriter();
+				String jsonStr = "{\"processingResult\": " + result + ", \"processingMessage\": \"" + message + "\"}";
+				out.write(jsonStr);
+			}	
 		}
 	}
 }

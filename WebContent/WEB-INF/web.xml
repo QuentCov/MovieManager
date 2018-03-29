@@ -11,7 +11,7 @@
   </welcome-file-list>
   <context-param>
     <param-name>BankingUrl</param-name>
-    <param-value>http://localhost:8080/MovieManagerBanking</param-value>
+    <param-value>https://localhost:8443/MovieManagerBanking</param-value>
   </context-param>
   <servlet>
     <description></description>
