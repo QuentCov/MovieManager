@@ -8,8 +8,36 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import models.User;
+
 //This class is used to define utility functions used in various web security features.
 public class SecurityUtilities {
+	
+	//Ensures that the given user is an owner
+	public static boolean loggedInOwner(User user) {
+		if(user == null) {
+			return false;
+		}
+		
+		if(user.getType() != null && user.getType().equals("Owner") && User.isValidUser(user)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//Ensures that the given user is a customer
+	public static boolean loggedInCustomer(User user) {
+		if(user == null) {
+			return false;
+		}
+		
+		if(user.getType() != null && user.getType().equals("Customer") && User.isValidUser(user)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	// generates a secure-random string to use for authentication
 	// uses a modified version of the algorithm provided here:
